@@ -14,8 +14,9 @@ mongoose.connect(mongourl)
 .catch(() => console.log("not connected"))
 
 const userrouter = require('./Router/UserRouter')
-const adminrouter = require('./Router/AdminRouter')
+const adminrouter = require('./Router/AddCityRouter')
 const staterouter = require('./Router/AddStateRouter')
+
 
 
 app.use('/user', userrouter)

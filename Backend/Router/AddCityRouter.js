@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const admin = require('../Controller/AdminController')
+const admin = require('../Controller/AddCityController')
 const auth = require("../Middleware/Auth")
 
 router.post('/AddCityState', auth, admin.AddCityStateInForm )

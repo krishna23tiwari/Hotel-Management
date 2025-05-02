@@ -21,9 +21,12 @@ const ForAdmin = () => {
 
   const fetchStates = async () => {
     const res = await axios.get('http://localhost:4545/admin/getallstates', getAuthHeaders());
-    console.log(`>>>>statedataforcity`,res.data)
-    setAvailableStates(res.data.states || []); // assuming res.data.states is the array
+    // console.log(`>>>>statedataforcity`,res.data.state)
+    console.log("data", res.data.state.map((val) => val));
+    setAvailableStates(res.state|| []); // assuming res.data.states is the array
   };
+
+  console.log(`>>>>available>>>`, availableStates)
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
@@ -41,9 +44,15 @@ const ForAdmin = () => {
     setInactiveData(inactive);
   };
 
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
+  
 
   const handleSubmit = async () => {
     if (!form.city || !form.state) return alert('Both fields required');
@@ -56,6 +65,10 @@ const ForAdmin = () => {
     setEditingId(null);
     fetchData();
   };
+
+
+
+  
 
   const handleEdit = (item) => {
     setForm({ city: item.city, state: item.state });
@@ -104,7 +117,7 @@ const ForAdmin = () => {
     {availableStates.map((state, index) => (
       
 
-      <option key={index} value={state._id}>
+      <option key={state.id} value={state._id}>
   {state.state}
 </option>
 
@@ -161,6 +174,8 @@ const ForAdmin = () => {
               <tr key={item._id}>
                 <td className="border px-2 py-1">{item.city}</td>
                 <td className="border px-2 py-1">{item.state}</td>
+
+
                 <td className="border px-2 py-1">{item.date}</td>
                 <td className="border px-2 py-1 flex gap-2">
                   <button onClick={() => handleEdit(item)} className="text-yellow-600">Edit</button>

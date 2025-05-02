@@ -1,7 +1,7 @@
-const adminmodel = require('../Model/AdminModel')
+const addcitymodel = require('../Model/AddCityModel')
 const addstatemodel = require('../Model/AddStateModel')
 var jwt = require('jsonwebtoken');
-const { findByIdAndUpdate } = require('../Model/UserModel');
+// const { findByIdAndUpdate } = require('../Model/UserModel');
 const secret = "asasfasfijqwijjqwmnasfa"
 
 
@@ -12,7 +12,7 @@ exports.AddCityStateInForm = async(req, res) =>{
 
     const date = new Date().toISOString().slice(0, 10); 
 
-    const newCityAndStateAdd = new adminmodel({
+    const newCityAndStateAdd = new addcitymodel({
         state,
         city,
         date,
@@ -27,7 +27,7 @@ exports.AddCityStateInForm = async(req, res) =>{
 
 exports.GetAllCityState = async(req, res) =>{
     
-    const allData = await adminmodel.find()
+    const allData = await addcitymodel.find()
 
     if(!allData){
         return res.status(500).json({message: "error fetching data"})
@@ -39,8 +39,12 @@ exports.GetAllCityState = async(req, res) =>{
 
 exports.getAllStatesFromStates = async(req, res) => {
 
-    const cities = await addstatemodel.find()
-    .populate('state')
+    const cities = await addcitymodel.find()
+    .populate("state")
+    // .populate({
+    //     path: "state",
+    //     model: "AddState"
+    // })
 
     console.log(`>>>cities>>>>`, cities)
 
@@ -48,7 +52,9 @@ exports.getAllStatesFromStates = async(req, res) => {
         return res.status(400).json({message: "data not found"})
     }
 
-    res.status(200).json({ state: cities })
+    // res.status(200).json({ state: cities })
+
+    return res.status(200).json({ status: true, message: "Location fetched Successfully", state: cities })
 
 }
 
@@ -61,7 +67,7 @@ exports.UpdateCityState = async(req, res) => {
     const {city, state, status} = req.body
 
     try{
-        const updatedtask = await adminmodel.findByIdAndUpdate(id, { city, state, status }, {new: true})
+        const updatedtask = await addcitymodel.findByIdAndUpdate(id, { city, state, status }, {new: true})
         return res.json({message: 'Update is complete', updatedtask})
     }catch{
         return res.status(500).json({message: 'failed to update',})
@@ -72,7 +78,7 @@ exports.UpdateCityState = async(req, res) => {
 exports.softdelete = async(req,res) => {
     const {id} = req.params
 
-    const updatestatus = await adminmodel.findByIdAndUpdate(
+    const updatestatus = await addcitymodel.findByIdAndUpdate(
         id,
         {status: 'inactive'},
         {new: true}
@@ -89,7 +95,7 @@ exports.softdelete = async(req,res) => {
 exports.hardDelete = async (req, res) => {
     const { id } = req.params;
     
-    const deleteEntry = await adminmodel.findByIdAndDelete(id)
+    const deleteEntry = await addcitymodel.findByIdAndDelete(id)
 
     if(!deleteEntry){
         return res.status(400).json({message:  "entry not found !!"})
@@ -103,7 +109,7 @@ exports.hardDelete = async (req, res) => {
 exports.ActivateEntryFromDeactivation = async(req, res) => {
     const {id} = req.params
 
-    const updatedentry = await adminmodel.findByIdAndUpdate(
+    const updatedentry = await addcitymodel.findByIdAndUpdate(
         id,
         {status : 'active'},
         {new: true}
