@@ -16,12 +16,14 @@ mongoose.connect(mongourl)
 const userrouter = require('./Router/UserRouter')
 const adminrouter = require('./Router/AddCityRouter')
 const staterouter = require('./Router/AddStateRouter')
-
-
+const hotelrouter = require('./Router/AddHotelRouter')
+const roomroute = require('./Router/AddRoomRouter')
 
 app.use('/user', userrouter)
 app.use('/admin', adminrouter)
 app.use('/addingstate', staterouter)
+app.use('/hotelroute', hotelrouter)
+app.use('/roomroute', roomroute)
 
 app.listen(port, () => {
     console.log(`${port} is listning`)

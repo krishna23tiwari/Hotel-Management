@@ -1,74 +1,143 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const ForAdmin = () => {
-  const [form, setForm] = useState({ city: '', state: '' });
+  const [form, setForm] = useState({ city: "", state: "" });
+  const [states, setStates] = useState([]);
   const [data, setData] = useState([]);
+  const [activeinactive ,setctiveinactive] = useState([])
   const [inactiveData, setInactiveData] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [availableStates, setAvailableStates] = useState([]);
 
 
-  const [searchActive, setSearchActive] = useState('');
-  const [searchInactive, setSearchInactive] = useState('');
+  const [searchActive, setSearchActive] = useState("");
+  const [searchInactive, setSearchInactive] = useState("");
   const [sortActiveAsc, setSortActiveAsc] = useState(true);
   const [sortInactiveAsc, setSortInactiveAsc] = useState(true);
 
   useEffect(() => {
     fetchData();
-    fetchStates();
+   
+    fetchStatesindropdown();
   }, []);
 
-  const fetchStates = async () => {
-    const res = await axios.get('http://localhost:4545/admin/getallstates', getAuthHeaders());
-    // console.log(`>>>>statedataforcity`,res.data.state)
-    console.log("data", res.data.state.map((val) => val));
-    setAvailableStates(res.state|| []); // assuming res.data.states is the array
+  // const fetchStates = async () => {
+  //   const res = await axios.get(
+  //     "http://localhost:4545/admin/getallstates",
+  //     getAuthHeaders()
+  //   );
+  //   // console.log(`>>>>statedataforcity`,res.data.state)
+  //   console.log(
+  //     "data",
+  //     res.data.state.map((val) => val)
+  //   );
+  //   setAvailableStates(res.data.state || []); // assuming res.data.states is the array
+  // };
+
+  const fetchStatesindropdown = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4545/addingstate/showallstate",
+        getAuthHeaders()
+      );
+
+      const activeStates = response.data.data.filter(state => state.status === 'active');
+      // console.log(`>>>>cityDropDown>>>>>`, response.data.data)
+      setStates(activeStates);
+      setctiveinactive(response.data.data)
+
+    } catch (error) {
+      console.error("Error fetching states:", error);
+      showAlert("error", "Failed to load states");
+    }
   };
 
-  console.log(`>>>>available>>>`, availableStates)
+
+  // const fetchStatesindropdown = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "http://localhost:4545/addingstate/showallstate",
+  //       getAuthHeaders()
+  //     );
+      
+  //     // Filter the states to include only those with 'active' status
+  //     const activeStates = response.data.data.filter(state => state.status === 'active');
+      
+  //     setStates(activeStates);
+  //     console.log("Active states:", activeStates);
+  //   } catch (error) {
+  //     console.error("Error fetching states:", error);
+  //     showAlert("error", "Failed to load states");
+  //   }
+  // };
+  
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
   const fetchData = async () => {
-    const res = await axios.get('http://localhost:4545/admin/getalldata', getAuthHeaders());
-    const actualData = res.data.data; // correct path to the array
+    const res = await axios.get(
+      "http://localhost:4545/admin/getalldata",
+      getAuthHeaders()
+    );
+    const actualData = res.data.data; 
 
-    const active = actualData.filter(item => item.status === 'active');
-    const inactive = actualData.filter(item => item.status === 'inactive');
+    const active = actualData.filter((item) => item.status === "active");
+    const inactive = actualData.filter((item) => item.status === "inactive");
 
     setData(active);
     setInactiveData(inactive);
   };
 
-  // const handleChange = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value });
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  
+
 
   const handleSubmit = async () => {
-    if (!form.city || !form.state) return alert('Both fields required');
-    if (editingId) {
-      await axios.put(`http://localhost:4545/admin/updatecitystate/${editingId}`, form, getAuthHeaders());
-    } else {
-      await axios.post('http://localhost:4545/admin/AddCityState', form, getAuthHeaders());
-    }
-    setForm({ city: '', state: '' });
-    setEditingId(null);
-    fetchData();
-  };
-
-
-
+    if (!form.city || !form.state) return alert("Both fields required");
   
+    try {
+      let response;
+      if (editingId) {
+
+        response = await axios.put(
+          `http://localhost:4545/admin/updatecitystate/${editingId}`,
+          form,
+          getAuthHeaders()
+        );
+      } else {
+        response = await axios.post(
+          "http://localhost:4545/admin/AddCityState",
+          form,
+          getAuthHeaders()
+        );
+      }
+
+      if (response.status === 200) {
+        alert(response.data.message); 
+      }
+  
+  
+      setForm({ city: "", state: "" });
+      setEditingId(null);
+      fetchData();
+    } catch (err) {
+
+      if (err.response && err.response.data && err.response.data.message) {
+        alert(err.response.data.message); 
+        setForm({ city: "", state: "" });
+      } else {
+        console.error("Error submitting:", err);
+        alert("Failed to add or update city-state. Please try again.");
+      }
+    }
+  };
+  
+
 
   const handleEdit = (item) => {
     setForm({ city: item.city, state: item.state });
@@ -76,7 +145,11 @@ const ForAdmin = () => {
   };
 
   const activateEntry = async (id) => {
-    await axios.patch(`http://localhost:4545/admin/activateentry/${id}`, {}, getAuthHeaders());
+    await axios.patch(
+      `http://localhost:4545/admin/activateentry/${id}`,
+      {},
+      getAuthHeaders()
+    );
     fetchData();
   };
 
@@ -86,7 +159,10 @@ const ForAdmin = () => {
   };
 
   const hardDelete = async (id) => {
-    await axios.delete(`http://localhost:4545/admin/harddelete/${id}`, getAuthHeaders());
+    await axios.delete(
+      `http://localhost:4545/admin/harddelete/${id}`,
+      getAuthHeaders()
+    );
     fetchData();
   };
 
@@ -94,42 +170,39 @@ const ForAdmin = () => {
     <div className="p-5">
       <h1 className="text-xl mb-4 font-semibold">City-State Management</h1>
 
-
-
       <div className="flex gap-2 mb-4">
-  <input
-    type="text"
-    name="city"
-    value={form.city}
-    onChange={handleChange}
-    placeholder="Enter city"
-    className="border px-2 py-1"
-  />
+        <input
+          type="text"
+          name="city"
+          value={form.city}
+          onChange={handleChange}
+          placeholder="Enter city"
+          className="border px-2 py-1"
+        />
 
+        <select
+          name="state"
+          value={form.state}
+          onChange={handleChange}
+          className="border px-2 py-1"
+        >
+          <option value="">Select state</option>
 
-  <select
-    name="state"
-    value={form.state}
-    onChange={handleChange}
-    className="border px-2 py-1"
-  >
-    <option value="">Select state</option>
-    {availableStates.map((state, index) => (
-      
+          {states.map((state) => (
+            <option key={state._id} value={state._id}>
+              {state.state}
+            </option>
+          ))}
+        </select>
 
-      <option key={state.id} value={state._id}>
-  {state.state}
-</option>
-
-    ))}
-  </select>
-
-  {/* Submit Button */}
-  <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded">
-    {editingId ? 'Update' : 'Add'}
-  </button>
-</div>
-
+        {/* Submit Button */}
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 text-white px-4 py-1 rounded"
+        >
+          {editingId ? "Update" : "Add"}
+        </button>
+      </div>
 
       {/* Active List */}
       <h2 className="font-bold">Active Entries</h2>
@@ -147,7 +220,7 @@ const ForAdmin = () => {
           onClick={() => setSortActiveAsc(!sortActiveAsc)}
           className="bg-gray-300 px-3 py-1 rounded"
         >
-          Sort {sortActiveAsc ? 'A-Z' : 'Z-A'}
+          Sort {sortActiveAsc ? "A-Z" : "Z-A"}
         </button>
       </div>
 
@@ -162,7 +235,7 @@ const ForAdmin = () => {
         </thead>
         <tbody>
           {[...data]
-            .filter(item =>
+            .filter((item) =>
               item.city.toLowerCase().includes(searchActive.toLowerCase())
             )
             .sort((a, b) =>
@@ -170,17 +243,36 @@ const ForAdmin = () => {
                 ? a.city.localeCompare(b.city)
                 : b.city.localeCompare(a.city)
             )
-            .map(item => (
+            .map((item) => (
               <tr key={item._id}>
                 <td className="border px-2 py-1">{item.city}</td>
-                <td className="border px-2 py-1">{item.state}</td>
 
+                <td className="border px-2 py-1">
+                  {item.state?.state ||
+                    activeinactive.find((s) => s._id === item.state)?.state ||
+                    "Unknown"}
+                </td>
 
                 <td className="border px-2 py-1">{item.date}</td>
                 <td className="border px-2 py-1 flex gap-2">
-                  <button onClick={() => handleEdit(item)} className="text-yellow-600">Edit</button>
-                  <button onClick={() => softDelete(item._id)} className="text-orange-600">Soft Delete</button>
-                  <button onClick={() => hardDelete(item._id)} className="text-red-600">Hard Delete</button>
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="text-yellow-600"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => softDelete(item._id)}
+                    className="text-orange-600"
+                  >
+                    Soft Delete
+                  </button>
+                  <button
+                    onClick={() => hardDelete(item._id)}
+                    className="text-red-600"
+                  >
+                    Hard Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -203,7 +295,7 @@ const ForAdmin = () => {
           onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
           className="bg-gray-300 px-3 py-1 rounded"
         >
-          Sort {sortInactiveAsc ? 'A-Z' : 'Z-A'}
+          Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
         </button>
       </div>
 
@@ -218,7 +310,7 @@ const ForAdmin = () => {
         </thead>
         <tbody>
           {[...inactiveData]
-            .filter(item =>
+            .filter((item) =>
               item.city.toLowerCase().includes(searchInactive.toLowerCase())
             )
             .sort((a, b) =>
@@ -226,15 +318,25 @@ const ForAdmin = () => {
                 ? a.city.localeCompare(b.city)
                 : b.city.localeCompare(a.city)
             )
-            .map(item => (
+            .map((item) => (
               <tr key={item._id}>
                 <td className="border px-2 py-1">{item.city}</td>
-                <td className="border px-2 py-1">{item.state}</td>
+
+                <td td className="border px-2 py-1">
+                {item.state?.state ||
+                  activeinactive.find((value) => value._id === item.state)?.state ||
+                  "Unknown"
+                  }
+                </td>
+
                 <td className="border px-2 py-1">{item.date}</td>
                 <td className="border px-2 py-1 flex gap-2">
-                  <button onClick={() => activateEntry(item._id)} className="text-green-600">Activate</button>
-                  {/* <button onClick={() => softDelete(item._id)} className="text-orange-600">Soft Delete</button>
-                  <button onClick={() => hardDelete(item._id)} className="text-red-600">Hard Delete</button> */}
+                  <button
+                    onClick={() => activateEntry(item._id)}
+                    className="text-green-600"
+                  >
+                    Activate
+                  </button>
                 </td>
               </tr>
             ))}
@@ -245,3 +347,6 @@ const ForAdmin = () => {
 };
 
 export default ForAdmin;
+
+
+

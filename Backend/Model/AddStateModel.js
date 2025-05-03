@@ -22,3 +22,6 @@ const addState = new schema({
 }, { timestamps: true, versionKey: false })
 
 module.exports = mongoose.model('AddState',addState )
+
+
+

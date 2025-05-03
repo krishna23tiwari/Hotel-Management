@@ -12,6 +12,12 @@ exports.AddCityStateInForm = async(req, res) =>{
 
     const date = new Date().toISOString().slice(0, 10); 
 
+    const existingcity = await addcitymodel.findOne({city})
+
+    if(existingcity){
+        return res.status(400).json({message: "city is already exists"})
+    }
+
     const newCityAndStateAdd = new addcitymodel({
         state,
         city,
@@ -39,8 +45,9 @@ exports.GetAllCityState = async(req, res) =>{
 
 exports.getAllStatesFromStates = async(req, res) => {
 
-    const cities = await addcitymodel.find()
+    const cities = await add.find()
     .populate("state")
+    // .where('status').equals('active');
     // .populate({
     //     path: "state",
     //     model: "AddState"
