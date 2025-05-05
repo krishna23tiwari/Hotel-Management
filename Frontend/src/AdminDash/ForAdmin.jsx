@@ -144,14 +144,64 @@ const ForAdmin = () => {
     setEditingId(item._id);
   };
 
+  // const activateEntry = async (id) => {
+  //  const res =  await axios.patch(
+  //     `http://localhost:4545/admin/activateentry/${id}`,
+  //     {},
+  //     getAuthHeaders()
+  //   );
+  //   console.log(res.data)
+  //   alert(res.data.message)
+  //   fetchData();
+  // };
+
+  // const activateEntry = async (id) => {
+  //   try {
+  //     const res = await axios.patch(
+  //       `http://localhost:4545/admin/activateentry/${id}`,
+  //       {},
+  //       getAuthHeaders()
+  //     );
+  //     console.log(res);  
+  //     alert(res.data.message);  
+  //     fetchData();
+  //   } catch (err) {
+  //     console.error("Error activating entry:", err);
+  //     alert("Failed to activate city, state is inactive.");
+  //   }
+  // };
+
+
   const activateEntry = async (id) => {
-    await axios.patch(
-      `http://localhost:4545/admin/activateentry/${id}`,
-      {},
-      getAuthHeaders()
-    );
-    fetchData();
+    try {
+      const res = await axios.patch(
+        `http://localhost:4545/admin/activateentry/${id}`,
+        {},
+        getAuthHeaders()
+      );
+      // 200 OK
+      alert(res.data.message);
+      fetchData();
+    } catch (err) {
+      if (err.response) {
+        // your backend is returning 400 for “state inactive” or 404 for “city not found”, etc.
+        const { status, data } = err.response;
+        if (status === 400 || status === 404) {
+          alert(data.message);
+        } else if (status >= 500) {
+          alert("Server error — please try again later.");
+        } else {
+          alert("Unexpected error: " + data.message);
+        }
+      } else {
+        // no response (network error, etc.)
+        console.error("Error activating entry:", err);
+        alert("Network error — please check your connection.");
+      }
+    }
   };
+  
+  
 
   const softDelete = async (id) => {
     await axios.patch(`http://localhost:4545/admin/softdelete/${id}`);
@@ -171,14 +221,7 @@ const ForAdmin = () => {
       <h1 className="text-xl mb-4 font-semibold">City-State Management</h1>
 
       <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          name="city"
-          value={form.city}
-          onChange={handleChange}
-          placeholder="Enter city"
-          className="border px-2 py-1"
-        />
+       
 
         <select
           name="state"
@@ -194,6 +237,15 @@ const ForAdmin = () => {
             </option>
           ))}
         </select>
+
+        <input
+          type="text"
+          name="city"
+          value={form.city}
+          onChange={handleChange}
+          placeholder="Enter city"
+          className="border px-2 py-1"
+        />
 
         {/* Submit Button */}
         <button

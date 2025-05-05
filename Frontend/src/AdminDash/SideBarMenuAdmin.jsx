@@ -40,8 +40,10 @@ const Sidebar = () => {
     { name: 'Add State', path: '/add-state' },
     { name: 'Add City', path: '/add-city' },
     { name: 'Add Hotel', path: '/add-hotel' },
-    { name: 'Add Rooms', path: '/add-room' }
-  ];
+    { name: 'Add Rooms', path: '/add-room' },
+    { name: 'for user', path: '/user-board' },
+    { name: 'practice', path: '/user-board' }
+  ]
 
   const handleLogout = () => {
     localStorage.clear(); // Clear token or all stored items

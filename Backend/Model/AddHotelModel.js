@@ -13,6 +13,27 @@ const addHotel = new schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'AddCity'
         },
+    
+        address: {
+    type: String,
+    require: true,
+  },
+  room: {
+    type: Number,
+    require: true,
+  },
+  description: {
+    type: String,
+    require: true,
+  },
+  phone: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
 
     status: { 
         type: String, 

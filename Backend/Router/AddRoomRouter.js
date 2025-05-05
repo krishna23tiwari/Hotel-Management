@@ -15,7 +15,7 @@ router.delete('/harddeleteroom/:id', auth, roomroute.hardDeleteRoom);
 
 router.patch('/activateroom/:id', auth, roomroute.activateRoom);
 
-router.get('/getroom/:id', auth, roomroute.getRoomById);
+// router.get('/getroom/:id', auth, roomroute.getRoomById);
 
 
 module.exports = router 

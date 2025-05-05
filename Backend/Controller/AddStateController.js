@@ -1,6 +1,7 @@
 const addstatemodel = require('../Model/AddStateModel')
 const addcitymodel = require('../Model/AddCityModel')
 const addhotel = require('../Model/AddHotelModel')
+const addroom = require('../Model/AddRoomModel')
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 // const { findByIdAndUpdate } = require('../Model/UserModel');
@@ -60,80 +61,132 @@ exports.updateState = async(req, res) => {
 }
 
 
-exports.softDeleteState = async (req, res) => {
-    const { id } = req.params;
-  
-    const updatedstate = await addstatemodel.findByIdAndUpdate(
-        id,
-        {status: 'inactive'},
-        {new: true}
-    )
-
-    if (!updatedstate) {
-        return res.status(404).json({ message: "State not found" });
-      }
-
-      const linkedCities = await addcitymodel.find({
-        state: new mongoose.Types.ObjectId(id),
-      });
-console.log("Linked Cities:", linkedCities);
-
-
-    await addcitymodel.updateMany(
-        { state: id }, 
-        { status: 'inactive' } 
-    )
-
-    res
-    .status(200)
-    .json({ message: "State and linked cities deactivated successfully" })
- 
-  };
-  
-
-
-exports.activateState = async(req, res) => {
-        const {id} = req.params
-    
-        const updatedentry = await addstatemodel.findByIdAndUpdate(
-            id,
-            {status : 'active'},
-            {new: true}
-        )
-    
-        if(!updatedentry){
-            return res.status(400).json({messgae: "Entry not found "})
+    exports.softDeleteState = async (req, res) => {
+        const { id } = req.params;
+      
+        const updatedState = await addstatemodel.findByIdAndUpdate(
+          id,
+          { status: 'inactive' },
+          { new: true }
+        );
+      
+        if (!updatedState) {
+          return res.status(404).json({ message: 'State not found' });
         }
-    
-        res.status(200).json({message: "entry is activated"})
-}
-
-exports.hardDeleteState = async(req, res) => {
-     const { id } = req.params;
-
-        
-        const deleteEntry = await addstatemodel.findByIdAndDelete(id)
-    
-        if(!deleteEntry){
-            return res.status(400).json({message:  "entry not found !!"})
-        }
-
-        const deletecity = await addcitymodel.deleteMany({
-            state: new mongoose.Types.ObjectId(id),
-        })
-
-        const deletehotel = await addhotel.deleteMany({
-            state: new mongoose.Types.ObjectId(id),
-        })
-
-        console.log(`>>>delete>>>>`, deletecity)
-    
+      
+        const linkedCities = await addcitymodel.find({ state: id });
+        const cityIds = linkedCities.map(city => city._id);
+      
+        await addcitymodel.updateMany(
+          { state: id },
+          { status: 'inactive' }
+        );
+      
+        const hotelUpdateResult = await addhotel.updateMany(
+          { city: { $in: cityIds } },
+          { status: 'inactive' }
+        );
+      
+        const linkedHotels = await addhotel.find({ city: { $in: cityIds } });
+        const hotelIds = linkedHotels.map(h => h._id);
+      
+        const roomUpdateResult = await addroom.updateMany(
+          { hotel: { $in: hotelIds } },
+          { status: 'inactive' }
+        );
+      
         res.status(200).json({
-            message: "State and linked cities permanently deleted successfully",
-            deleteEntry,
-            deletedCitiesCount: deletecity.deletedCount,
-          });
-}
+          message: 'State, cities, hotels, and rooms deactivated successfully',
+          updatedState,
+          deactivatedCitiesCount: cityIds.length,
+          deactivatedHotelsCount: hotelUpdateResult.modifiedCount,
+          deactivatedRoomsCount: roomUpdateResult.modifiedCount,
+        });
+      };
+
+
+
+      
+      exports.activateState = async (req, res) => {
+        const { id } = req.params;
+
+        const updatedEntry = await addstatemodel.findByIdAndUpdate(
+          id,
+          { status: 'active' },
+          { new: true }
+        );
+      
+        if (!updatedEntry) {
+          return res.status(400).json({ message: 'Entry not found' });
+        }
+
+        const linkedCities = await addcitymodel.find({ state: id });
+        const cityIds = linkedCities.map(city => city._id);
+      
+        await addcitymodel.updateMany(
+          { state: id },
+          { status: 'active' }
+        );
+      
+        const hotelUpdateResult = await addhotel.updateMany(
+          { city: { $in: cityIds } },
+          { status: 'active' }
+        );
+      
+        const linkedHotels = await addhotel.find({ city: { $in: cityIds } });
+        const hotelIds = linkedHotels.map(h => h._id);
+      
+        const roomUpdateResult = await addroom.updateMany(
+          { hotel: { $in: hotelIds } },
+          { status: 'active' }
+        );
+      
+        res.status(200).json({
+          message: 'State, cities, hotels, and rooms activated successfully',
+          updatedState: updatedEntry,
+          activatedCitiesCount: cityIds.length,
+          activatedHotelsCount: hotelUpdateResult.modifiedCount,
+          activatedRoomsCount: roomUpdateResult.modifiedCount,
+        });
+      };
+
+
+      
+    
+
+      exports.hardDeleteState = async (req, res) => {
+        const { id } = req.params;
+
+        const cities = await addcitymodel.find({ state: id });
+        const cityIds = cities.map(city => city._id);
+      
+
+        const hotels = await addhotel.find({ city: { $in: cityIds } });
+        const hotelIds = hotels.map(hotel => hotel._id);
+    
+        const deletedRooms = await addroom.deleteMany({ hotel: { $in: hotelIds } });
+      
+        const deletedHotels = await addhotel.deleteMany({ city: { $in: cityIds } });
+      
+        const deletedCities = await addcitymodel.deleteMany({ state: id });
+      
+        const deletedState = await addstatemodel.findByIdAndDelete(id);
+      
+        if (!deletedState) {
+          return res.status(400).json({ message: 'State not found!' });
+        }
+      
+        res.status(200).json({
+          message: 'State, its cities, hotels, and rooms deleted successfully',
+          deletedState,
+          deletedCitiesCount: deletedCities.deletedCount,
+          deletedHotelsCount: deletedHotels.deletedCount,
+          deletedRoomsCount: deletedRooms.deletedCount,
+        });
+      };
+      
+
+
 
 
 
