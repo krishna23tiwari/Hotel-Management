@@ -9,6 +9,7 @@ import AddState from './AdminDash/AddState';
 import SideBarMenuAdmin from './AdminDash/SideBarMenuAdmin';
 import AddHotel from './AdminDash/AddHotel';
 import AddRoom from './AdminDash/AddRoom';
+import ForBookings from './Components/ForBookings';
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/otp" element={<OtpVarificaton />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/user-board" element={<ForUser />} />
+        <Route path="/user-booking-form/:selectedRoom" element={<ForBookings />} />
 
         {/* Admin Routes with Sidebar */}
         <Route

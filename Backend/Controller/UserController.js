@@ -202,7 +202,7 @@ exports.login = async(req, res) => {
       return  res.status(401).json({message: 'Incorrect password'})
     }
 
-    const token = jwt.sign({ email, role: user.role }, secret, { expiresIn: '2h' });
+    const token = jwt.sign({ email, role: user.role }, secret, { expiresIn: '24h' });
 
     const resdata = {
         message: "Login Successful",
