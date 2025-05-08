@@ -128,7 +128,7 @@ const citiesByState = rooms.reduce((acc, room) => {
 
   return (
     // <div className="p-4">
-    <div className="p-4 min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
 <div className="relative h-[60vh] bg-cover bg-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/462014/pexels-photo-462014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
     <div className="absolute inset-0 bg-opacity-50"></div>
 

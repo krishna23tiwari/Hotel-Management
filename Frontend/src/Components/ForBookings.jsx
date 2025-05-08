@@ -193,13 +193,24 @@ const ForBookings = () => {
             </select>
           </div>
 
-          {/* Display Price Section */}
+          
           <div className="bg-white p-4 rounded-md shadow text-center">
+            <input 
+                type = "text"
+                name="Coupon Code"
+                value={formData.userName}
+                onChange={handleChange}
+                placeholder="Ener Coupon Code"
+                required
+                className="w-full p-2 border rounded"
+                />
+               <hr className="my-2 mb-3" /> 
             <p className="text-sm text-gray-600">Price per Night</p>
             <p className="text-xl font-bold text-indigo-700">₹ {roomPrice}</p>
             <hr className="my-2" />
             <p className="text-sm text-gray-600">Total Price</p>
             <p className="text-xl font-bold text-green-600">₹ {totalPrice}</p>
+            
           </div>
 
           <button

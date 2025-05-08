@@ -23,7 +23,7 @@ exports.signup = async(req, res) =>{
     let otp = "";
     for (let i = 0; i < 6; i++) {
         otp += Math.floor(Math.random() * 10);
-      }
+      }   
 
     const currTimer = moment();
     const otpTimer = currTimer.clone().add(10, "minutes"); 

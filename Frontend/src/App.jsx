@@ -10,6 +10,7 @@ import SideBarMenuAdmin from './AdminDash/SideBarMenuAdmin';
 import AddHotel from './AdminDash/AddHotel';
 import AddRoom from './AdminDash/AddRoom';
 import ForBookings from './Components/ForBookings';
+import ForUserBookingAdminSide from './Components/UserBookingAdminSide';
 
 
 
@@ -71,6 +72,15 @@ const App = () => {
             </AdminLayout>
           }
         />
+
+        <Route
+          path="/user-admin-side-dash"
+          element={
+            <AdminLayout>
+              <ForUserBookingAdminSide />
+            </AdminLayout>
+          }
+          />
         {/* Add other admin routes similarly */}
       </Routes>
     </BrowserRouter>

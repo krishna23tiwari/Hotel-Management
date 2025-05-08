@@ -42,12 +42,12 @@ const Sidebar = () => {
     { name: 'Add Hotel', path: '/add-hotel' },
     { name: 'Add Rooms', path: '/add-room' },
     { name: 'for user', path: '/user-board' },
-    { name: 'practice', path: '/user-board' }
+    { name: 'user-admin-side', path: '/user-admin-side-dash' }
   ]
 
   const handleLogout = () => {
-    localStorage.clear(); // Clear token or all stored items
-    navigate('/login');   // Navigate to login
+    localStorage.clear(); 
+    navigate('/login');  
   };
 
   return (

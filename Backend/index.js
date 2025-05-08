@@ -22,6 +22,7 @@ const staterouter = require('./Router/AddStateRouter')
 const hotelrouter = require('./Router/AddHotelRouter')
 const roomroute = require('./Router/AddRoomRouter')
 const bookingroute = require('./Router/UserBookings')
+const couponroute = require('./Router/CouponRoute')
 
 app.use('/user', userrouter)
 app.use('/admin', adminrouter)
@@ -29,6 +30,7 @@ app.use('/addingstate', staterouter)
 app.use('/hotelroute', hotelrouter)
 app.use('/roomroute', roomroute)
 app.use('/userbooking', bookingroute)
+app.use('/coupon', couponroute )
 
 app.listen(port, () => {
     console.log(`${port} is listning`)

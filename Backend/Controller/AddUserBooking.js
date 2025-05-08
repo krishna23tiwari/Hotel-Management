@@ -89,33 +89,51 @@ exports.showbookingdata = async (req,res) => {
 }
 
 
+exports.ShowBookingsWithoutPopulate = async (req,res) =>{
+    
+    const allRooms = await adduserbooking.find()
 
-// exports.showbookingdata = async (req, res) => {
-//     try {
-//       const allBookings = await adduserbooking.find()
-//         .populate({
-//           path: 'roomId',
-//           populate: {
-//             path: 'hotel',
-//             populate: {
-//               path: 'city',
-//               populate: {
-//                 path: 'state'
-//               }
-//             }
-//           }
-//         });
-  
-//       if (!allBookings || allBookings.length === 0) {
-//         return res.status(404).json({ message: "No booking data found" });
-//       }
-  
-//       res.status(200).json({ message: "All booking data fetched", data: allBookings });
-//     } catch (error) {
-//       console.error("Error in showbookingdata:", error);
-//       res.status(500).json({ message: "Server error" });
-//     }
-//   };
-  
+    console.log(`>>>>getallstate>>>>`,allRooms)
+    
+    if(!allRooms){
+        return res.status(400).json({message : "error to fetching state data"})
+    }else{
+       return res.status(200).json({message: "all booking data fetched", data : allRooms})
+    }
+
+
+}
+
+
+exports.UpdateUserBookingStatus = async (req,res) => {
+
+    const {id} = req.params
+    const {status} = req.body
+
+    try {
+        // Validate the status value
+        if (!["pending", "approved", "cancelled"].includes(status)) {
+          return res.status(400).json({ success: false, message: "Invalid status value" });
+        }
+    
+        // Find and update the booking
+        const updatedBooking = await adduserbooking.findByIdAndUpdate(
+          id,
+          { status: status },
+          { new: true }
+        );
+    
+        if (!updatedBooking) {
+          return res.status(404).json({ success: false, message: "Booking not found" });
+        }
+    
+        return res.status(200).json({ success: true, message: "Status updated", data: updatedBooking });
+      } catch (error) {
+        console.error("Error updating status:", error);
+        return res.status(500).json({ success: false, message: "Server error" });
+      }
+
+
+}
 
  
