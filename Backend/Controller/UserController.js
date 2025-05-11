@@ -179,6 +179,101 @@ exports.resetPassword = async(req, res) => {
 
 
 
+// exports.userPasswordReset = async (req, res) => {
+//   const { email, oldPassword, newPassword } = req.body;
+
+//   try {
+//     // 1. Find the user by email
+//     const user = await usermodel.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // 2. Compare old password
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ message: "Old password is incorrect" });
+//     }
+
+//     // 3. Hash the new password
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+//     // 4. Update the password
+//     user.password = hashedNewPassword;
+//     await user.save();
+
+//     res.status(200).json({ message: "Password reset successful" });
+//   } catch (error) {
+//     console.error("Reset password error:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+
+// exports.userPasswordReset = async (req, res) => {
+//   const { oldPassword, newPassword } = req.body;
+
+//   try {
+//     // 1. Get user email from token (set by auth middleware)
+//     const userEmail = req.user.email;
+
+//     console.log(`>>>>email>>>`, userEmail)
+
+//     const user = await usermodel.findOne({ email: userEmail });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // 2. Compare old password
+//     const isMatch = await bcrypt.compare(oldPassword, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ message: "Old password is incorrect" });
+//     }
+
+//     // 3. Hash new password and save
+//     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+//     user.password = hashedNewPassword;
+//     await user.save();
+
+//     res.status(200).json({ message: "Password reset successful" });
+//   } catch (error) {
+//     console.error("Reset password error:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+
+exports.userPasswordReset = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const userEmail = req.user.email; // Logged-in user's email only
+
+    console.log(`>>>>>userEmail>>>>`, userEmail)
+
+    const user = await usermodel.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 
 
 exports.login = async(req, res) => {

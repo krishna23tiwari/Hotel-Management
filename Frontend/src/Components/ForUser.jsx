@@ -134,7 +134,7 @@ const citiesByState = rooms.reduce((acc, room) => {
 
     {/* Site Name */}
     <div className="absolute top-4 left-6 z-10">
-      <h1 className="text-3xl font-sans text-white">FindMyStay</h1>
+      {/* <h1 className="text-3xl font-sans text-white">FindMyStay</h1> */}
     </div>
 
     {/* Filters & Search */}

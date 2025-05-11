@@ -45,14 +45,23 @@ const bookingSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    userEmail:{
+        type: String,
+        required : true
+    },
     status: {
         type: String,
         enum: ['pending', 'cancel', 'approved'],
         default : "pending"
     },
-    ischeck : {
-        type: Boolean,
-        default: false
+    ischecking : {
+        type: String,
+       enum: ['checkIn', 'checkOut', 'cancel', 'waiting'],
+        default: "waiting"
+
+    },
+    couponName:{
+        type: String
     }
   },
   { timestamps: true, versionKey: false }

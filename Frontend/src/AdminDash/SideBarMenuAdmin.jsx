@@ -42,7 +42,9 @@ const Sidebar = () => {
     { name: 'Add Hotel', path: '/add-hotel' },
     { name: 'Add Rooms', path: '/add-room' },
     { name: 'for user', path: '/user-board' },
-    { name: 'user-admin-side', path: '/user-admin-side-dash' }
+    { name: 'user-admin-side', path: '/user-admin-side-dash' },
+    { name: 'Admin coupons', path: '/coupons'},
+    
   ]
 
   const handleLogout = () => {

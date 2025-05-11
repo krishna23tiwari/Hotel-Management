@@ -8,11 +8,14 @@ const mongoose = require('mongoose');
 const { populate } = require('../Model/UserModel')
 // const { findByIdAndUpdate } = require('../Model/UserModel');
 const secret = "asasfasfijqwijjqwmnasfa"
+const {sendBookingApprovalEmail} = require('../Utils/EmailService')
+const senderemail = "jangiddummy6375@gmail.com";
+const mailkey = "evhb rvjo ysqi ooss";
 
 
 exports.foruserbookings = async (req, res) => {
     
-        console.log(req.body);
+        // console.log(req.body);
         try {
           const {
             roomId,
@@ -24,6 +27,9 @@ exports.foruserbookings = async (req, res) => {
             totalAmount,
             userName,
             userPhone,
+            userEmail,
+            couponName,
+            isChecking
           } = req.body;
       
           const conflict = await adduserbooking.findOne({
@@ -40,6 +46,25 @@ exports.foruserbookings = async (req, res) => {
           if (conflict) {
             return res.status(200).json({ message: "Room is already booked" });
           }
+
+        //   const emailsent = await sendBookingApprovalEmail({
+        //     userId : req.user._id,
+        //     roomId,
+        //     checkInDate,
+        //     checkOutDate,
+        //     numberOfGuests,
+        //     numberOfRooms,
+        //     anyChild,
+        //     totalAmount,
+        //     userName,
+        //     userPhone,
+        //     senderemail,
+        //     mailkey
+        // })
+
+        // if(!emailsent){
+        //     return res.status(400).json({message: "Failed to send Message of booking"})
+        // }
       
           const booking = new adduserbooking({
             userId : req.user._id,
@@ -52,6 +77,9 @@ exports.foruserbookings = async (req, res) => {
             totalAmount,
             userName,
             userPhone,
+            userEmail,
+            couponName,
+            isChecking
             
           });
       
@@ -79,7 +107,7 @@ exports.showbookingdata = async (req,res) => {
         }   
       })
     
-        console.log(`>>>>getallstate>>>>`,allRooms)
+        // console.log(`>>>>getallstate>>>>`,allRooms)
     
         if(!allRooms){
             return res.status(400).json({message : "error to fetching state data"})
@@ -93,7 +121,7 @@ exports.ShowBookingsWithoutPopulate = async (req,res) =>{
     
     const allRooms = await adduserbooking.find()
 
-    console.log(`>>>>getallstate>>>>`,allRooms)
+    // console.log(`>>>>getallstate>>>>`,allRooms)
     
     if(!allRooms){
         return res.status(400).json({message : "error to fetching state data"})
@@ -111,12 +139,11 @@ exports.UpdateUserBookingStatus = async (req,res) => {
     const {status} = req.body
 
     try {
-        // Validate the status value
+        
         if (!["pending", "approved", "cancelled"].includes(status)) {
           return res.status(400).json({ success: false, message: "Invalid status value" });
         }
     
-        // Find and update the booking
         const updatedBooking = await adduserbooking.findByIdAndUpdate(
           id,
           { status: status },
@@ -133,7 +160,181 @@ exports.UpdateUserBookingStatus = async (req,res) => {
         return res.status(500).json({ success: false, message: "Server error" });
       }
 
-
 }
 
- 
+exports.harddelete = async(req, res) => {
+    
+    const {id} = req.params
+
+    const bookingdelete = await adduserbooking.findByIdAndDelete(id)
+
+    if(!bookingdelete){
+        return res.status(400).json({message: "User id has been not found"})
+    }
+
+    res.status(200).json({messaage : "User id has been deleted"})
+}
+
+exports.softdelete = async(req,res) =>{
+
+    const {id} = req.params
+
+    const softdelete = await adduserbooking.findByIdAndUpdate(
+        id,
+        {isActive: "false"},
+        {new: true}
+    )
+
+    // console.log(`>>>>softdelet>>>`,softdelete)
+
+    if(!softdelete){
+        return res.status(400).json({message: "Found some error "})
+    }
+
+    res.status(200).json({message: "Soft Delete done successfully"})
+}
+
+
+
+
+exports.approveUser = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      
+      const booking = await adduserbooking.findById(id);
+  
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+      
+      if (booking.status === "approved") {
+        return res.status(400).json({ message: "Booking is already approved" });
+      }
+  
+   
+      booking.status = "approved";
+      await booking.save();
+  
+      
+      const emailsent = await sendBookingApprovalEmail({
+        userId: req.user._id,
+        roomId: booking.roomId,
+        checkInDate: booking.checkInDate,
+        checkOutDate: booking.checkOutDate,
+        numberOfGuests: booking.numberOfGuests,
+        numberOfRooms: booking.numberOfRooms,
+        anyChild: booking.anyChild,
+        totalAmount: booking.totalAmount,
+        userName: booking.userName,
+        userPhone: booking.userPhone,
+        userEmail: booking.userEmail,
+        anyCoupon: booking.anyCoupon,
+        isChecking: booking.isChecking,
+        senderemail,
+        mailkey
+      });
+
+      console.log(`>>>>emailsent>>>`, emailsent)
+      console.log("User Email:", booking.userEmail);
+
+  
+      if (!emailsent) {
+        return res.status(400).json({ message: "Failed to send approval email" });
+      }
+  
+      return res.status(200).json({ message: "Booking approved and email sent" });
+  
+    } catch (error) {
+      console.error("Error in approveUser:", error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  };
+
+
+  exports.ischecking = async(req,res) => {
+
+    const {id} = req.params
+
+    const ischeckingdata = await adduserbooking.findByIdAndUpdate(
+        id,
+        {ischecking: 'checkIn'},
+        {new: true}
+    )
+
+    if(!ischeckingdata){
+        return res.status(400).json({message: "Not able to update Checkin request"})
+    }
+
+    return res.status(200).json({message: "You are CheckIn !!"})
+
+  }
+
+  exports.ischeckout = async(req, res) =>{
+
+    const {id} = req.params
+
+    const ischeckingout = await adduserbooking.findByIdAndUpdate(
+        id,
+        {ischecking: 'checkOut'},
+        {new: true}
+    )
+
+    if(!ischeckingout){
+        return res.status(400).json({message: "Not able to update ChecOut request"})
+    }
+
+    return res.status(200).json({message: "You are CheckOut !!"})
+
+  }
+
+
+  // Example: GET /userbooking/checkstatus?ischecking=checkIn
+exports.CheckInStatus =  async (req, res) => {
+    const { ischecking } = req.query;
+    try {
+      const data = await adduserbooking.find({ ischecking }); // or .where('ischecking').equals(ischecking)
+      res.json({ success: true, data });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  };
+
+// exports.handleCancel = async(req, res) => {
+//     const {id} = req.body
+
+//     const data = await adduserbooking.findByIdAndUpdate(id)
+
+
+// }
+
+exports.handleCancel = async (req, res) => {
+    try {
+      const { id } = req.params;  // <-- use params instead of body
+  
+      const data = await adduserbooking.findByIdAndUpdate(
+        id,
+        { ischecking: "cancel" },
+        { new: true }
+      );
+  
+      if (!data) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+      res.status(200).json({
+        message: "Booking cancelled successfully",
+        updatedBooking: data
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Something went wrong",
+        error: error.message
+      });
+    }
+  };
+  
+  
+  
+  

@@ -12,4 +12,16 @@ router.get('/getbookingdataforadmin', auth, addUserBooking.ShowBookingsWithoutPo
 
 router.put('/updatebookingstatus/:id', auth, addUserBooking.UpdateUserBookingStatus)
 
+router.delete('/harddelete/:id', auth, addUserBooking.harddelete)
+
+router.put('/approveuser/:id', auth, addUserBooking.approveUser)
+
+router.put('/checkin/:id', auth, addUserBooking.ischecking)
+
+router.put('/checkout/:id', auth, addUserBooking.ischeckout)
+
+router.get('/checkstatus', auth, addUserBooking.CheckInStatus)
+
+router.patch('/handlecancel/:id', auth, addUserBooking.handleCancel)
+
 module.exports = router 

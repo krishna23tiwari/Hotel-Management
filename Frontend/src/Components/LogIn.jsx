@@ -84,7 +84,7 @@ const LogIn = () => {
             </form>
             <div className="mt-4 flex justify-between text-sm">
               <button onClick={() => setStep('forgot')} className="text-indigo-300 hover:underline">Forgot Password?</button>
-              <button onClick={() => navi('/')} className="text-purple-300 hover:underline">Signup</button>
+              <button onClick={() => navi('/signup')} className="text-purple-300 hover:underline">Signup</button>
             </div>
           </>
         )}

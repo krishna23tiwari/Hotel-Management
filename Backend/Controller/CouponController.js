@@ -9,7 +9,7 @@ exports.addcoupon = async(req, res) => {
     const existinCoupon = await couponmodel.findOne({couponName})
 
     if(existinCoupon){
-        return res.statue(400).json({message: "Coupon is already exists"})
+        return res.status(400).json({message: "Coupon is already exists"})
     }
 
     const coupon = new couponmodel({couponName, discount, startDate, endDate, isActive})
@@ -74,7 +74,7 @@ exports.activatecoupon = async(req, res) => {
     )
 
     if(!activatecoupon){
-        res.statue(400).json({message: "Error Activating Coupon"})
+        res.status(400).json({message: "Error Activating Coupon"})
     }
 
     res.status(200).json({message: "Activated coupon from deactivation"})

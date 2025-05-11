@@ -15,6 +15,8 @@ router.post('/verifyResetOtp', user.VerifyOtpOnReset)
 
 router.post('/resetPassword', user.resetPassword)
 
+router.put('/reset-password', auth, user.userPasswordReset)
+
 
 
 module.exports = router 

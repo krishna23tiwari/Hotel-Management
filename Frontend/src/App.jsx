@@ -11,6 +11,8 @@ import AddHotel from './AdminDash/AddHotel';
 import AddRoom from './AdminDash/AddRoom';
 import ForBookings from './Components/ForBookings';
 import ForUserBookingAdminSide from './Components/UserBookingAdminSide';
+import AddCoupon from './AdminDash/AddCoupon';
+import NavBar from './AdminDash/NavBar';
 
 
 
@@ -18,7 +20,20 @@ const AdminLayout = ({ children }) => {
   return (
     <div className="flex min-h-screen">
       <SideBarMenuAdmin />
-      <div className="flex-1 p-4 ml-64"> 
+      <div className="flex-1 ml-64"> 
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const UserLayout = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <NavBar />
+      </div>
+      <div className="pt-18"> {/* Add top padding to prevent overlap */}
         {children}
       </div>
     </div>
@@ -34,8 +49,27 @@ const App = () => {
         <Route path="/" element={<SignUp />} />
         <Route path="/otp" element={<OtpVarificaton />} />
         <Route path="/login" element={<LogIn />} />
-        <Route path="/user-board" element={<ForUser />} />
-        <Route path="/user-booking-form/:selectedRoom" element={<ForBookings />} />
+        {/* <Route path="/user-board" element={<ForUser />} />
+        <Route path="/user-booking-form/:selectedRoom" element={<ForBookings />} /> */}
+
+        
+<Route
+  path="/user-board"
+  element={
+    <UserLayout>
+      <ForUser />
+    </UserLayout>
+  }
+/>
+<Route
+  path="/user-booking-form/:selectedRoom"
+  element={
+    <UserLayout>
+      <ForBookings />
+    </UserLayout>
+  }
+/>
+        <Route path="/navbar" element={<NavBar/>} />
 
         {/* Admin Routes with Sidebar */}
         <Route
@@ -78,6 +112,15 @@ const App = () => {
           element={
             <AdminLayout>
               <ForUserBookingAdminSide />
+            </AdminLayout>
+          }
+          />
+
+          <Route
+          path="/coupons"
+          element={
+            <AdminLayout>
+              <AddCoupon />
             </AdminLayout>
           }
           />
