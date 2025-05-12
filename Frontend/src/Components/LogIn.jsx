@@ -11,13 +11,17 @@ const LogIn = () => {
   const [confirmPass, setConfirmPass] = useState('');
   const navi = useNavigate();
 
+  let data = null;
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4545/user/login', { email, password });
       alert(res.data.message);
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('email', res.data.email)
 
+      data = res.data.email 
 
       if (res.data.role === 'admin') {
         navi('/add-state');
@@ -28,6 +32,8 @@ const LogIn = () => {
       alert(err.response.data.message || 'Login failed');
     }
   };
+
+ 
 
   const handleSendOtp = async (e) => {
     e.preventDefault();

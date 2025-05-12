@@ -20,6 +20,7 @@ const ForBookings = () => {
   const [roomPrice, setRoomPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [coupons, setcoupons] = useState([])
+  const [userInfo, setUserInfo] = useState(null);
   const [status, setStatus] = useState(""); // Default is pending
 
 
@@ -33,7 +34,7 @@ const ForBookings = () => {
   const fetchCoupons = async() =>{
         const res = await axios.get('http://localhost:4545/coupon/getallcoupon', getAuthHeaders())
         if(res.status === 200){
-            alert(res.data.message)
+            // alert(res.data.message)
             // console.log(`>>>>resforcoupon>>>`,res.data)
             setcoupons(res.data.showallcoupon)
             
@@ -41,6 +42,8 @@ const ForBookings = () => {
   }
 
 //   console.log(`>>>coupons>>>`, coupons)
+
+
 
   const fetchRoomPrice = async () => {
     try {
@@ -68,44 +71,109 @@ const ForBookings = () => {
   useEffect(() => {
     const checkIn = new Date(formData.checkInDate);
     const checkOut = new Date(formData.checkOutDate);
-    if (!isNaN(checkIn) && !isNaN(checkOut) && checkOut > checkIn) {
-      const timeDiff = checkOut.getTime() - checkIn.getTime();
-      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      let total = roomPrice * dayDiff * formData.numberOfRooms;
-      
-      if (formData.couponName) {
-        const selectedCoupon = coupons.find(c => c.couponName === formData.couponName) || "not found"; 
-        // console.log(`>>selectedcoupon>>>>`, selectedCoupon)
-        if (selectedCoupon) {
-          const discountPercent = selectedCoupon.discount || 0;
-          const discountAmount = (total * discountPercent) / 100;
-          total -= discountAmount;
+  
+    if (!isNaN(checkIn) && !isNaN(checkOut)) {
+      if (checkOut <= checkIn) {
+        // If checkout date is before or equal to check-in date, set an error
+        alert("Check-out date must be later than Check-in date.");
+        setFormData(prevData => ({
+          ...prevData,
+          checkOutDate: "" // Reset checkout date or handle the error as needed
+        }));
+        setTotalPrice(0); // Reset the total price
+      } else {
+        const timeDiff = checkOut.getTime() - checkIn.getTime();
+        const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        let total = roomPrice * dayDiff * formData.numberOfRooms;
+        
+        // Apply discounts based on user info and coupon
+        if (userInfo?.role === "admin") {
+          const adminDiscount = (total * 20) / 100;
+          total -= adminDiscount;
         }
+        
+        if (formData.couponName) {
+          const selectedCoupon = coupons.find(c => c.couponName === formData.couponName);
+          if (selectedCoupon) {
+            const couponDiscount = (total * selectedCoupon.discount) / 100;
+            total -= couponDiscount;
+          }
+        }
+        
+        setTotalPrice(total);
       }
-
-      
-      setTotalPrice(total);
     } else {
       setTotalPrice(0);
     }
-  }, [formData.checkInDate, formData.checkOutDate, formData.numberOfRooms, roomPrice, formData.couponName, coupons]);
+  }, [formData.checkInDate, formData.checkOutDate, formData.numberOfRooms, roomPrice, formData.couponName, coupons, userInfo]);
+  
+
+
+//   useEffect(() => {
+//     const checkIn = new Date(formData.checkInDate);
+//     const checkOut = new Date(formData.checkOutDate);
+  
+//     if (!isNaN(checkIn) && !isNaN(checkOut) && checkOut > checkIn && roomPrice > 0) {
+//       const timeDiff = checkOut.getTime() - checkIn.getTime();
+//       const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+//       let total = roomPrice * dayDiff * formData.numberOfRooms;
+  
+      
+//       if (userInfo?.role === "admin") {
+//         const adminDiscount = (total * 20) / 100;
+//         total -= adminDiscount;
+//       }
+  
+//       if (formData.couponName) {
+//         const selectedCoupon = coupons.find(c => c.couponName === formData.couponName);
+//         if (selectedCoupon) {
+//           const couponDiscount = (total * selectedCoupon.discount) / 100;
+//           total -= couponDiscount;
+//         }
+//       }
+  
+//       setTotalPrice(total);
+//     } else {
+//       setTotalPrice(0);
+//     }
+//   }, 
+//     [formData.checkInDate, formData.checkOutDate, formData.numberOfRooms, roomPrice, formData.couponName, coupons, userInfo]);
+  
+
+    console.log(`>>>>userInfo>>>>>`, userInfo)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const checkBookingStatus = async() => {
-        const res = await axios.get('http://localhost:4545/userbooking/getbookingdataforadmin', getAuthHeaders())
-        console.log(`res.sttus>>>>`, res.data.data)
-  }
+const userinfo = async() => {
+    const res = await axios.get('http://localhost:4545/user/getuserinfo', getAuthHeaders())
 
+    if(res.status === 200 && res.data.user){
+        setUserInfo(res.data.user)
+    }else{
+        console.log("failed to fetch info")
+    }
+}
 
+useEffect(() => {
+    userinfo()
+},[])
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice,  status: "pending" };
-
+  
+    const checkInDate = new Date(formData.checkInDate);
+    const checkOutDate = new Date(formData.checkOutDate);
+  
+    if (checkOutDate <= checkInDate) {
+      alert("Check-out date must be later than Check-in date.");
+      return; 
+    }
+  
+    const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice, status: "pending" };
+  
     try {
       const res = await axios.post("http://localhost:4545/userbooking/forbooking", payload, getAuthHeaders());
       alert("Booking Successful!");
@@ -120,15 +188,43 @@ const ForBookings = () => {
         anyChild: "no",
         couponName: ""
       });
-
-      setStatus(res.data)
+  
+      setStatus(res.data);
     } catch (err) {
       console.error("Booking failed:", err?.response?.data || err.message);
       alert("Booking Failed!");
     }
   };
+  
 
-  console.log(`>>>status>>>>`, status)
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice,  status: "pending" };
+
+//     try {
+//       const res = await axios.post("http://localhost:4545/userbooking/forbooking", payload, getAuthHeaders());
+//       alert("Booking Successful!");
+//       setFormData({
+//         userName: "",
+//         userPhone: "",
+//         userEmail: "",
+//         checkInDate: "",
+//         checkOutDate: "",
+//         numberOfGuests: 1,
+//         numberOfRooms: 1,
+//         anyChild: "no",
+//         couponName: ""
+//       });
+
+//       setStatus(res.data)
+//     } catch (err) {
+//       console.error("Booking failed:", err?.response?.data || err.message);
+//       alert("Booking Failed!");
+//     }
+//   };
+
+//   console.log(`>>>status>>>>`, status)
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">

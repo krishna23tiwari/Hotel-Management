@@ -6,6 +6,8 @@ const secret = "asasfasfijqwijjqwmnasfa"
 const { sendOtpEmail } = require("../Utils/EmailService");
 const senderemail = "jangiddummy6375@gmail.com";
 const mailkey = "hneo ulux pgln lgts";
+const fileupload = require('express-fileupload')
+const{uploadFile} = require('../Utils/ImagesUpload')
 
 
 
@@ -179,71 +181,6 @@ exports.resetPassword = async(req, res) => {
 
 
 
-// exports.userPasswordReset = async (req, res) => {
-//   const { email, oldPassword, newPassword } = req.body;
-
-//   try {
-//     // 1. Find the user by email
-//     const user = await usermodel.findOne({ email });
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // 2. Compare old password
-//     const isMatch = await bcrypt.compare(oldPassword, user.password);
-//     if (!isMatch) {
-//       return res.status(400).json({ message: "Old password is incorrect" });
-//     }
-
-//     // 3. Hash the new password
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-
-//     // 4. Update the password
-//     user.password = hashedNewPassword;
-//     await user.save();
-
-//     res.status(200).json({ message: "Password reset successful" });
-//   } catch (error) {
-//     console.error("Reset password error:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
-
-
-// exports.userPasswordReset = async (req, res) => {
-//   const { oldPassword, newPassword } = req.body;
-
-//   try {
-//     // 1. Get user email from token (set by auth middleware)
-//     const userEmail = req.user.email;
-
-//     console.log(`>>>>email>>>`, userEmail)
-
-//     const user = await usermodel.findOne({ email: userEmail });
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // 2. Compare old password
-//     const isMatch = await bcrypt.compare(oldPassword, user.password);
-//     if (!isMatch) {
-//       return res.status(400).json({ message: "Old password is incorrect" });
-//     }
-
-//     // 3. Hash new password and save
-//     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-//     user.password = hashedNewPassword;
-//     await user.save();
-
-//     res.status(200).json({ message: "Password reset successful" });
-//   } catch (error) {
-//     console.error("Reset password error:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
-
-
 exports.userPasswordReset = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
@@ -266,10 +203,123 @@ exports.userPasswordReset = async (req, res) => {
     user.password = hashedNewPassword;
     await user.save();
 
-    res.status(200).json({ message: "Password reset successful" });
+    res.status(200).json({ message: "Password reset successful", email: userEmail });
   } catch (error) {
     console.error("Reset password error:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+
+exports.updateUserNamePhoneGenderAge = async (req, res) => {
+  const { email, name, phone, age } = req.body;
+
+  let imageUrl = "";
+  if (req.files) {
+    const uploadResults = await uploadFile(req.files);
+    if (uploadResults.length) {
+      imageUrl = uploadResults[0].secure_url;
+    }
+  }
+
+  const updateData = { name, phone, age };
+  if (imageUrl) updateData.image = imageUrl;
+
+  const updatedUser = await usermodel.findOneAndUpdate(
+    { email },
+    updateData,
+    { new: true }
+  );
+
+  if (!updatedUser) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  res.status(200).json({
+    message: "Information has been updated",
+    updatedUser
+  });
+};
+
+
+exports.getUserProfile = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await usermodel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User profile fetched successfully",
+      user: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        age: user.age,
+        image: user.image // Assuming the user's profile image is stored in the 'image' field
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getAllUserInfo = async(req, res) =>{
+    
+    const user = await usermodel.find()
+
+    if(!user){
+      return res.status(400).json({meassage: "user info not found !!"})
+    }
+    return res.status(200).json({message: "User info has been found", users: user})
+
+}
+
+// exports.getAllUserInfosingle = async(req, res) =>{
+//    const {email} = req.body 
+//   const user = await usermodel.findOne({email})
+
+//   if(!user){
+//     return res.status(400).json({meassage: "user info not found !!"})
+//   }
+//   return res.status(200).json({message: "User info has been found",     user: {
+//     _id: user._id,
+//     name: user.name,
+//     email: user.email,
+//     phone: user.phone,
+//     role: user.role,
+//     status: user.status,
+//     age: user.age,
+//     image: user.image,
+//     createdAt: user.createdAt,
+//     updatedAt: user.updatedAt,
+//   },
+// })
+
+// }
+
+
+exports.getUserInfodata = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you're using auth middleware to attach req.user
+    console.log(`>>>userID>>>>`, userId)
+    const user = await usermodel.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ user }); // Return user object directly
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -303,7 +353,8 @@ exports.login = async(req, res) => {
         message: "Login Successful",
         user,
         token, 
-        role: user.role
+        role: user.role,
+        email
     }
 
     res.status(200).json(resdata)

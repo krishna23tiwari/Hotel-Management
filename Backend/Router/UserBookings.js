@@ -24,4 +24,7 @@ router.get('/checkstatus', auth, addUserBooking.CheckInStatus)
 
 router.patch('/handlecancel/:id', auth, addUserBooking.handleCancel)
 
+router.get('/showuserbooking', auth, addUserBooking.showUserbookingdata)
+
+
 module.exports = router 

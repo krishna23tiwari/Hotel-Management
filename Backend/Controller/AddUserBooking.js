@@ -290,7 +290,7 @@ exports.approveUser = async (req, res) => {
   }
 
 
-  // Example: GET /userbooking/checkstatus?ischecking=checkIn
+  
 exports.CheckInStatus =  async (req, res) => {
     const { ischecking } = req.query;
     try {
@@ -301,17 +301,10 @@ exports.CheckInStatus =  async (req, res) => {
     }
   };
 
-// exports.handleCancel = async(req, res) => {
-//     const {id} = req.body
-
-//     const data = await adduserbooking.findByIdAndUpdate(id)
-
-
-// }
 
 exports.handleCancel = async (req, res) => {
     try {
-      const { id } = req.params;  // <-- use params instead of body
+      const { id } = req.params;  
   
       const data = await adduserbooking.findByIdAndUpdate(
         id,
@@ -336,5 +329,61 @@ exports.handleCancel = async (req, res) => {
   };
   
   
+
+  exports.showUserbookingdata = async (req, res) => {
+    try {
+      const userId = req.user._id; // ✅ logged-in user
+  
+      const userBookings = await adduserbooking.find({ userId }) // filter here
+        .populate({
+          path: "roomId",
+          populate: {
+            path: "hotel",
+            populate: {
+              path: "city",
+              populate: {
+                path: "state",
+              },
+            },
+          },
+        });
+  
+      if (!userBookings || userBookings.length === 0) {
+        return res.status(404).json({ message: "No bookings found for this user" });
+      }
+  
+      return res.status(200).json({ message: "User booking data fetched", data: userBookings });
+    } catch (err) {
+      console.error("Error fetching user bookings:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+  };
+  
+
+
+//   exports.showUserbookingdata = async (req,res) => {
+
+//     const allRooms = await adduserbooking.find()
+//     .populate({
+//       path: 'roomId',
+//       populate: {
+//           path: "hotel",
+//           populate: {
+//               path: "city",
+//               populate: {
+//                   path: "state"
+//               }
+//           }
+//       }   
+//     })
+  
+//       // console.log(`>>>>getallstate>>>>`,allRooms)
+  
+//       if(!allRooms){
+//           return res.status(400).json({message : "error to fetching state data"})
+//       }else{
+//          return res.status(200).json({message: "all booking data fetched", data : allRooms})
+//       }
+// }
   
   

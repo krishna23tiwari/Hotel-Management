@@ -16,6 +16,8 @@ const RoomsPage = () => {
   const [cities, setCities] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const [showHotelPopup, setShowHotelPopup] = useState(false);
+
 
   const navi = useNavigate();
 
@@ -37,6 +39,11 @@ const citiesByState = rooms.reduce((acc, room) => {
   return acc;
 }, {});
 
+
+const handleHotelClick = (hotel) => {
+  setSelectedHotel(hotel);
+  setShowHotelPopup(true); // first popup
+};
 
 
 
@@ -127,20 +134,20 @@ const citiesByState = rooms.reduce((acc, room) => {
   }
 
   return (
-    // <div className="p-4">
+   
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
 <div className="relative h-[60vh] bg-cover bg-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/462014/pexels-photo-462014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
     <div className="absolute inset-0 bg-opacity-50"></div>
 
-    {/* Site Name */}
+    
     <div className="absolute top-4 left-6 z-10">
       {/* <h1 className="text-3xl font-sans text-white">FindMyStay</h1> */}
     </div>
 
-    {/* Filters & Search */}
+    
     <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center">
       <div className="flex flex-wrap items-center gap-4 bg-opacity-40 p-6 rounded-xl ">
-        {/* State Dropdown */}
+        
         <select
           value={selectedState}
           onChange={(e) => {
@@ -157,7 +164,6 @@ const citiesByState = rooms.reduce((acc, room) => {
           ))}
         </select>
 
-        {/* City Dropdown */}
         <select
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
@@ -173,7 +179,7 @@ const citiesByState = rooms.reduce((acc, room) => {
             ))}
         </select>
 
-        {/* Search */}
+       
         <input
           type="text"
           placeholder="Search by hotel or room..."
@@ -182,7 +188,7 @@ const citiesByState = rooms.reduce((acc, room) => {
           className="p-2 border-gray-700 rounded-md min-w-[200px] flex-1 bg-gray-800 text-white"
         />
 
-        {/* Sorting */}
+        
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -239,6 +245,7 @@ const citiesByState = rooms.reduce((acc, room) => {
 
         ))}
       </div>
+      
 
       {isPopupOpen && selectedRoom && (
 
@@ -262,7 +269,7 @@ const citiesByState = rooms.reduce((acc, room) => {
       </p>
     </div>
 
-    {/* Info Grid */}
+    
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-5 rounded-2xl shadow hover:shadow-xl transition">
         <h3 className="text-lg font-semibold text-blue-300 mb-2 flex items-center gap-2">
@@ -321,7 +328,7 @@ const citiesByState = rooms.reduce((acc, room) => {
       </div>
     </div>
 
-    {/* Image Grid with Custom Layout */}
+   
     {selectedRoom.image?.length > 0 && (
       <div className="mt-10">
         <h3 className="text-lg font-semibold text-indigo-300 mb-3 flex items-center gap-2">
@@ -355,7 +362,7 @@ const citiesByState = rooms.reduce((acc, room) => {
       </div>
     )}
 
-    {/* Book Now Button */}
+    
     <div className="mt-8 flex justify-end">
       <button
         onClick={() => handleBooking(selectedRoom._id)}

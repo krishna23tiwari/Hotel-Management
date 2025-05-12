@@ -17,7 +17,13 @@ router.post('/resetPassword', user.resetPassword)
 
 router.put('/reset-password', auth, user.userPasswordReset)
 
+router.patch('/editnamephonegenderage',auth, user.updateUserNamePhoneGenderAge)
 
+router.post('/profile', auth, user.getUserProfile);
+
+router.get('/getalluerinfo', auth, user.getAllUserInfo)
+
+router.get('/getuserinfo', auth, user.getUserInfodata)
 
 module.exports = router 
 

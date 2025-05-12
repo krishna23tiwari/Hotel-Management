@@ -32,6 +32,9 @@ const userschema = new schema({
     gender:{
         type: String
     },
+    image: {
+        type : String,
+    },
     age:{
         type:Number
     },
