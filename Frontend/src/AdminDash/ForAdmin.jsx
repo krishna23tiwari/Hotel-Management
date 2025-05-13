@@ -21,18 +21,6 @@ const ForAdmin = () => {
     fetchStatesindropdown();
   }, []);
 
-  // const fetchStates = async () => {
-  //   const res = await axios.get(
-  //     "http://localhost:4545/admin/getallstates",
-  //     getAuthHeaders()
-  //   );
-  //   // console.log(`>>>>statedataforcity`,res.data.state)
-  //   console.log(
-  //     "data",
-  //     res.data.state.map((val) => val)
-  //   );
-  //   setAvailableStates(res.data.state || []); // assuming res.data.states is the array
-  // };
 
   const fetchStatesindropdown = async () => {
     try {
@@ -52,25 +40,6 @@ const ForAdmin = () => {
     }
   };
 
-
-  // const fetchStatesindropdown = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "http://localhost:4545/addingstate/showallstate",
-  //       getAuthHeaders()
-  //     );
-      
-  //     // Filter the states to include only those with 'active' status
-  //     const activeStates = response.data.data.filter(state => state.status === 'active');
-      
-  //     setStates(activeStates);
-  //     console.log("Active states:", activeStates);
-  //   } catch (error) {
-  //     console.error("Error fetching states:", error);
-  //     showAlert("error", "Failed to load states");
-  //   }
-  // };
-  
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
@@ -144,33 +113,6 @@ const ForAdmin = () => {
     setEditingId(item._id);
   };
 
-  // const activateEntry = async (id) => {
-  //  const res =  await axios.patch(
-  //     `http://localhost:4545/admin/activateentry/${id}`,
-  //     {},
-  //     getAuthHeaders()
-  //   );
-  //   console.log(res.data)
-  //   alert(res.data.message)
-  //   fetchData();
-  // };
-
-  // const activateEntry = async (id) => {
-  //   try {
-  //     const res = await axios.patch(
-  //       `http://localhost:4545/admin/activateentry/${id}`,
-  //       {},
-  //       getAuthHeaders()
-  //     );
-  //     console.log(res);  
-  //     alert(res.data.message);  
-  //     fetchData();
-  //   } catch (err) {
-  //     console.error("Error activating entry:", err);
-  //     alert("Failed to activate city, state is inactive.");
-  //   }
-  // };
-
 
   const activateEntry = async (id) => {
     try {
@@ -179,12 +121,12 @@ const ForAdmin = () => {
         {},
         getAuthHeaders()
       );
-      // 200 OK
+     
       alert(res.data.message);
       fetchData();
     } catch (err) {
       if (err.response) {
-        // your backend is returning 400 for “state inactive” or 404 for “city not found”, etc.
+
         const { status, data } = err.response;
         if (status === 400 || status === 404) {
           alert(data.message);
@@ -194,7 +136,7 @@ const ForAdmin = () => {
           alert("Unexpected error: " + data.message);
         }
       } else {
-        // no response (network error, etc.)
+     
         console.error("Error activating entry:", err);
         alert("Network error — please check your connection.");
       }
@@ -247,7 +189,6 @@ const ForAdmin = () => {
           className="border px-2 py-1"
         />
 
-        {/* Submit Button */}
         <button
           onClick={handleSubmit}
           className="bg-blue-500 text-white px-4 py-1 rounded"
@@ -256,10 +197,9 @@ const ForAdmin = () => {
         </button>
       </div>
 
-      {/* Active List */}
+  
       <h2 className="font-bold">Active Entries</h2>
 
-      {/* Active Search and Sort Controls */}
       <div className="flex justify-between items-center mb-2">
         <input
           type="text"
@@ -331,10 +271,10 @@ const ForAdmin = () => {
         </tbody>
       </table>
 
-      {/* Inactive List */}
+    
       <h2 className="font-bold">Inactive Entries</h2>
 
-      {/* Inactive Search and Sort Controls */}
+     
       <div className="flex justify-between items-center mb-2 mt-4">
         <input
           type="text"

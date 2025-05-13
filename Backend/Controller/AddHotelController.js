@@ -72,25 +72,64 @@ exports.addHotel = async (req, res) => {
   
 
 
+// exports.getAllHotels = async(req, res) => {
+
+//        const allData = await addhotelmodel.find()
+//        .populate({
+//            path: 'city',
+//            populate: {
+//                path: 'state',
+//                model: 'AddState'
+//            }
+//        });
+
+//        console.log(allData)
+    
+//         if(!allData){
+//             return res.status(500).json({message: "error fetching data"})
+//         }else{
+//             return res.status(200).json({ message: "All city and state data fetched", data: allData })
+//         }
+// }
+
+
 exports.getAllHotels = async(req, res) => {
 
-       const allData = await addhotelmodel.find()
-       .populate({
-           path: 'city',
-           populate: {
-               path: 'state',
-               model: 'AddState'
-           }
-       });
+    const allData = await addhotelmodel.aggregate([
+        
+        {
+          $lookup: {
+            from: "addcities",        
+            localField: "city",
+            foreignField: "_id",
+            as: "city"
+          }
+        },
+        { $unwind: "$city" },
+  
+      
+        {
+          $lookup: {
+            from: "addstates",      
+            localField: "city.state",
+            foreignField: "_id",
+            as: "city.state"
+          }
+        },
+        { $unwind: "$city.state" }
+      ]);
 
-       console.log(allData)
-    
-        if(!allData){
-            return res.status(500).json({message: "error fetching data"})
-        }else{
-            return res.status(200).json({ message: "All city and state data fetched", data: allData })
-        }
+    console.log(allData)
+ 
+     if(!allData){
+         return res.status(500).json({message: "error fetching data"})
+     }else{
+         return res.status(200).json({ message: "All city and state data fetched", data: allData })
+     }
 }
+
+
+
 
 exports.updateHotel = async(req, res) => {
     const {id} = req.params

@@ -74,19 +74,19 @@ const ForBookings = () => {
   
     if (!isNaN(checkIn) && !isNaN(checkOut)) {
       if (checkOut <= checkIn) {
-        // If checkout date is before or equal to check-in date, set an error
+
         alert("Check-out date must be later than Check-in date.");
         setFormData(prevData => ({
           ...prevData,
-          checkOutDate: "" // Reset checkout date or handle the error as needed
+          checkOutDate: "" 
         }));
-        setTotalPrice(0); // Reset the total price
+        setTotalPrice(0); 
       } else {
         const timeDiff = checkOut.getTime() - checkIn.getTime();
         const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
         let total = roomPrice * dayDiff * formData.numberOfRooms;
         
-        // Apply discounts based on user info and coupon
+    
         if (userInfo?.role === "admin") {
           const adminDiscount = (total * 20) / 100;
           total -= adminDiscount;

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { LuX, LuHotel, LuBedDouble, LuInfo, LuImage } from "react-icons/lu";
+import { LuX, LuHotel, LuBedDouble, LuInfo, LuImage, LuPhone, LuMail, LuMapPin } from "react-icons/lu";
 import { useNavigate } from "react-router";
+import {  useSelector } from "react-redux";
+
 
 const RoomsPage = () => {
   const [rooms, setRooms] = useState([]);
@@ -18,6 +20,9 @@ const RoomsPage = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [showHotelPopup, setShowHotelPopup] = useState(false);
 
+  // const dispatch = useDispatch()
+
+  const darkMode = useSelector((state) => state.theme.darkMode)
 
   const navi = useNavigate();
 
@@ -133,15 +138,33 @@ const handleHotelClick = (hotel) => {
     return <div>Error: {error}</div>;
   }
 
+  const mainBg = darkMode
+  ? "bg-black bg-opacity-70 backdrop-blur-md"
+  : "bg-white";
+const textColor = darkMode ? "text-gray-100" : "text-gray-900";
+const subText = darkMode ? "text-gray-400" : "text-gray-600";
+const cardBg = darkMode
+  ? "bg-white bg-opacity-5 border border-gray-700"
+  : "bg-gray-50";
+const shadow = "shadow-xl hover:shadow-2xl transition-all duration-300";
+
   return (
    
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    
+
+    <div className={`min-h-screen transition-all duration-300 ease-in
+      ${darkMode 
+        ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white" 
+        : "bg-gradient-to-br from-blue-100 via-white to-blue-200 text-gray-900"
+      }`}
+    >
+     
 <div className="relative h-[60vh] bg-cover bg-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/462014/pexels-photo-462014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}>
     <div className="absolute inset-0 bg-opacity-50"></div>
 
     
     <div className="absolute top-4 left-6 z-10">
-      {/* <h1 className="text-3xl font-sans text-white">FindMyStay</h1> */}
+
     </div>
 
     
@@ -154,7 +177,11 @@ const handleHotelClick = (hotel) => {
             setSelectedState(e.target.value);
             setSelectedCity("");
           }}
-          className="p-2 border-gray-700 rounded-md w-36 bg-gray-800 text-white"
+          className={`p-2 rounded-md w-36 transition-all duration-300 ease-in
+    ${darkMode 
+      ? "bg-gray-800 text-white border-gray-700" 
+      : "bg-white text-black border-gray-300"}`}
+
         >
           <option value="">State</option>
           {uniqueStates.map((state) => (
@@ -167,7 +194,11 @@ const handleHotelClick = (hotel) => {
         <select
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
-          className="p-2 border-gray-700 rounded-md w-36 bg-gray-800 text-white"
+          className={`p-2 rounded-md w-36 transition-all duration-300 ease-in
+    ${darkMode 
+      ? "bg-gray-800 text-white border-gray-700" 
+      : "bg-white text-black border-gray-300"}`}
+
           disabled={!selectedState}
         >
           <option value="">City</option>
@@ -185,14 +216,20 @@ const handleHotelClick = (hotel) => {
           placeholder="Search by hotel or room..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border-gray-700 rounded-md min-w-[200px] flex-1 bg-gray-800 text-white"
+          className={`p-2 rounded-md min-w-[200px] flex-1 transition-all duration-300 ease-in
+    ${darkMode 
+      ? "bg-gray-800 text-white border-gray-700"
+      : "bg-white text-black border-gray-300"}`}
         />
 
         
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="p-2 border-gray-700 rounded-md w-48 bg-gray-800 text-white"
+          className={`p-2 rounded-md min-w-[200px] flex-1 transition-all duration-300 ease-in
+    ${darkMode 
+      ? "bg-gray-800 text-white border-gray-700"
+      : "bg-white text-black border-gray-300"}`}
         >
           <option value="">Sort By</option>
           <option value="asc">Hotel Name (A-Z)</option>
@@ -203,124 +240,158 @@ const handleHotelClick = (hotel) => {
   </div>
 
 
+
       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-        {filteredAndSortedRooms.map((room) => (
-          <div
-  key={room._id}
+  {filteredAndSortedRooms.map((room) => (
+    <div
+      key={room._id}
+      onClick={() => handleCardClick(room)}
+      className={`cursor-pointer rounded-2xl p-4 shadow-md hover:shadow-xl hover:scale-[1.02] transform transition duration-300
+        ${darkMode
+          ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white border border-gray-700"
+          : "bg-gradient-to-br from-white to-blue-100 text-gray-900 border border-gray-300"
+        }`}
+    >
+      <div className="mb-2">
+        {room.image.length > 0 ? (
+          <img
+            src={room.image[0]}
+            alt={room.room}
+            className={`w-full h-48 object-cover rounded-xl border 
+              ${darkMode ? "border-gray-700" : "border-gray-300"}`}
+          />
+        ) : (
+          <div className={`w-full h-48 rounded-xl 
+            ${darkMode ? "bg-gray-700" : "bg-gray-200"}`}></div>
+        )}
+      </div>
 
-  className="cursor-pointer border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl p-4 shadow-md hover:shadow-xl hover:scale-[1.02] transform transition duration-300"
-  onClick={() => handleCardClick(room)}
->
-  <div className="mb-2">
-    {room.image.length > 0 ? (
-      <img
-        src={room.image[0]}
-        alt={room.room}
-        className="w-full h-48 object-cover rounded-xl border border-gray-700"
-      />
-    ) : (
-      <div className="w-full h-48 bg-gray-700 rounded-xl"></div>
-    )}
-  </div>
+      <div className="p-2 space-y-1">
+        <h3 className={`text-lg font-bold ${darkMode ? "text-indigo-400" : "text-indigo-600"}`}>
+          {room.hotel.hotel}
+        </h3>
 
-  <div className="p-2 space-y-1">
-    <h3 className="text-lg font-bold text-indigo-400">{room.hotel.hotel}</h3>
-    <p className="text-sm text-gray-300">
-      <span className="font-medium text-gray-400">State:</span> {room.hotel.city.state.state}
-    </p>
-    <p className="text-sm text-gray-300">
-      <span className="font-medium text-gray-400">City:</span> {room.hotel.city.city}
-    </p>
-    <p className="text-sm text-gray-300">
-      <span className="font-medium text-gray-400">Email:</span> {room.hotel.email}
-    </p>
-    <p className="text-sm text-gray-300">
-      <span className="font-medium text-gray-400">Phone:</span> {room.hotel.phone}
-    </p>
-    <p className="text-sm text-gray-300">
-      <span className="font-medium text-gray-400">Room No:</span> {room.room}
-    </p>
-  </div>
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            State:
+          </span> {room.hotel.city.state.state}
+        </p>
+
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            City:
+          </span> {room.hotel.city.city}
+        </p>
+
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Email:
+          </span> {room.hotel.email}
+        </p>
+
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Phone:
+          </span> {room.hotel.phone}
+        </p>
+
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <span className={`font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Room No:
+          </span> {room.room}
+        </p>
+      </div>
+    </div>
+  ))}
 </div>
 
-        ))}
-      </div>
       
 
       {isPopupOpen && selectedRoom && (
 
-   <div className="fixed inset-0 z-50 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 bg-opacity-95 flex items-center justify-center px-4">
-  <div className="bg-gradient-to-br from-[#1f1f1f] to-[#2c2c2c] rounded-3xl shadow-2xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto relative text-white transition-all">
+    
+  <div
+  className={`fixed inset-0 z-50 flex items-center justify-center px-4 
+    ${darkMode ? "bg-black bg-opacity-70 backdrop-blur-md" : "bg-white bg-opacity-70 backdrop-blur-md"}`}>
+  <div
+    className={`rounded-3xl p-8 w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl transition-all duration-300
+      ${darkMode 
+        ? "bg-gradient-to-br from-gray-900 to-gray-800 text-white" 
+        : "bg-gradient-to-br from-gray-100 to-white text-black"}`}>
 
+    
     <button
       onClick={handleClosePopup}
-      className="absolute top-4 right-4 text-gray-400 hover:text-red-500"
+      className="absolute top-5 right-5 text-gray-400 hover:text-red-500 transition"
     >
       <LuX className="h-6 w-6" />
     </button>
 
-    <div className="mb-6">
-      <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-        <LuHotel className="text-blue-400" />
-        {selectedRoom.hotel?.hotel}
+  
+    <div className="mb-6 border-b border-gray-600 pb-4">
+      <h2 className="text-4xl font-bold flex items-center gap-3 text-pink-400">
+        <LuBedDouble />
+        {selectedRoom?.hotel?.hotel}
       </h2>
-      <p className="text-sm text-gray-300">
-        {selectedRoom.hotel?.city?.city}, {selectedRoom.hotel?.city?.state?.state}
+      <p className={`text-sm flex items-center gap-2 mt-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}
+>
+        <LuMapPin className="text-yellow-400" />
+        {selectedRoom?.hotel?.city?.city}, {selectedRoom?.hotel?.city?.state?.state}
       </p>
     </div>
 
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-5 rounded-2xl shadow hover:shadow-xl transition">
-        <h3 className="text-lg font-semibold text-blue-300 mb-2 flex items-center gap-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <div className="bg-white/5 backdrop-blur-md p-5 rounded-2xl border border-gray-700 shadow-md">
+        <h3 className="text-xl font-semibold text-blue-400 mb-3 flex items-center gap-2">
           <LuInfo /> Hotel Info
         </h3>
-        <ul className="text-sm text-gray-200 space-y-1">
-          <li><strong>Email:</strong> {selectedRoom.hotel?.email}</li>
-          <li><strong>Phone:</strong> {selectedRoom.hotel?.phone}</li>
-          <li><strong>City:</strong> {selectedRoom.hotel?.city?.city}</li>
-          <li><strong>State:</strong> {selectedRoom.hotel?.city?.state?.state}</li>
+        {/* <ul className="space-y-2 text-sm text-gray-800"> */}
+        <ul className={`space-y-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+
+          <li className="flex items-center gap-2"><LuMail /> {selectedRoom.hotel?.email}</li>
+          <li className="flex items-center gap-2"><LuPhone /> {selectedRoom.hotel?.phone}</li>
+          <li>City: {selectedRoom.hotel?.city?.city}</li>
+          <li>State: {selectedRoom.hotel?.city?.state?.state}</li>
         </ul>
       </div>
 
-      <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-5 rounded-2xl shadow hover:shadow-xl transition">
-        <h3 className="text-lg font-semibold text-green-300 mb-2 flex items-center gap-2">
-          <LuBedDouble /> Room Details
+      {/* <div className="bg-white/5 backdrop-blur-md p-5 rounded-2xl border border-gray-700 shadow-md"> */}
+      <div className={`${darkMode 
+  ? "bg-white/5 border border-gray-700 text-gray-300" 
+  : "bg-white border border-gray-200 text-gray-800"} 
+  backdrop-blur-md p-5 rounded-2xl shadow-md`}>
+
+        <h3 className="text-xl font-semibold text-green-400 mb-3 flex items-center gap-2">
+          <LuBedDouble /> Room Info
         </h3>
-        <ul className="text-sm text-gray-200 space-y-1">
-          <li><strong>Room No:</strong> {selectedRoom.roomNumber}</li>
-          <li><strong>Type:</strong> {selectedRoom.type}</li>
-          <li><strong>Capacity:</strong> {selectedRoom.capacity}</li>
-          <li><strong>Price:</strong> ₹{selectedRoom.price}</li>
+        {/* <ul className="space-y-2 text-sm text-gray-300"> */}
+        <ul className={`space-y-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+
+          <li>Room #: {selectedRoom.roomNumber}</li>
+          <li>Type: {selectedRoom.type}</li>
+          <li>Capacity: {selectedRoom.capacity}</li>
+          <li>Price: ₹{selectedRoom.price}</li>
           <li>
-            <strong>Status:</strong>
-            <span
-              className={`ml-2 text-xs font-medium px-2 py-1 rounded-full ${
-                selectedRoom.status === "available"
-                  ? "bg-green-200 text-green-800"
-                  : "bg-red-200 text-red-800"
-              }`}
-            >
+            Status:
+            <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
+              selectedRoom.status === "available"
+                ? "bg-green-500/20 text-green-400"
+                : "bg-red-500/20 text-red-400"
+            }`}>
               {selectedRoom.status}
             </span>
           </li>
         </ul>
       </div>
 
-      <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-5 rounded-2xl shadow md:col-span-2 hover:shadow-xl transition">
-        <h3 className="text-lg font-semibold text-yellow-300 mb-2 flex items-center gap-2">
-          <LuInfo /> Description
-        </h3>
-        <p className="text-sm text-gray-300">
-          {selectedRoom.description || "No description provided."}
-        </p>
-      </div>
-
-      <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-5 rounded-2xl shadow md:col-span-2 hover:shadow-xl transition">
-        <h3 className="text-lg font-semibold text-purple-300 mb-2 flex items-center gap-2">
+      <div className="bg-white/5 backdrop-blur-md p-5 rounded-2xl border border-gray-700 shadow-md">
+        <h3 className="text-xl font-semibold text-purple-400 mb-3 flex items-center gap-2">
           <LuInfo /> Amenities
         </h3>
-        <p className="text-sm text-gray-300">
+        {/* <p className="text-sm text-gray-300"> */}
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+
           {selectedRoom.amenities?.length > 0
             ? selectedRoom.amenities.join(", ")
             : "No amenities listed."}
@@ -328,33 +399,35 @@ const handleHotelClick = (hotel) => {
       </div>
     </div>
 
-   
+  
+    <div className="bg-white/5 backdrop-blur-md p-5 rounded-2xl border border-gray-700 shadow-md mt-6">
+      <h3 className="text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+        <LuInfo /> Description
+      </h3>
+      {/* <p className="text-sm text-gray-300"> */}
+      <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+
+        {selectedRoom.description || "No description provided."}
+      </p>
+    </div>
+
+ 
     {selectedRoom.image?.length > 0 && (
       <div className="mt-10">
-        <h3 className="text-lg font-semibold text-indigo-300 mb-3 flex items-center gap-2">
+        <h3 className="text-xl font-semibold text-pink-400 mb-4 flex items-center gap-2">
           <LuImage /> Room Images
         </h3>
-        <div className="grid grid-cols-7 grid-rows-6 gap-2 parent">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {selectedRoom.image.slice(0, 5).map((img, index) => (
             <div
               key={index}
-              className={`rounded-xl overflow-hidden shadow-md hover:scale-105 transition-transform cursor-pointer ${
-                index === 0
-                  ? "col-span-2 row-span-3"
-                  : index === 1
-                  ? "col-span-3 row-span-3"
-                  : index === 2
-                  ? "col-span-2 row-span-3"
-                  : index === 3
-                  ? "col-span-3 row-span-3"
-                  : "col-span-2 row-span-6"
-              }`}
+              className="overflow-hidden rounded-xl transform hover:scale-105 transition-all duration-300 cursor-pointer border border-gray-700"
+              onClick={() => handleImageClick(img)}
             >
               <img
                 src={img}
                 alt={`Room ${index + 1}`}
-                className="w-full h-full object-cover"
-                onClick={() => handleImageClick(img)}
+                className="w-full h-40 object-cover"
               />
             </div>
           ))}
@@ -362,17 +435,18 @@ const handleHotelClick = (hotel) => {
       </div>
     )}
 
-    
-    <div className="mt-8 flex justify-end">
+
+    <div className="mt-10 flex justify-end">
       <button
         onClick={() => handleBooking(selectedRoom._id)}
-        className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-xl shadow-lg transition-all duration-300"
+        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold px-6 py-3 rounded-full shadow-lg transition-transform hover:scale-105"
       >
-        Book Now
+        Book This Room
       </button>
     </div>
   </div>
 </div>
+
 
       )}
 

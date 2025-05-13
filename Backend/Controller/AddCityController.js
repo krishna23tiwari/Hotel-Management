@@ -45,12 +45,36 @@ exports.GetAllCityState = async(req, res) =>{
 
 }
 
+// exports.getAllStatesFromStates = async(req, res) => {
+
+//     const cities = await addcitymodel.find()
+//     .populate("state")
+
+//     console.log(`>>>cities>>>>`, cities)
+
+//     if(!cities){
+//         return res.status(400).json({message: "data not found"})
+//     }
+
+//     return res.status(200).json({ status: true, message: "Location fetched Successfully", state: cities })
+
+// }
+
 exports.getAllStatesFromStates = async(req, res) => {
+    
+    const cities = await addcitymodel.aggregate([
+        {
+            $lookup:{
+                from: "addstates",
+                localField: "state",
+                foreignField: "_id",
+                as : "stateinfo "
 
-    const cities = await add.find()
-    .populate("state")
+            }
+        }
+    ])
 
-    console.log(`>>>cities>>>>`, cities)
+        console.log(`>>>cities>>>>`, cities)
 
     if(!cities){
         return res.status(400).json({message: "data not found"})
@@ -59,6 +83,7 @@ exports.getAllStatesFromStates = async(req, res) => {
     return res.status(200).json({ status: true, message: "Location fetched Successfully", state: cities })
 
 }
+
 
 
 

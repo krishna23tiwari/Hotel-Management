@@ -10,7 +10,7 @@ module.exports = async(req, res, next) =>{
     if(!barrertoken){
         return res.status(401).json({message: "No token found"})
     }
-
+                                                                                                                        
     const token = barrertoken.split(" ")[1]
     console.log(`>>>token>>>>`, token)
 

@@ -6,7 +6,7 @@ const AddHotel = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [data, setData] = useState([]);
-  // const [stateprint, setstateprint] = useState([]);
+  const [stateprint, setstateprint] = useState([]);
   const [showdropdown, setshowdropdown] = useState([])
   const [activedropdowncity, setactivedropdowncity] = useState([])
 

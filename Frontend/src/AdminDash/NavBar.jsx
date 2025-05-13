@@ -12,7 +12,10 @@ import {
 import { CiEdit } from "react-icons/ci";
 import { IoSettingsSharp } from "react-icons/io5";
 import { MdPassword, MdCancel } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { BsSun, BsMoon } from "react-icons/bs";
 import axios from "axios";
+import {toggleTheme} from '../Slice/Theme'
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -30,7 +33,10 @@ const NavBar = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("")
 
+  const dispatch = useDispatch();
+
   const dropdownRef = useRef(null);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -194,16 +200,38 @@ const NavBar = () => {
   
   
   return (
-    <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md">
-      <h1 className="text-xl font-extralight text-white font-serif">
-        FindMyStay
-      </h1>
+    // <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md">
+    <div className={`flex justify-between items-center p-4 shadow-md transition-all duration-300 ease-in
+      ${darkMode 
+        ? "bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white" 
+        : "bg-gradient-to-r from-blue-100 via-white to-blue-200 text-gray-900"
+      }`}
+    >
+    
+    <h1 className={`text-xl font-extralight font-serif transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-900"}`}>
+  FindMyStay
+</h1>
+
 
       {userName && (
-  <p className="text-white font-light text-base ml-4">
-    Hello, <span className="font-semibold">{userName} !!</span> 👋
-  </p>
+        <p className={`font-light text-base ml-4 transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-800"}`}>
+  Hello, <span className="font-semibold">{userName} !!</span> 👋
+</p>
+
 )}
+
+<div className="flex items-center gap-4 relative">
+  <button
+    onClick={() => dispatch(toggleTheme())}
+    className="text-xl hover:text-yellow-400 transition ease-in"
+    title="Toggle Theme"
+  >
+    {darkMode ? <BsSun /> : <BsMoon />}
+  </button>
+
+</div>
+
+
 
       <div className="flex items-center gap-4 relative">
         <button
@@ -225,10 +253,14 @@ const NavBar = () => {
 
 
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded-lg z-50 text-white">
+            {/* <div className="absolute right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded-lg z-50 text-white"> */},
+            <div className={`absolute right-0 mt-2 w-48 shadow-lg rounded-lg z-50 transition duration-300 ease-in
+  ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"}`}>
+
               <ul>
                 <li
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                  className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
+                    ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                   onClick={() => {
                     setDropdownOpen(false);
                     openResetPopup();
@@ -238,7 +270,8 @@ const NavBar = () => {
                 </li>
 
                 <li
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                  className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
+                    ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                   onClick={() => {
                     const savedEmail = localStorage.getItem("email");
                     setEmailinfield(savedEmail || "");
@@ -249,7 +282,8 @@ const NavBar = () => {
                   <CiEdit /> Edit Profile
                 </li>
 
-                <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                <li className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
+    ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}>
                   <IoSettingsSharp /> Settings
                 </li>
               </ul>
@@ -259,200 +293,177 @@ const NavBar = () => {
       </div>
 
       {popupOpen && (
-        {/* <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-40">
-          <div className="bg-gray-700 p-6 rounded-xl shadow-2xl max-w-6xl w-full overflow-y-auto max-h-[80vh]">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-white">All Bookings</h2>
-              <button
-                className="text-red-400 hover:text-red-600 font-bold"
-                onClick={() => setPopupOpen(false)}
-              >
-                Close
-              </button>
-            </div>
 
-            <table className="w-full text-sm border mb-6">
-              <thead>
-                <tr className="bg-gray-300 text-gray-800">
-                  <th className="border p-2">Name</th>
-                  <th className="border p-2">Phone</th>
-                  <th className="border p-2">Email</th>
-                  <th className="border p-2">Check-In</th>
-                  <th className="border p-2">Check-Out</th>
-                  <th className="border p-2">Coupon</th>
-                  <th className="border p-2">City</th>
-                  <th className="border p-2">State</th>
-                  <th className="border p-2">Hotel</th>
-                  <th className="border p-2">Amount</th>
-                  <th className="border p-2">Guests</th>
-                  <th className="border p-2">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {data?.data?.map((b, idx) => (
-                  <tr key={idx} className="text-center text-white">
-                    <td className="border p-2">{b.userName}</td>
-                    <td className="border p-2">{b.userPhone}</td>
-                    <td className="border p-2">{b.userEmail}</td>
-                    <td className="border p-2">
-                      {new Date(b.checkInDate).toLocaleDateString()}
-                    </td>
-                    <td className="border p-2">
-                      {new Date(b.checkOutDate).toLocaleDateString()}
-                    </td>
-                    <td className="border p-2">{b.couponName || "N/A"}</td>
-                    <td className="border p-2">
-                      {b.roomId?.hotel?.city?.city || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {b.roomId?.hotel?.city?.state?.state || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {b.roomId?.hotel?.hotel || "N/A"}
-                    </td>
-                    <td className="border p-2">₹{b.totalAmount || "N/A"}</td>
-                    <td className="border p-2">{b.numberOfGuests}</td>
-
-                    <td className="border p-2">
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => handleCheckIn(b._id)}
-                          disabled={
-                            b.ischecking === "checkIn" ||
-                            b.ischecking === "cancel"
-                          }
-                          className={`flex items-center justify-center gap-1 px-3 py-1 rounded text-sm ${
-                            b.ischecking === "checkIn" ||
-                            b.ischecking === "cancel"
-                              ? "bg-gray-500 cursor-not-allowed"
-                              : "bg-green-600 hover:bg-green-700"
-                          } text-white`}
-                        >
-                          <FaSignInAlt />{" "}
-                          {b.ischecking === "checkIn"
-                            ? "Checked In"
-                            : "Check-In"}
-                        </button>
-
-                        <button
-                          onClick={() => handleCheckOut(b._id)}
-                          disabled={
-                            b.ischecking === "checkOut" ||
-                            b.ischecking === "cancel"
-                          }
-                          className={`flex items-center justify-center gap-1 px-3 py-1 rounded text-sm ${
-                            b.ischecking === "checkOut" ||
-                            b.ischecking === "cancel"
-                              ? "bg-gray-500 cursor-not-allowed"
-                              : "bg-green-600 hover:bg-green-700"
-                          } text-white`}
-                        >
-                          <FaSignInAlt />{" "}
-                          {b.ischecking === "checkOut"
-                            ? "Checked Out"
-                            : "Check-Out"}
-                        </button>
-
-                        <button
-                          onClick={() => handleCacel(b._id)}
-                          disabled={b.ischecking === "cancel"}
-                          className={`flex items-center justify-center gap-1 px-3 py-1 rounded text-sm ${
-                            b.ischecking === "cancel"
-                              ? "bg-gray-500 cursor-not-allowed"
-                              : "bg-red-600 hover:bg-red-700"
-                          } text-white`}
-                        >
-                          <MdCancel />{" "}
-                          {b.ischecking === "cancel" ? "Cancelled" : "Cancel"}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div> */},
-
-        <div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex justify-center items-center z-40 px-4 py-6">
-  <div className="w-full max-w-7xl max-h-[90vh] overflow-y-auto space-y-8">
-
-    {/* Header */}
-    <div className="flex justify-between items-center px-4">
-      <h2 className="text-4xl font-bold text-[#333] tracking-wide">🏨 Booking Details</h2>
+<div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex flex-col z-40 overflow-y-auto">
+  
+  <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-800 p-4 shadow-lg">
+    <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        Booking Details
+      </h2>
       <button
-        className="text-gray-700 hover:text-red-500 text-xl font-semibold transition"
+        className="text-white hover:text-red-200 text-lg font-semibold transition flex items-center gap-1 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full"
         onClick={() => setPopupOpen(false)}
       >
-        ✖ Close
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+        </svg>
+        Close
       </button>
     </div>
+  </div>
 
-    {/* Grid of Cards */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 pb-6">
-      {data?.data?.map((b, idx) => (
-        <div
-          key={idx}
-          className="bg-white/70 backdrop-blur-md rounded-3xl p-5 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300"
-        >
-          {/* Info section */}
-          <div className="space-y-3 text-sm text-gray-800 leading-relaxed">
-            <div className="flex items-center gap-2"><User size={18} /> <span className="font-medium">Name:</span> {b.userName}</div>
-            <div className="flex items-center gap-2"><Phone size={18} /> <span className="font-medium">Phone:</span> {b.userPhone}</div>
-            <div className="flex items-center gap-2"><Mail size={18} /> <span className="font-medium">Email:</span> {b.userEmail}</div>
-            <div className="flex items-center gap-2"><CalendarCheck size={18} /> <span className="font-medium">Check-In:</span> {new Date(b.checkInDate).toLocaleDateString()}</div>
-            <div className="flex items-center gap-2"><CalendarX size={18} /> <span className="font-medium">Check-Out:</span> {new Date(b.checkOutDate).toLocaleDateString()}</div>
-            <div className="flex items-center gap-2"><Users size={18} /> <span className="font-medium">Guests:</span> {b.numberOfGuests}</div>
-            <div className="flex items-center gap-2"><Hotel size={18} /> <span className="font-medium">Hotel:</span> {b.roomId?.hotel?.hotel || "N/A"}</div>
-            <div className="flex items-center gap-2"><MapPin size={18} /> <span className="font-medium">City:</span> {b.roomId?.hotel?.city?.city}, {b.roomId?.hotel?.city?.state?.state}</div>
-            <div className="flex items-center gap-2"><IndianRupee size={18} /> <span className="font-medium">Amount:</span> ₹{b.totalAmount}</div>
-            {b.couponName && (
-              <div className="flex items-center gap-2"><CheckCircle size={18} /> <span className="font-medium">Coupon:</span> {b.couponName}</div>
+  
+  <div className="flex-grow p-6">
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {data?.data?.map((b, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col"
+          >
+          
+            <div className={`self-end mb-2 px-3 py-1 rounded-full text-xs font-bold ${
+              b.ischecking === "checkIn" ? "bg-green-100 text-green-800" :
+              b.ischecking === "checkOut" ? "bg-blue-100 text-blue-800" :
+              b.ischecking === "cancel" ? "bg-red-100 text-red-800" :
+              "bg-yellow-100 text-yellow-800"
+            }`}>
+              {b.ischecking === "checkIn" ? "Checked In" :
+               b.ischecking === "checkOut" ? "Checked Out" :
+               b.ischecking === "cancel" ? "Cancelled" : "Pending"}
+            </div>
+
+            
+            <div className="space-y-3 text-sm text-gray-700 leading-relaxed flex-grow">
+              <div className="flex items-start gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <div>
+                  <h3 className="font-bold text-gray-900">{b.userName}</h3>
+                  <div className="text-gray-600">{b.userPhone}</div>
+                  <div className="text-gray-600 truncate">{b.userEmail}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <span className="font-medium">Dates:</span> {new Date(b.checkInDate).toLocaleDateString()} - {new Date(b.checkOutDate).toLocaleDateString()}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <div>
+                  <span className="font-medium">Guests:</span> {b.numberOfGuests}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <div className="truncate">
+                  <span className="font-medium">Hotel:</span> {b.roomId?.hotel?.hotel || "N/A"}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <div>
+                  <span className="font-medium">Location:</span> {b.roomId?.hotel?.city?.city}, {b.roomId?.hotel?.city?.state?.state}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <span className="font-medium">Amount:</span> ₹{b.totalAmount}
+                </div>
+              </div>
+
+              {b.couponName && (
+                <div className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                  </svg>
+                  <div>
+                    <span className="font-medium">Coupon:</span> {b.couponName}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            
+            {b.ischecking !== "cancel" ? (
+              <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap justify-between gap-2">
+                <button
+                  onClick={() => handleCheckIn(b._id)}
+                  disabled={b.ischecking === "checkIn"}
+                  className={`flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition ${
+                    b.ischecking === "checkIn"
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "bg-green-500 hover:bg-green-600 text-white"
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  {b.ischecking === "checkIn" ? "Checked In" : "Check-In"}
+                </button>
+
+                <button
+                  onClick={() => handleCheckOut(b._id)}
+                  disabled={b.ischecking === "checkOut"}
+                  className={`flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition ${
+                    b.ischecking === "checkOut"
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600 text-white"
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  {b.ischecking === "checkOut" ? "Checked Out" : "Check-Out"}
+                </button>
+
+                <button
+                  onClick={() => handleCacel(b._id)}
+                  className="flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4 pt-3 border-t border-gray-100 text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Booking Cancelled
+                </div>
+              </div>
             )}
           </div>
-
-          {/* Buttons or Cancelled */}
-          {b.ischecking !== "cancel" ? (
-            <div className="mt-5 flex flex-wrap gap-2">
-              <button
-                onClick={() => handleCheckIn(b._id)}
-                disabled={b.ischecking === "checkIn"}
-                className={`flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-semibold transition ${
-                  b.ischecking === "checkIn"
-                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                    : "bg-green-500 hover:bg-green-400 text-white"
-                }`}
-              >
-                <LogIn size={16} /> {b.ischecking === "checkIn" ? "Checked In" : "Check-In"}
-              </button>
-
-              <button
-                onClick={() => handleCheckOut(b._id)}
-                disabled={b.ischecking === "checkOut"}
-                className={`flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-semibold transition ${
-                  b.ischecking === "checkOut"
-                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                    : "bg-blue-500 hover:bg-blue-400 text-white"
-                }`}
-              >
-                <LogOut size={16} /> {b.ischecking === "checkOut" ? "Checked Out" : "Check-Out"}
-              </button>
-
-              <button
-                onClick={() => handleCacel(b._id)}
-                className="flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-semibold bg-red-500 hover:bg-red-400 text-white"
-              >
-                <XCircle size={16} /> Cancel
-              </button>
-            </div>
-          ) : (
-            <div className="mt-4 text-center text-red-500 font-semibold">
-              ❌ Booking Cancelled
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </div>
 </div>
