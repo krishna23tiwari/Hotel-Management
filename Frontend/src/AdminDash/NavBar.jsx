@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { BsSun, BsMoon } from "react-icons/bs";
 import axios from "axios";
 import {toggleTheme} from '../Slice/Theme'
+import { Link } from "react-router";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -200,7 +201,7 @@ const NavBar = () => {
   
   
   return (
-    // <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white shadow-md">
+
     <div className={`flex justify-between items-center p-4 shadow-md transition-all duration-300 ease-in
       ${darkMode 
         ? "bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white" 
@@ -282,10 +283,10 @@ const NavBar = () => {
                   <CiEdit /> Edit Profile
                 </li>
 
-                <li className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
+                <Link to={'/user-setting'} className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
     ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}>
                   <IoSettingsSharp /> Settings
-                </li>
+                </Link>
               </ul>
             </div>
           )}

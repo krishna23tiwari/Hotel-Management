@@ -7,7 +7,8 @@ const { sendOtpEmail } = require("../Utils/EmailService");
 const senderemail = "jangiddummy6375@gmail.com";
 const mailkey = "hneo ulux pgln lgts";
 const fileupload = require('express-fileupload')
-const{uploadFile} = require('../Utils/ImagesUpload')
+const{uploadFile} = require('../Utils/ImagesUpload');
+const UserModel = require('../Model/UserModel');
 
 
 
@@ -359,4 +360,46 @@ exports.login = async(req, res) => {
 
     res.status(200).json(resdata)
 }
+
+
+exports.backgroundImageSet = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    let backgroundImageUrl = "";
+
+    if (req.files) {
+      const uploadResults = await uploadFile(req.files);
+      if (uploadResults.length) {
+        backgroundImageUrl = uploadResults[0].secure_url;
+      }
+    }
+
+    if (!backgroundImageUrl) {
+      return res.status(400).json({ message: "No background image uploaded" });
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { email },
+      { backgroundImage: backgroundImageUrl },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Background image updated successfully",
+      updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
 

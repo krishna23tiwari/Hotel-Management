@@ -25,5 +25,8 @@ router.get('/getalluerinfo', auth, user.getAllUserInfo)
 
 router.get('/getuserinfo', auth, user.getUserInfodata)
 
+router.post('/backgroundimage', auth, user.backgroundImageSet)
+
+
 module.exports = router 
 

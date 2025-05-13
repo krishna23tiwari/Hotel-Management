@@ -13,6 +13,7 @@ import ForBookings from './Components/ForBookings';
 import ForUserBookingAdminSide from './Components/UserBookingAdminSide';
 import AddCoupon from './AdminDash/AddCoupon';
 import NavBar from './AdminDash/NavBar';
+import UserSettings from './AdminDash/UserSettings';
 
 
 
@@ -49,8 +50,9 @@ const App = () => {
         <Route path="/" element={<SignUp />} />
         <Route path="/otp" element={<OtpVarificaton />} />
         <Route path="/login" element={<LogIn />} />
-        {/* <Route path="/user-board" element={<ForUser />} />
+        {/* <Route path="/user-board" element={<ForUser />} 
         <Route path="/user-booking-form/:selectedRoom" element={<ForBookings />} /> */}
+        <Route path="/user-setting" element={<UserSettings />} />
 
         
 <Route

@@ -35,6 +35,9 @@ const userschema = new schema({
     image: {
         type : String,
     },
+    backgroundImage:{
+        type: String
+    },
     age:{
         type:Number
     },
