@@ -9,7 +9,11 @@ const mailkey = "hneo ulux pgln lgts";
 const fileupload = require('express-fileupload')
 const{uploadFile} = require('../Utils/ImagesUpload');
 const UserModel = require('../Model/UserModel');
+// const cron = require('node-cron')
 
+// cron.schedule(' * * * * *', () => {
+//   console.log(`cron task`)
+// })
 
 
 exports.signup = async(req, res) =>{
@@ -72,7 +76,7 @@ exports.verifyOtp = async(req, res) =>{
         return res.status(400).json({message: "user not found"})
     }
 
-    console.log(`>>>>>user>>>>`, user)
+    // console.log(`>>>>>user>>>>`, user)
 
     if(user.otp !== otp){
         return res.status(400).json({message:"Incorrect OTP"})
@@ -348,7 +352,7 @@ exports.login = async(req, res) => {
       return  res.status(401).json({message: 'Incorrect password'})
     }
 
-    const token = jwt.sign({ email, role: user.role }, secret, { expiresIn: '24h' });
+    const token = jwt.sign({ email, role: user.role }, secret, {expiresIn : '24h' });
 
     const resdata = {
         message: "Login Successful",
@@ -401,5 +405,39 @@ exports.backgroundImageSet = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
+
+
+// exports.getAllAndImage = async(req, res) => {
+
+//     const user = await usermodel.find()
+
+//     if(!user){
+//       return res.status(400).json({meassage: "user info not found !!"})
+//     }
+//     return res.status(200).json({message: "User info has been found", users: user})
+// }
+
+
+exports.getAllAndImage = async (req, res) => {
+  try {
+    const email = req.query.email;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required!" });
+    }
+
+    const user = await usermodel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    return res.status(200).json({ message: "User info found", user });
+  } catch (err) {
+    console.error("Error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 

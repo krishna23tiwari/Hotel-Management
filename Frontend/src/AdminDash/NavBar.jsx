@@ -33,6 +33,7 @@ const NavBar = () => {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("")
+    const [userData, setuserData] = useState("")
 
   const dispatch = useDispatch();
 
@@ -191,6 +192,53 @@ const NavBar = () => {
     }
   };
 
+  
+
+// const getBackGroundImage = async () => {
+//   try {
+//     const email = localStorage.getItem("email"); 
+//     if (!email) {
+//       console.error("Email not found in localStorage");
+//       return;
+//     }
+
+//     const res = await axios.get(
+//       `http://localhost:4545/user/getalldataimage?email=${email}`,
+//       getAuthHeaders()
+//     );
+
+//     console.log('>>>res.data>>>', res.data);
+//     setuserData(res.data.user);
+//   } catch (error) {
+//     console.error("Error fetching user image:", error.response?.data || error.message);
+//   }
+// };
+
+
+
+const getBackGroundImage = async(req, res) => {
+  const email = localStorage.getItem('email')
+
+  if(!email){
+    console.error("email not found")
+    return
+  }
+  const res = await axios.get(`http://localhost:4545/user/getalldataimage?email=${email}`, getAuthHeaders())
+
+  console.log(`>>>>response-api>>>>`, res.data);
+  setuserData(res.data.user)
+}
+
+useEffect(() => {
+  getBackGroundImage();
+}, []);
+
+console.log(`>>>back>>`,userData)
+
+
+ 
+
+
   useEffect(() => {
     fetchUserProfile();
   }, [profileImage, userName]);
@@ -295,7 +343,15 @@ const NavBar = () => {
 
       {popupOpen && (
 
-<div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex flex-col z-40 overflow-y-auto">
+<div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex flex-col z-40 overflow-y-auto"
+  style={{
+    backgroundImage: `url(${userData?.backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+
+>
   
   <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-800 p-4 shadow-lg">
     <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -324,7 +380,8 @@ const NavBar = () => {
         {data?.data?.map((b, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col"
+            className="bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl p-5 shadow-xl hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 flex flex-col text-black"
+
           >
           
             <div className={`self-end mb-2 px-3 py-1 rounded-full text-xs font-bold ${
@@ -475,151 +532,166 @@ const NavBar = () => {
       )}
 
       {editProfileOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-gray-800 text-white p-6 rounded-lg w-full max-w-md shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+      
+        <div
+  className="fixed inset-0 flex justify-center items-center z-50"
+  style={{
+    backgroundImage: `url(${userData?.backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+>
+  <div className="backdrop-blur-md bg-white/10 border border-white/20 text-black p-6 rounded-xl w-full max-w-md shadow-2xl">
+    <h2 className="text-xl font-semibold mb-4 text-center">Edit Profile</h2>
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">
-                Email 
-              </label>
-              <input
-                type="email"
-                value={emailinfield}
-                readOnly
-                className="w-full px-3 py-2 rounded bg-gray-600 text-white outline-none cursor-not-allowed"
-              />
-            </div>
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Email</label>
+      <input
+        type="email"
+        value={emailinfield}
+        readOnly
+        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none cursor-not-allowed placeholder:text-white/60"
+      />
+    </div>
 
-            <div className="mb-4">
-  <label className="block text-sm font-medium mb-1">Profile Image</label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => setEditImage(e.target.files[0])}
-    className="w-full px-3 py-2 rounded bg-gray-700 text-white outline-none"
-  />
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Profile Image</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setEditImage(e.target.files[0])}
+        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-sm file:bg-white/30 file:text-black/40"
+      />
+    </div>
+
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Name</label>
+      <input
+        type="text"
+        value={editName}
+        onChange={(e) => setEditName(e.target.value)}
+        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
+        placeholder="Enter Name"
+      />
+    </div>
+
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Age</label>
+      <input
+        type="number"
+        value={editAge}
+        onChange={(e) => setEditAge(e.target.value)}
+        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
+        placeholder="Enter Age"
+      />
+    </div>
+
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Phone</label>
+      <input
+        type="text"
+        value={editPhone}
+        onChange={(e) => setEditPhone(e.target.value)}
+        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
+        placeholder="Enter Phone Number"
+      />
+    </div>
+
+    <div className="flex justify-between mt-6">
+      <button
+        className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 transition ease-in"
+        onClick={() => {
+          updateNameAgePhone();
+          setEditProfileOpen(false);
+        }}
+      >
+        Save
+      </button>
+      <button
+        className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition ease-in"
+        onClick={() => setEditProfileOpen(false)}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
 </div>
 
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Name</label>
-              <input
-                type="text"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white outline-none"
-                placeholder="Enter Name"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Age</label>
-              <input
-                type="number"
-                value={editAge}
-                onChange={(e) => setEditAge(e.target.value)}
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white outline-none"
-                placeholder="Enter Age"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Phone</label>
-              <input
-                type="text"
-                value={editPhone}
-                onChange={(e) => setEditPhone(e.target.value)}
-                className="w-full px-3 py-2 rounded bg-gray-700 text-white outline-none"
-                placeholder="Enter Phone Number"
-              />
-            </div>
-
-            <div className="flex justify-between mt-6">
-              <button
-                className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 transition ease-in"
-                onClick={() => {
-                  updateNameAgePhone();
-                  setEditProfileOpen(false);
-                }}
-              >
-                Save
-              </button>
-              <button
-                className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition ease-in"
-                onClick={() => setEditProfileOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
       )}
 
       {resetPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">
-                Reset Password
-              </h2>
-              <button
-                className="text-red-500 hover:text-red-700 font-bold"
-                onClick={() => setResetPopupOpen(false)}
-              >
-                X
-              </button>
-            </div>
+      
 
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">
-                  Email
-                </label>
+        <div
+  className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+  style={{
+    backgroundImage: `url(${userData?.backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+>
+  <div className="backdrop-blur-md bg-white/10 border border-white/20 p-6 rounded-lg shadow-xl w-full max-w-md">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-bold text-gray-800">Reset Password</h2>
+      <button
+        className="text-red-500 hover:text-red-700 font-bold"
+        onClick={() => setResetPopupOpen(false)}
+      >
+        X
+      </button>
+    </div>
 
-                <input
-                  type="email"
-                  value={emailinfield}
-                  readOnly
-                  className="w-full p-2 border text-black border-gray-300 rounded bg-gray-100 cursor-not-allowed"
-                />
-              </div>
+    <div className="space-y-4">
+      <div>
+        <label className="block mb-1 text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          type="email"
+          value={emailinfield}
+          readOnly
+          className="w-full p-2 border text-black border-gray-300 rounded bg-white/20 cursor-not-allowed"
+        />
+      </div>
 
-              <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">
-                  Old Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter Old Password"
-                  className="w-full p-2 text-black border border-gray-300 rounded"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </div>
+      <div>
+        <label className="block mb-1 text-sm font-medium text-gray-700">
+          Old Password
+        </label>
+        <input
+          type="password"
+          placeholder="Enter Old Password"
+          className="w-full p-2 text-black border border-gray-300 rounded bg-white/20"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
+        />
+      </div>
 
-              <div>
-                <label className="block mb-1 text-sm font-medium text-gray-700">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter New Password"
-                  className="w-full p-2 border text-black border-gray-300 rounded"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
+      <div>
+        <label className="block mb-1 text-sm font-medium text-gray-700">
+          New Password
+        </label>
+        <input
+          type="password"
+          placeholder="Enter New Password"
+          className="w-full p-2 text-black border border-gray-300 rounded bg-white/20"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+      </div>
 
-              <button
-                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition ease-in w-full"
-                onClick={handleResetPassword}
-              >
-                Reset Password
-              </button>
-            </div>
-          </div>
-        </div>
+      <button
+        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition ease-in w-full"
+        onClick={handleResetPassword}
+      >
+        Reset Password
+      </button>
+    </div>
+  </div>
+</div>
+
       )}
     </div>
   );

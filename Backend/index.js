@@ -4,6 +4,8 @@ const app = express()
 const port = 4545
 const cors = require('cors')
 const fileupload = require('express-fileupload')
+const schedule = require('./CronScheduling/FindUserNotCheckIn')
+const cron = require('node-cron')
 
 app.use(fileupload())
 app.use(express.urlencoded({extended:true}))

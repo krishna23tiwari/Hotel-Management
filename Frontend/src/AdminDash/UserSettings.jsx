@@ -19,32 +19,22 @@ const UserSettings = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const handleDesignSelect = async (design) => {
-    setSelectedBg(design.image);
-
-    try {
+  const handleDesignSelect = async (value) => {
+    setSelectedBg(value.image);
   
-      const response = await fetch(design.image);
-      const blob = await response.blob();
-
-      
-      const file = new File([blob], `${design.name}.jpg`, { type: blob.type });
-
-   
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("files", file); 
-
-      await axios.post("http://localhost:4545/user/backgroundimage", formData,
-       getAuthHeaders()
-      );
-
-      alert(`✅ ${design.name} saved as background!`);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("❌ Failed to save background image");
-    }
+    const res = await fetch(value.image);
+    const blob = await res.blob();
+    const file = new File([blob], `${value.name}.jpg`, { type: blob.type });
+  
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("files", file);
+  
+    await axios.post("http://localhost:4545/user/backgroundimage", formData, getAuthHeaders());
+  
+    alert(`${value.name} saved as background!`);
   };
+  
 
   return (
     <div
@@ -60,19 +50,19 @@ const UserSettings = () => {
         <h1 className="text-3xl font-semibold mb-6 text-center">🎨 Choose Your Design</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {designs.map((design) => (
+          {designs.map((value) => (
             <div
-              key={design.id}
+              key={value.id}
               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-transform duration-300 hover:scale-105"
-              onClick={() => handleDesignSelect(design)}
+              onClick={() => handleDesignSelect(value)}
             >
               <img
-                src={design.image}
-                alt={design.name}
+                src={value.image}
+                alt={value.name}
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
-                <h2 className="text-lg font-medium text-center">{design.name}</h2>
+                <h2 className="text-lg font-medium text-center">{value.name}</h2>
               </div>
             </div>
           ))}
