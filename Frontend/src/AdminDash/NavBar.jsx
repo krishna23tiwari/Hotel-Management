@@ -223,10 +223,10 @@ const getBackGroundImage = async(req, res) => {
     console.error("email not found")
     return
   }
-  const res = await axios.get(`http://localhost:4545/user/getalldataimage?email=${email}`, getAuthHeaders())
+  const response = await axios.get(`http://localhost:4545/user/getalldataimage?email=${email}`, getAuthHeaders())
 
-  console.log(`>>>>response-api>>>>`, res.data);
-  setuserData(res.data.user)
+  console.log(`>>>>response-api>>>>`, response.data);
+  setuserData(response.data.user)
 }
 
 useEffect(() => {
