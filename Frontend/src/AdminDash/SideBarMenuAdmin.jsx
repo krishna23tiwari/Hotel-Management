@@ -44,6 +44,7 @@ const Sidebar = () => {
     { name: 'for user', path: '/user-board' },
     { name: 'user-admin-side', path: '/user-admin-side-dash' },
     { name: 'Admin coupons', path: '/coupons'},
+    { name: 'Admin-Dashboard', path: '/admindash'},
     
   ]
 
@@ -53,7 +54,8 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 min-h-screen fixed bg-gray-900 text-white flex flex-col justify-between">
+<div className="w-64 h-screen fixed bg-gray-900 text-white flex flex-col justify-between overflow-y-auto">
+
       <div>
         <h2 className="text-2xl font-bold p-6 border-b border-gray-700">Admin Panel</h2>
         <nav className="p-4 flex flex-col gap-4">

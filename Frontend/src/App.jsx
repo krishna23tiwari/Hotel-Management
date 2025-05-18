@@ -14,6 +14,7 @@ import ForUserBookingAdminSide from './Components/UserBookingAdminSide';
 import AddCoupon from './AdminDash/AddCoupon';
 import NavBar from './AdminDash/NavBar';
 import UserSettings from './AdminDash/UserSettings';
+import AdminDashBoard from './AdminDash/AdminDashBoard';
 
 
 
@@ -123,6 +124,15 @@ const App = () => {
           element={
             <AdminLayout>
               <AddCoupon />
+            </AdminLayout>
+          }
+          />
+
+<Route
+          path="/admindash"
+          element={
+            <AdminLayout>
+              <AdminDashBoard />
             </AdminLayout>
           }
           />

@@ -28,7 +28,3 @@ cron.schedule('* * * * *', async() => {
     console.log(`>>>>totalbookings>>>>`, users.length)
 })
 
-cron.schedule('* * * * *', async() => {
-     
-    const user = await userbooking.find()
-})
