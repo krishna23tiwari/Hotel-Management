@@ -13,7 +13,7 @@ const designs = [
 const UserSettings = () => {
   const [selectedBg, setSelectedBg] = useState(null);
   const email = localStorage.getItem('email');
-
+  
   const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };

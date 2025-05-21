@@ -314,6 +314,7 @@ const handleSubmit = async (e) => {
               type="date"
               name="checkInDate"
               value={formData.checkInDate}
+              min={new Date().toISOString().split("T")[0]}
               onChange={handleChange}
               required
               className="w-full p-2 border rounded"
@@ -326,6 +327,7 @@ const handleSubmit = async (e) => {
               type="date"
               name="checkOutDate"
               value={formData.checkOutDate}
+              min={new Date().toISOString().split("T")[0]}
               onChange={handleChange}
               required
               className="w-full p-2 border rounded"

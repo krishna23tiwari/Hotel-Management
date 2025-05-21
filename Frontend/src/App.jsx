@@ -15,6 +15,8 @@ import AddCoupon from './AdminDash/AddCoupon';
 import NavBar from './AdminDash/NavBar';
 import UserSettings from './AdminDash/UserSettings';
 import AdminDashBoard from './AdminDash/AdminDashBoard';
+import CheckInCheckOutBarchart from './Charts/CheckInCheckOutBarchart';
+import DayWiseBookingStatus from './Charts/DayWiseBookingStatus';
 
 
 
@@ -128,11 +130,30 @@ const App = () => {
           }
           />
 
-<Route
+          <Route
           path="/admindash"
           element={
             <AdminLayout>
               <AdminDashBoard />
+            </AdminLayout>
+          }
+          />
+
+          <Route
+          path="/charts"
+          element={
+            <AdminLayout>
+              <CheckInCheckOutBarchart />
+            </AdminLayout>
+          }
+          />
+
+          
+<Route
+          path="/line-chart"
+          element={
+            <AdminLayout>
+              <DayWiseBookingStatus />
             </AdminLayout>
           }
           />

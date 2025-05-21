@@ -440,4 +440,28 @@ exports.getAllAndImage = async (req, res) => {
 };
 
 
+// exports.userToState = async(req, res) => {
+
+//     const alldata = await usermodel.find()
+//       .populate({
+//         path : "roomId",
+//         populate: {
+//           path: "hotel",
+//           populate: {
+//             path: "city",
+//             populate: {
+//               path : state
+//             }
+//           }
+//         }
+//       })
+
+//       if(!alldata){
+//         res.status(400).json({ message: "All rooms not fetched"});
+//       }
+
+//       res.status(200).json({ message: "All rooms fetched", data: alldata });
+// }
+
+
 

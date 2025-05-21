@@ -41,10 +41,12 @@ const Sidebar = () => {
     { name: 'Add City', path: '/add-city' },
     { name: 'Add Hotel', path: '/add-hotel' },
     { name: 'Add Rooms', path: '/add-room' },
-    { name: 'for user', path: '/user-board' },
+    { name: 'View', path: '/user-board' },
     { name: 'user-admin-side', path: '/user-admin-side-dash' },
     { name: 'Admin coupons', path: '/coupons'},
     { name: 'Admin-Dashboard', path: '/admindash'},
+    { name: 'ChartBar', path: '/charts'},
+    { name: 'lineBar', path: '/line-chart'},
     
   ]
 

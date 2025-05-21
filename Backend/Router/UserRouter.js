@@ -31,5 +31,6 @@ router.get('/getalldataimage', auth, user.getAllAndImage)
 
 
 
+
 module.exports = router 
 
