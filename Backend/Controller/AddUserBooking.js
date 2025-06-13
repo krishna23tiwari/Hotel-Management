@@ -7,10 +7,10 @@ var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { populate } = require('../Model/UserModel')
 // const { findByIdAndUpdate } = require('../Model/UserModel');
-const secret = "asasfasfijqwijjqwmnasfa"
+const secret = process.env.JWT_SECRET
 const {sendBookingApprovalEmail} = require('../Utils/EmailService')
-const senderemail = "jangiddummy6375@gmail.com";
-const mailkey = "evhb rvjo ysqi ooss";
+const senderemail = process.env.EMAIL_USER
+const mailkey = process.env.EMAIL_PASS
 
 
 exports.foruserbookings = async (req, res) => {

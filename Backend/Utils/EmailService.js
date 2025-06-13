@@ -4,8 +4,8 @@ const createTransporter = (email, mailkey) => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: "jangiddummy6375@gmail.com",
-      pass: "evhb rvjo ysqi ooss"
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS 
     }
   });
 };
@@ -15,7 +15,7 @@ const sendOtpEmail = async (email, otp, name, senderEmail, mailkey) => {
       const transporter = createTransporter(senderEmail, mailkey);
   
       const mailOptions = {
-        from: "jangiddummy6375@gmail.com",
+        from: process.env.EMAIL_USER, // Use the environment variable for the sender email
         to: email,
         subject: 'Your OTP Verification Code',
         html: `

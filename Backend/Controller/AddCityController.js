@@ -4,7 +4,7 @@ const addhotelmodel = require('../Model/AddHotelModel')
 const addroommodel = require ('../Model/AddRoomModel')
 var jwt = require('jsonwebtoken');
 // const { findByIdAndUpdate } = require('../Model/UserModel');
-const secret = "asasfasfijqwijjqwmnasfa"
+const secret = process.env.JWT_SECRET
 
 
 exports.AddCityStateInForm = async(req, res) =>{

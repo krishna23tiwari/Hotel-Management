@@ -5,7 +5,7 @@ const addroom = require('../Model/AddRoomModel')
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 // const { findByIdAndUpdate } = require('../Model/UserModel');
-const secret = "asasfasfijqwijjqwmnasfa"
+const secret = process.env.JWT_SECRET
 
 exports.addingstate = async (req, res) => {
     const {state, code} = req.body

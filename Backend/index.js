@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
-const port = 4545
+const port = process.env.PORT
 const cors = require('cors')
 const fileupload = require('express-fileupload')
 const schedule = require('./CronScheduling/FindUserNotCheckIn')
@@ -12,7 +13,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cors())
 
-const mongourl = "mongodb://localhost:27017/Hotel"
+const mongourl = process.env.MONGO_URL
 
 mongoose.connect(mongourl)
 .then(() => console.log("connected"))
