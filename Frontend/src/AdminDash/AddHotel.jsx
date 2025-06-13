@@ -1,5 +1,190 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+
+// const AddHotel = () => {
+//   const [form, setForm] = useState({ hotel: "", state: "", city: "",  address: "",email: "",phone: "",room: "",description: ""});
+//   const [states, setStates] = useState([]);
+//   const [cities, setCities] = useState([]);
+//   const [data, setData] = useState([]);
+//   const [stateprint, setstateprint] = useState([]);
+//   const [showdropdown, setshowdropdown] = useState([])
+//   const [activedropdowncity, setactivedropdowncity] = useState([])
+
+//   const [inactiveData, setInactiveData] = useState([]); 
+//   const [editingId, setEditingId] = useState(null);
+
+//   const [searchActive, setSearchActive] = useState("");
+//   const [searchInactive, setSearchInactive] = useState("");
+//   const [sortActiveAsc, setSortActiveAsc] = useState(true);
+//   const [sortInactiveAsc, setSortInactiveAsc] = useState(true);
+
+  
+//   useEffect(() => {
+//     fetchStates();
+//     fetchCities();
+//     fetchData();
+//     fetchStatestoprint();
+//   }, []);
+
+//   const getAuthHeaders = () => {
+//     const token = localStorage.getItem("token");
+//     return { headers: { Authorization: `Bearer ${token}` } };
+//   };
+
+//   const fetchStates = async () => {
+//     const res = await axios.get(
+//       "http://localhost:4545/addingstate/showallstate",
+//       getAuthHeaders()
+//     );
+
+//     console.log(`>>>res.data.hotel`, res.data.data)
+
+//     const activeStates = res.data.data.filter(state => state.status === 'active');
+//     setshowdropdown(activeStates)
+//     setStates(res.data.data);
+//   };
+
+//   const fetchStatestoprint = async () => {
+//     const res = await axios.get(
+//       "http://localhost:4545/hotelroute/showallstateprint",
+//       getAuthHeaders()
+//     );
+//     console.log(`>>>>>nested-data>>>>>`, res.data)
+//     setstateprint(res.data.data);
+//   };
+
+//   const fetchCities = async () => {
+//     const res = await axios.get(
+//       "http://localhost:4545/admin/getalldata",
+//       getAuthHeaders()
+//     );
+
+//     const activecity = res.data.data.filter(city => city.status === 'active')
+//     console.log(`>>>>res.data>>>`, res.data.data)
+//     setCities(res.data.data || []);
+//     setactivedropdowncity(activecity)
+//   };
+
+//   const fetchData = async () => {
+//     const res = await axios.get(
+//       "http://localhost:4545/hotelroute/getallhotels",
+//       getAuthHeaders()
+//     );
+//     const actualData = res.data.data;
+//     setData(actualData.filter((item) => item.status === "active"));
+//     console.log("asdas", actualData.filter((item) => item.status === "active"))
+//     setInactiveData(actualData.filter((item) => item.status === "inactive"));
+//   };
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setForm({ ...form, [name]: value });
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!form.hotel || !form.city || !form.state || !form.address || !form.email || !form.phone)
+//       return alert("All fields are required");
+  
+//     try {
+//       let response;
+      
+//       if (editingId) {
+        
+//         response = await axios.put(
+//           `http://localhost:4545/hotelroute/updatehotel/${editingId}`,
+//           form,
+//           getAuthHeaders()
+//         );
+//       } else {
+        
+//         response = await axios.post(
+//           "http://localhost:4545/hotelroute/addhotel",
+//           form,
+//           getAuthHeaders()
+//         );
+//       }
+  
+      
+//       alert(response.data.message);
+      
+      
+//       setForm({ hotel: "", city: "", state: "",  address: "", email: "", phone: "",room: "", description: "" });
+//       setEditingId(null);
+//       fetchData();
+//     } catch (err) {
+
+//       if (err.response && err.response.data.message) {
+//         alert(err.response.data.message); 
+        
+//       } else {
+//         alert("An error occurred. Please try again.");
+//       }
+//       console.error("Error submitting:", err);
+//     }
+//   };
+ 
+
+//   const handleEdit = (item) => {
+//     setForm({ hotel: item.hotel, city: item.city, state: item.state, address: item.address, email: item.email, phone: item.phone, room: item.room, description: item.description  });
+//     setEditingId(item._id);
+//   };
+
+
+  
+
+//   const softDelete = async (id) => {
+//     await axios.patch(
+//       `http://localhost:4545/hotelroute/softdeletehotel/${id}`,
+//       {},
+//       getAuthHeaders()
+//     );
+//     fetchData();
+//   };
+
+//   const hardDelete = async (id) => {
+//     await axios.delete(
+//       `http://localhost:4545/hotelroute/harddeletehotel/${id}`,
+//       getAuthHeaders()
+//     );
+//     fetchData();
+//   };
+
+//   const activateEntry = async (id) => {
+//     try {
+//       const res = await axios.patch(
+//         `http://localhost:4545/hotelroute/activatehotel/${id}`,
+//         {},
+//         getAuthHeaders()
+//       );
+      
+//       if (res.status === 200) {
+//         console.log(res);
+//         alert(res.data.message); 
+//         fetchData(); 
+//       }
+//     } catch (err) {
+      
+//       if (err.response) {
+//         const statusCode = err.response.status;
+//         const message = err.response.data.message;
+  
+//         if (statusCode === 400) {
+//           alert(message);
+//         } else if (statusCode === 500) {
+//           alert("Server error occurred, please try again later.");
+//         } else {
+//           alert("An unknown error occurred.");
+//         }
+//       } else {
+//         console.error("Error activating entry:", err);
+//         alert("Failed to activate hotel, state or city is inactive.");
+//       }
+//     }
+//   };
+  
+ import React, { useEffect, useState } from "react";
 import axios from "axios";
+import baseurl from "../BaseUrl"; // <-- Add this import
 
 const AddHotel = () => {
   const [form, setForm] = useState({ hotel: "", state: "", city: "",  address: "",email: "",phone: "",room: "",description: ""});
@@ -33,7 +218,7 @@ const AddHotel = () => {
 
   const fetchStates = async () => {
     const res = await axios.get(
-      "http://localhost:4545/addingstate/showallstate",
+      `${baseurl}addingstate/showallstate`,
       getAuthHeaders()
     );
 
@@ -46,7 +231,7 @@ const AddHotel = () => {
 
   const fetchStatestoprint = async () => {
     const res = await axios.get(
-      "http://localhost:4545/hotelroute/showallstateprint",
+      `${baseurl}hotelroute/showallstateprint`,
       getAuthHeaders()
     );
     console.log(`>>>>>nested-data>>>>>`, res.data)
@@ -55,7 +240,7 @@ const AddHotel = () => {
 
   const fetchCities = async () => {
     const res = await axios.get(
-      "http://localhost:4545/admin/getalldata",
+      `${baseurl}admin/getalldata`,
       getAuthHeaders()
     );
 
@@ -67,7 +252,7 @@ const AddHotel = () => {
 
   const fetchData = async () => {
     const res = await axios.get(
-      "http://localhost:4545/hotelroute/getallhotels",
+      `${baseurl}hotelroute/getallhotels`,
       getAuthHeaders()
     );
     const actualData = res.data.data;
@@ -91,14 +276,14 @@ const AddHotel = () => {
       if (editingId) {
         
         response = await axios.put(
-          `http://localhost:4545/hotelroute/updatehotel/${editingId}`,
+          `${baseurl}hotelroute/updatehotel/${editingId}`,
           form,
           getAuthHeaders()
         );
       } else {
         
         response = await axios.post(
-          "http://localhost:4545/hotelroute/addhotel",
+          `${baseurl}hotelroute/addhotel`,
           form,
           getAuthHeaders()
         );
@@ -129,12 +314,9 @@ const AddHotel = () => {
     setEditingId(item._id);
   };
 
-
-  
-
   const softDelete = async (id) => {
     await axios.patch(
-      `http://localhost:4545/hotelroute/softdeletehotel/${id}`,
+      `${baseurl}hotelroute/softdeletehotel/${id}`,
       {},
       getAuthHeaders()
     );
@@ -143,7 +325,7 @@ const AddHotel = () => {
 
   const hardDelete = async (id) => {
     await axios.delete(
-      `http://localhost:4545/hotelroute/harddeletehotel/${id}`,
+      `${baseurl}hotelroute/harddeletehotel/${id}`,
       getAuthHeaders()
     );
     fetchData();
@@ -152,7 +334,7 @@ const AddHotel = () => {
   const activateEntry = async (id) => {
     try {
       const res = await axios.patch(
-        `http://localhost:4545/hotelroute/activatehotel/${id}`,
+        `${baseurl}hotelroute/activatehotel/${id}`,
         {},
         getAuthHeaders()
       );
@@ -181,8 +363,7 @@ const AddHotel = () => {
       }
     }
   };
-  
- 
+// ...existing code continues...
 
   return (
     <div className="p-5">

@@ -1,6 +1,7 @@
 import React, { useState,useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import baseurl from '../BaseUrl';
 
 const OtpVarificaton = () => {
     const [otp, setOtp] = useState('');
@@ -8,27 +9,50 @@ const OtpVarificaton = () => {
     const email = localStorage.getItem('signupEmail'); 
 
 
-    const handleSubmit = async(e) => {
-        e.preventDefault()
+    // const handleSubmit = async(e) => {
+    //     e.preventDefault()
 
-        if (!email) {
-            alert('No email found. Please signup again.');
-            navigate('/signup');
-            return;
-        }
+    //     if (!email) {
+    //         alert('No email found. Please signup again.');
+    //         navigate('/signup');
+    //         return;
+    //     }
 
-        try{
-        const res = await axios.post('http://localhost:4545/user/verifyOtp', {email, otp})
+    //     try{
+    //     const res = await axios.post('http://localhost:4545/user/verifyOtp', {email, otp})
 
-        if(res.status === 200){
-            alert(res.data.message)
-            localStorage.removeItem('signupEmail')
-            navi('/login')
-        }
-        }catch(err){
-            alert(err.response.data.message || 'something is wrong')
-        }
+    //     if(res.status === 200){
+    //         alert(res.data.message)
+    //         localStorage.removeItem('signupEmail')
+    //         navi('/login')
+    //     }
+    //     }catch(err){
+    //         alert(err.response.data.message || 'something is wrong')
+    //     }
+    // }
+
+
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!email) {
+    alert('No email found. Please signup again.');
+    navigate('/signup');
+    return;
+  }
+
+  try {
+    const res = await axios.post(`${baseurl}user/verifyOtp`, { email, otp });
+
+    if (res.status === 200) {
+      alert(res.data.message);
+      localStorage.removeItem('signupEmail');
+      navi('/login');
     }
+  } catch (err) {
+    alert(err.response?.data?.message || 'something is wrong');
+  }
+};
     
 
   return (

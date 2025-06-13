@@ -1,6 +1,125 @@
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import { Pencil, Trash2, EyeOff, CheckCircle } from "lucide-react";
+
+// const CouponManager = () => {
+//   const [coupons, setCoupons] = useState([]);
+//   const [formData, setFormData] = useState({
+//     couponName: "",
+//     discount: "",
+//     startDate: "",
+//     endDate: "",
+//   });
+//   const [editId, setEditId] = useState(null);
+//   const [filter, setFilter] = useState("all");
+//   const [searchQuery, setSearchQuery] = useState("");
+
+//   useEffect(() => {
+//     fetchCoupons();
+//   }, [filter]);
+
+//   const getAuthHeaders = () => {
+//     const token = localStorage.getItem("token");
+//     return { headers: { Authorization: `Bearer ${token}` } };
+//   };
+
+//   const fetchCoupons = async () => {
+//     try {
+//       const res = await axios.get(
+//         "http://localhost:4545/coupon/getallcoupon",
+//         getAuthHeaders()
+//       );
+//       setCoupons(res.data.showallcoupon);
+//     } catch (err) {
+//       console.error("Error fetching coupons:", err);
+//     }
+//   };
+
+//   console.log(`>>>>coupons>>>`, coupons)
+
+//   const handleChange = (e) => {
+//     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       let res;
+//       if (editId) {
+//         res = await axios.put(
+//           `http://localhost:4545/coupon/updatecoupon/${editId}`,
+//           formData,
+//           getAuthHeaders()
+//         );
+//         alert(res.data.message);
+//         setEditId(null);
+//       } else {
+//         res = await axios.post(
+//           "http://localhost:4545/coupon/addcoupon",
+//           { ...formData, isActive: true },
+//           getAuthHeaders()
+//         );
+//         alert(res.data.message);
+//       }
+//       setFormData({ couponName: "", discount: "", startDate: "", endDate: "" });
+//       fetchCoupons();
+//     } catch (err) {
+//       alert("Something went wrong");
+//     }
+//   };
+
+//   const handleAction = async (id, action) => {
+//     try {
+//       if (action === "softdelete") {
+//         await axios.patch(
+//           `http://localhost:4545/coupon/softdelete/${id}`,
+//           {},
+//           getAuthHeaders()
+//         );
+//       }
+//       if (action === "delete") {
+//         await axios.delete(
+//           `http://localhost:4545/coupon/harddelete/${id}`,
+//           getAuthHeaders()
+//         );
+//       }
+//       if (action === "activate") {
+//         await axios.patch(
+//           `http://localhost:4545/coupon/activatecoupon/${id}`,
+//           {},
+//           getAuthHeaders()
+//         );
+//       }
+//       fetchCoupons();
+//     } catch (err) {
+//       console.error("Error performing action:", err);
+//     }
+//   };
+
+//   const handleEdit = (coupon) => {
+//     setFormData({
+//       couponName: coupon.couponName,
+//       discount: coupon.discount,
+//       startDate: coupon.startDate,
+//       endDate: coupon.endDate,
+//     });
+//     setEditId(coupon._id);
+//   };
+
+//   const filteredCoupons = coupons
+//     .filter((c) => {
+//       if (filter === "active") return c.isActive;
+//       if (filter === "inactive") return !c.isActive;
+//       return true;
+//     })
+//     .filter((c) =>
+//       c.couponName.toLowerCase().includes(searchQuery.toLowerCase())
+//     );
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Pencil, Trash2, EyeOff, CheckCircle } from "lucide-react";
+import baseurl from "../BaseUrl"; // <-- Add this import
 
 const CouponManager = () => {
   const [coupons, setCoupons] = useState([]);
@@ -26,7 +145,7 @@ const CouponManager = () => {
   const fetchCoupons = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4545/coupon/getallcoupon",
+        `${baseurl}coupon/getallcoupon`,
         getAuthHeaders()
       );
       setCoupons(res.data.showallcoupon);
@@ -47,7 +166,7 @@ const CouponManager = () => {
       let res;
       if (editId) {
         res = await axios.put(
-          `http://localhost:4545/coupon/updatecoupon/${editId}`,
+          `${baseurl}coupon/updatecoupon/${editId}`,
           formData,
           getAuthHeaders()
         );
@@ -55,7 +174,7 @@ const CouponManager = () => {
         setEditId(null);
       } else {
         res = await axios.post(
-          "http://localhost:4545/coupon/addcoupon",
+          `${baseurl}coupon/addcoupon`,
           { ...formData, isActive: true },
           getAuthHeaders()
         );
@@ -72,20 +191,20 @@ const CouponManager = () => {
     try {
       if (action === "softdelete") {
         await axios.patch(
-          `http://localhost:4545/coupon/softdelete/${id}`,
+          `${baseurl}coupon/softdelete/${id}`,
           {},
           getAuthHeaders()
         );
       }
       if (action === "delete") {
         await axios.delete(
-          `http://localhost:4545/coupon/harddelete/${id}`,
+          `${baseurl}coupon/harddelete/${id}`,
           getAuthHeaders()
         );
       }
       if (action === "activate") {
         await axios.patch(
-          `http://localhost:4545/coupon/activatecoupon/${id}`,
+          `${baseurl}coupon/activatecoupon/${id}`,
           {},
           getAuthHeaders()
         );
@@ -115,6 +234,7 @@ const CouponManager = () => {
     .filter((c) =>
       c.couponName.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
 
   return (
     <div className="min-h-screen px-4 py-8 bg-gradient-to-br from-white via-gray-50 to-white">

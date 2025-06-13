@@ -3,6 +3,7 @@ import axios from "axios";
 import { LuX, LuHotel, LuBedDouble, LuInfo, LuImage, LuPhone, LuMail, LuMapPin } from "react-icons/lu";
 import { useNavigate } from "react-router";
 import {  useSelector } from "react-redux";
+import baseurl from "../BaseUrl";
 
 
 const RoomsPage = () => {
@@ -53,28 +54,50 @@ const handleHotelClick = (hotel) => {
 
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [roomRes, stateRes, cityRes] = await Promise.all([
-          axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders()),
-          axios.get("http://localhost:4545/addingstate/showallstate", getAuthHeaders()),
-          axios.get("http://localhost:4545/admin/getalldata", getAuthHeaders())
-        ]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const [roomRes, stateRes, cityRes] = await Promise.all([
+  //         axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders()),
+  //         axios.get("http://localhost:4545/addingstate/showallstate", getAuthHeaders()),
+  //         axios.get("http://localhost:4545/admin/getalldata", getAuthHeaders())
+  //       ]);
   
-        setRooms(roomRes.data.data);
-        setStates(stateRes.data.data);
-        setCities(cityRes.data.data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+  //       setRooms(roomRes.data.data);
+  //       setStates(stateRes.data.data);
+  //       setCities(cityRes.data.data);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       setError(err.message);
+  //       setLoading(false);
+  //     } 
+  //   };
   
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [roomRes, stateRes, cityRes] = await Promise.all([
+        axios.get(`${baseurl}roomroute/getallrooms`, getAuthHeaders()),
+        axios.get(`${baseurl}addingstate/showallstate`, getAuthHeaders()),
+        axios.get(`${baseurl}admin/getalldata`, getAuthHeaders())
+      ]);
+
+      setRooms(roomRes.data.data);
+      setStates(stateRes.data.data);
+      setCities(cityRes.data.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
 
   const filteredAndSortedRooms = rooms
   .filter((room) => {

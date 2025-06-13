@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import baseurl from "../BaseUrl";
 
 const AddRoom = () => {
   // const [form, setForm] = useState({ room: "", hotel: "", city: "", state: "" });
@@ -42,125 +43,218 @@ const AddRoom = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const fetchStates = async () => {
-    const res = await axios.get("http://localhost:4545/addingstate/showallstate", getAuthHeaders());
+  // const fetchStates = async () => {
+  //   const res = await axios.get("http://localhost:4545/addingstate/showallstate", getAuthHeaders());
 
-    const activaeStates = res.data.data.filter(state => state.status === 'active')
-    setStates(res.data.data);
-    setactivestates(activaeStates)
-  };
+  //   const activaeStates = res.data.data.filter(state => state.status === 'active')
+  //   setStates(res.data.data);
+  //   setactivestates(activaeStates)
+  // };
 
-  const fetchCities = async () => {
-    const res = await axios.get("http://localhost:4545/admin/getalldata", getAuthHeaders());
+  // const fetchCities = async () => {
+  //   const res = await axios.get("http://localhost:4545/admin/getalldata", getAuthHeaders());
 
-    const activecity = res.data.data.filter(city => city.status === 'active')
-    setacivecity(activecity)
-    setCities(res.data.data || []);
-  };
+  //   const activecity = res.data.data.filter(city => city.status === 'active')
+  //   setacivecity(activecity)
+  //   setCities(res.data.data || []);
+  // };
 
-  const handleImageChange = (e) => {
-    setImages(Array.from(e.target.files)); // store FileList as array
-  };
+  // const handleImageChange = (e) => {
+  //   setImages(Array.from(e.target.files)); // store FileList as array
+  // };
 
-  const fetchHotels = async () => {
-    const res = await axios.get("http://localhost:4545/hotelroute/getallhotels", getAuthHeaders());
-    console.log(`res.hotel`, res.data.data)
-    setHotels(res.data.data || []);
-  };
+  // const fetchHotels = async () => {
+  //   const res = await axios.get("http://localhost:4545/hotelroute/getallhotels", getAuthHeaders());
+  //   console.log(`res.hotel`, res.data.data)
+  //   setHotels(res.data.data || []);
+  // };
 
-  const fetchRooms = async () => {
-    const res = await axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders());
-    const all = res.data.data;
-    console.log(`>>>rooms>>>>`, all)
-    setData(all.filter(r => r.status === "active"));
-    setInactiveData(all.filter(r => r.status === "inactive"));
-  };
+  // const fetchRooms = async () => {
+  //   const res = await axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders());
+  //   const all = res.data.data;
+  //   console.log(`>>>rooms>>>>`, all)
+  //   setData(all.filter(r => r.status === "active"));
+  //   setInactiveData(all.filter(r => r.status === "inactive"));
+  // };
+// <-- Add this at the top with your imports
+
+const fetchStates = async () => {
+  const res = await axios.get(`${baseurl}addingstate/showallstate`, getAuthHeaders());
+
+  const activaeStates = res.data.data.filter(state => state.status === 'active')
+  setStates(res.data.data);
+  setactivestates(activaeStates)
+};
+
+const fetchCities = async () => {
+  const res = await axios.get(`${baseurl}admin/getalldata`, getAuthHeaders());
+
+  const activecity = res.data.data.filter(city => city.status === 'active')
+  setacivecity(activecity)
+  setCities(res.data.data || []);
+};
+
+const handleImageChange = (e) => {
+  setImages(Array.from(e.target.files)); // store FileList as array
+};
+
+const fetchHotels = async () => {
+  const res = await axios.get(`${baseurl}hotelroute/getallhotels`, getAuthHeaders());
+  console.log(`res.hotel`, res.data.data)
+  setHotels(res.data.data || []);
+};
+
+const fetchRooms = async () => {
+  const res = await axios.get(`${baseurl}roomroute/getallrooms`, getAuthHeaders());
+  const all = res.data.data;
+  console.log(`>>>rooms>>>>`, all)
+  setData(all.filter(r => r.status === "active"));
+  setInactiveData(all.filter(r => r.status === "inactive"));
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    const { room, hotel, city, state } = form;
-    if (!room || !hotel || !city || !state) return alert("All fields are required");
+//   const handleSubmit = async () => {
+//     const { room, hotel, city, state } = form;
+//     if (!room || !hotel || !city || !state) return alert("All fields are required");
   
-    const formData = new FormData();
-    formData.append("room", room);
-    formData.append("hotel", hotel);
-    formData.append("city", city);
-    formData.append("state", state);
-    // formData.append("roomType", form.roomType);
-    // formData.append("price", form.price);
-    // formData.append("bedCount", form.bedCount);
-    // formData.append("capacity", form.capacity);
-    formData.append("type", form.type);
-formData.append("roomNumber", form.roomNumber);
-formData.append("capacity", form.capacity);
-formData.append("price", form.price);
-formData.append("description", form.description);
-formData.append("status", form.status);
-form.amenities.forEach((a) => formData.append("amenities", a));
+//     const formData = new FormData();
+//     formData.append("room", room);
+//     formData.append("hotel", hotel);
+//     formData.append("city", city);
+//     formData.append("state", state);
+//     // formData.append("roomType", form.roomType);
+//     // formData.append("price", form.price);
+//     // formData.append("bedCount", form.bedCount);
+//     // formData.append("capacity", form.capacity);
+//     formData.append("type", form.type);
+// formData.append("roomNumber", form.roomNumber);
+// formData.append("capacity", form.capacity);
+// formData.append("price", form.price);
+// formData.append("description", form.description);
+// formData.append("status", form.status);
+// form.amenities.forEach((a) => formData.append("amenities", a));
 
    
 
   
 
-    images.forEach((image) => {
-      formData.append("images", image); 
-    });
+//     images.forEach((image) => {
+//       formData.append("images", image); 
+//     });
 
   
-    try {
-      let res;
-      if (editingId) {
-        res = await axios.put(
-          `http://localhost:4545/roomroute/updateroom/${editingId}`,
-          formData,getAuthHeaders()
+//     try {
+//       let res;
+//       if (editingId) {
+//         res = await axios.put(
+//           `http://localhost:4545/roomroute/updateroom/${editingId}`,
+//           formData,getAuthHeaders()
           
-        );
-      } else {
-        res = await axios.post(
-          "http://localhost:4545/roomroute/addroom",
-          formData,
-          getAuthHeaders()
-        );
-      }
+//         );
+//       } else {
+//         res = await axios.post(
+//           "http://localhost:4545/roomroute/addroom",
+//           formData,
+//           getAuthHeaders()
+//         );
+//       }
   
-      alert(res.data.message);
-      setForm({
-        // room: "",
-        // hotel: "",
-        // city: "",
-        // state: "",
-        // roomType: "",
-        // price: "",
-        // bedCount: "",
-        // capacity: "",
+//       alert(res.data.message);
+//       setForm({
+//         // room: "",
+//         // hotel: "",
+//         // city: "",
+//         // state: "",
+//         // roomType: "",
+//         // price: "",
+//         // bedCount: "",
+//         // capacity: "",
 
-        room: '',
-        roomNumber: '',
-        type: '',
-        capacity: '',
-        price: '',
-        description: '',
-        amenities: [], 
-        image: '',
-        hotel: '',
-        status: 'active',
+//         room: '',
+//         roomNumber: '',
+//         type: '',
+//         capacity: '',
+//         price: '',
+//         description: '',
+//         amenities: [], 
+//         image: '',
+//         hotel: '',
+//         status: 'active',
         
-      });
+//       });
       
-      // setForm({ room: "", hotel: "", city: "", state: "" });
-      setImages([]);
-      setEditingId(null);
-      fetchRooms();
-    } catch (err) {
-      alert(err.response?.data?.message || "Something went wrong.");
-    }
-  };
+//       // setForm({ room: "", hotel: "", city: "", state: "" });
+//       setImages([]);
+//       setEditingId(null);
+//       fetchRooms();
+//     } catch (err) {
+//       alert(err.response?.data?.message || "Something went wrong.");
+//     }
+//   };
 
-  const handleEdit = (item) => {
+const handleSubmit = async () => {
+  const { room, hotel, city, state } = form;
+  if (!room || !hotel || !city || !state) return alert("All fields are required");
+
+  const formData = new FormData();
+  formData.append("room", room);
+  formData.append("hotel", hotel);
+  formData.append("city", city);
+  formData.append("state", state);
+  formData.append("type", form.type);
+  formData.append("roomNumber", form.roomNumber);
+  formData.append("capacity", form.capacity);
+  formData.append("price", form.price);
+  formData.append("description", form.description);
+  formData.append("status", form.status);
+  form.amenities.forEach((a) => formData.append("amenities", a));
+
+  images.forEach((image) => {
+    formData.append("images", image); 
+  });
+
+  try {
+    let res;
+    if (editingId) {
+      res = await axios.put(
+        `${baseurl}roomroute/updateroom/${editingId}`,
+        formData,
+        getAuthHeaders()
+      );
+    } else {
+      res = await axios.post(
+        `${baseurl}roomroute/addroom`,
+        formData,
+        getAuthHeaders()
+      );
+    }
+
+    alert(res.data.message);
+    setForm({
+      room: '',
+      roomNumber: '',
+      type: '',
+      capacity: '',
+      price: '',
+      description: '',
+      amenities: [], 
+      image: '',
+      hotel: '',
+      status: 'active',
+    });
+    setImages([]);
+    setEditingId(null);
+    fetchRooms();
+  } catch (err) {
+    alert(err.response?.data?.message || "Something went wrong.");
+  }
+};  
+
+const handleEdit = (item) => {
     setForm({
       room: item.room,
       hotel: item.hotel._id || item.hotel,
@@ -170,41 +264,77 @@ form.amenities.forEach((a) => formData.append("amenities", a));
     setEditingId(item._id);
   };
 
+  // const softDelete = async (id) => {
+  //   await axios.patch(`http://localhost:4545/roomroute/softdeleteroom/${id}`, {}, getAuthHeaders());
+  //   fetchRooms();
+  // };
+
+  // const hardDelete = async (id) => {
+  //   await axios.delete(`http://localhost:4545/roomroute/harddeleteroom/${id}`, getAuthHeaders());
+  //   fetchRooms();
+  // };
+
+  // const activateEntry = async (id) => {
+  //   try {
+  //     const res = await axios.patch(
+  //       `http://localhost:4545/roomroute/activateroom/${id}`,
+  //       {},
+  //       getAuthHeaders()
+  //     );
+  //     alert(res.data.message);
+  //     fetchRooms();
+  //   } catch (err) {
+  //     if (err.response) {
+  //       const { status, data } = err.response;
+  //       if (status === 400 || status === 404) {
+  //         alert(data.message);
+  //       } else if (status >= 500) {
+  //         alert("Server error — please try again later.");
+  //       } else {
+  //         alert("Unexpected error: " + data.message);
+  //       }
+  //     } else {
+  //       console.error("Error activating entry:", err);
+  //       alert("Network error — please check your connection.");
+  //     }
+  //   }
+  // };
+
   const softDelete = async (id) => {
-    await axios.patch(`http://localhost:4545/roomroute/softdeleteroom/${id}`, {}, getAuthHeaders());
-    fetchRooms();
-  };
+  await axios.patch(`${baseurl}roomroute/softdeleteroom/${id}`, {}, getAuthHeaders());
+  fetchRooms();
+};
 
-  const hardDelete = async (id) => {
-    await axios.delete(`http://localhost:4545/roomroute/harddeleteroom/${id}`, getAuthHeaders());
-    fetchRooms();
-  };
+const hardDelete = async (id) => {
+  await axios.delete(`${baseurl}roomroute/harddeleteroom/${id}`, getAuthHeaders());
+  fetchRooms();
+};
 
-  const activateEntry = async (id) => {
-    try {
-      const res = await axios.patch(
-        `http://localhost:4545/roomroute/activateroom/${id}`,
-        {},
-        getAuthHeaders()
-      );
-      alert(res.data.message);
-      fetchRooms();
-    } catch (err) {
-      if (err.response) {
-        const { status, data } = err.response;
-        if (status === 400 || status === 404) {
-          alert(data.message);
-        } else if (status >= 500) {
-          alert("Server error — please try again later.");
-        } else {
-          alert("Unexpected error: " + data.message);
-        }
+const activateEntry = async (id) => {
+  try {
+    const res = await axios.patch(
+      `${baseurl}roomroute/activateroom/${id}`,
+      {},
+      getAuthHeaders()
+    );
+    alert(res.data.message);
+    fetchRooms();
+  } catch (err) {
+    if (err.response) {
+      const { status, data } = err.response;
+      if (status === 400 || status === 404) {
+        alert(data.message);
+      } else if (status >= 500) {
+        alert("Server error — please try again later.");
       } else {
-        console.error("Error activating entry:", err);
-        alert("Network error — please check your connection.");
+        alert("Unexpected error: " + data.message);
       }
+    } else {
+      console.error("Error activating entry:", err);
+      alert("Network error — please check your connection.");
     }
-  };
+  }
+};
 
 
   const handleAmenitiesChange = (e) => {

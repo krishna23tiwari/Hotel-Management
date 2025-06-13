@@ -8,6 +8,9 @@ import {
 import CheckInCheckOutBarchart from '../Charts/CheckInCheckOutBarchart';
 import RecentBookings from '../Charts/RecentBookings';
 import DayWiseBookingStatus from '../Charts/DayWiseBookingStatus'
+import Allusers from '../Charts/Allusers';
+import baseurl from '../BaseUrl';
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -27,39 +30,68 @@ const AdminDashboard = () => {
   };
 
  
-  const fetchDashboardData = async () => {
-    try {
-      const bookingsRes = await axios.get('http://localhost:4545/userbooking/getbookingdataforadmin', getAuthHeaders());
-      const bookings = bookingsRes.data.data;
-      setTotalBookings(bookings.length);
-    //   console.log(`>>>bookings>>>>`, bookings)
+  // const fetchDashboardData = async () => {
+  //   try {
+  //     const bookingsRes = await axios.get('http://localhost:4545/userbooking/getbookingdataforadmin', getAuthHeaders());
+  //     const bookings = bookingsRes.data.data;
+  //     setTotalBookings(bookings.length);
+  //   //   console.log(`>>>bookings>>>>`, bookings)
 
       
-      const total = bookings.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
-      setTotalRevenue(total);
+  //     const total = bookings.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
+  //     setTotalRevenue(total);
 
-      const usersRes = await axios.get('http://localhost:4545/user/getalluerinfo', getAuthHeaders());
-      setTotalUsers(usersRes.data.users.length);
-    //   console.log(`>>>>u>>>>>`, totalUsers)
+  //     const usersRes = await axios.get('http://localhost:4545/user/getalluerinfo', getAuthHeaders());
+  //     setTotalUsers(usersRes.data.users.length);
+  //   //   console.log(`>>>>u>>>>>`, totalUsers)
 
-      const roomsRes = await axios.get('http://localhost:4545/roomroute/getallrooms', getAuthHeaders());
-      setTotalRooms(roomsRes.data.data.length);
+  //     const roomsRes = await axios.get('http://localhost:4545/roomroute/getallrooms', getAuthHeaders());
+  //     setTotalRooms(roomsRes.data.data.length);
 
 
-      const statesRes = await axios.get('http://localhost:4545/addingstate/showallstate', getAuthHeaders());
-      setTotalStates(statesRes.data.data.length);
+  //     const statesRes = await axios.get('http://localhost:4545/addingstate/showallstate', getAuthHeaders());
+  //     setTotalStates(statesRes.data.data.length);
 
-      const citiesRes = await axios.get('http://localhost:4545/admin/getalldata', getAuthHeaders());
-      setTotalCities(citiesRes.data.data.length);
+  //     const citiesRes = await axios.get('http://localhost:4545/admin/getalldata', getAuthHeaders());
+  //     setTotalCities(citiesRes.data.data.length);
 
-      const hotelsRes = await axios.get('http://localhost:4545/hotelroute/getallhotels', getAuthHeaders());
-      setTotalHotels(hotelsRes.data.data.length);
+  //     const hotelsRes = await axios.get('http://localhost:4545/hotelroute/getallhotels', getAuthHeaders());
+  //     setTotalHotels(hotelsRes.data.data.length);
 
-    } catch (error) {
-      console.error("Dashboard fetch error:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Dashboard fetch error:", error);
+  //   }
+  // };
 
+
+  const fetchDashboardData = async () => {
+  try {
+    const bookingsRes = await axios.get(`${baseurl}userbooking/getbookingdataforadmin`, getAuthHeaders());
+    const bookings = bookingsRes.data.data;
+    setTotalBookings(bookings.length);
+
+    const total = bookings.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
+    setTotalRevenue(total);
+
+    const usersRes = await axios.get(`${baseurl}user/getalluerinfo`, getAuthHeaders());
+    setTotalUsers(usersRes.data.users.length);
+
+    const roomsRes = await axios.get(`${baseurl}roomroute/getallrooms`, getAuthHeaders());
+    setTotalRooms(roomsRes.data.data.length);
+
+    const statesRes = await axios.get(`${baseurl}addingstate/showallstate`, getAuthHeaders());
+    setTotalStates(statesRes.data.data.length);
+
+    const citiesRes = await axios.get(`${baseurl}admin/getalldata`, getAuthHeaders());
+    setTotalCities(citiesRes.data.data.length);
+
+    const hotelsRes = await axios.get(`${baseurl}hotelroute/getallhotels`, getAuthHeaders());
+    setTotalHotels(hotelsRes.data.data.length);
+
+  } catch (error) {
+    console.error("Dashboard fetch error:", error);
+  }
+};
   console.log(`>>>users>>>>>`,totalUsers)
 
   useEffect(() => {
@@ -105,11 +137,20 @@ const AdminDashboard = () => {
     ))}
   </div>
 
-  <div  className="flex-grow text-black">
+  {/* <div  className="flex-grow text-black">
     <DayWiseBookingStatus/>
-  </div>
+  </div> */}
 
-<div className="flex flex-col lg:flex-row gap-8">
+  <div className="w-full px-0 mx-0 overflow-hidden">
+  <div className="text-black">
+    <DayWiseBookingStatus />
+  </div>
+</div>
+
+
+
+
+<div className="flex flex-col lg:flex-row gap-8 mb-8">
  
   <div className="lg:w-1/2 cursor-pointer bg-white/30 backdrop-blur-md hover:scale-105 transition transform  rounded-2xl shadow-xl p-6 flex flex-col justify-between"
        style={{ minHeight: '200px' }}>
@@ -128,6 +169,10 @@ const AdminDashboard = () => {
     </h2>
     <RecentBookings />
   </div>
+</div>
+
+<div>
+  <Allusers/>
 </div>
 
 </div>

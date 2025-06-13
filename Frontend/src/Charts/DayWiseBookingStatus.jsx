@@ -1,6 +1,7 @@
-// src/components/Charts/BookingByDayLineChart.jsx
+// src/components/Charts/DayWiseBookingStatus.jsx
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import baseurl from "../BaseUrl";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -45,23 +46,34 @@ const getDaywiseStats = (bookings) => {
   };
 };
 
-const BookingByDayLineChart = () => {
+const DayWiseBookingStatus = () => {
   const [bookings, setBookings] = useState([]);
 
-const apifetch = async() =>{
-    const res = await axios.get('http://localhost:4545/userbooking/getbookingdataforadmin', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    })
-    setBookings(res.data.data)
-}
+// const apifetch = async() =>{
+//     const res = await axios.get('http://localhost:4545/userbooking/getbookingdataforadmin', {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("token")}`
+//         }
+//     })
+//     setBookings(res.data.data)
+// }
+
+// Make sure this is at the top with your imports
+
+const apifetch = async () => {
+  const res = await axios.get(`${baseurl}userbooking/getbookingdataforadmin`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+  setBookings(res.data.data);
+};
 
 useEffect(() => {
     apifetch()
 }, [])
 
-console.log(`>>>>booking>>>>`,bookings)
+// console.log(`>>>>booking>>>>`,bookings)
 
 
 
@@ -93,8 +105,38 @@ console.log(`>>>>booking>>>>`,bookings)
     ],
   };
 
+  // const options = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: {
+  //       position: "top",
+  //       labels: { color: "#ffffff" },
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: "Bookings & Revenue by Day of Week",
+  //       color: "#ffffff",
+  //       font: {
+  //         size: 18,
+  //       },
+  //     },
+  //   },
+  //   scales: {
+  //     x: {
+  //       ticks: { color: "#ffffff" },
+  //       grid: { color: "rgba(255,255,255,0.1)" },
+  //     },
+  //     y: {
+  //       ticks: { color: "#ffffff" },
+  //       grid: { color: "rgba(255,255,255,0.1)" },
+  //     },
+  //   },
+  // };
+
+
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // ✅ Important
     plugins: {
       legend: {
         position: "top",
@@ -104,9 +146,7 @@ console.log(`>>>>booking>>>>`,bookings)
         display: true,
         text: "Bookings & Revenue by Day of Week",
         color: "#ffffff",
-        font: {
-          size: 18,
-        },
+        font: { size: 18 },
       },
     },
     scales: {
@@ -120,12 +160,23 @@ console.log(`>>>>booking>>>>`,bookings)
       },
     },
   };
+  
 
   return (
-    <div className="cursor-pointer bg-white/30 backdrop-blur-md hover:scale-105 transition transform rounded-2xl p-6 shadow-lg mt-8 mb-8">
+    
+    // <div className=" h-[400px] cursor-pointer bg-white/30 backdrop-blur-md hover:scale-105 transition transform rounded-2xl p-6 shadow-lg mt-8 mb-8">
+    // <div className="w-full max-w-full h-[400px] bg-white/30 backdrop-blur-md hover:scale-105 transition transform rounded-2xl p-6 shadow-lg mt-8 mb-8 overflow-hidden">
+
+    // <Line data={data} options={options} />
+    // </div>
+
+    <div className="w-full max-w-full h-[400px] bg-white/30 backdrop-blur-md hover:scale-95 transition transform rounded-2xl p-6 shadow-lg mt-8 mb-8 overflow-hidden">
+    <div className="h-full w-full">
       <Line data={data} options={options} />
     </div>
+  </div>
+
   );
 };
 
-export default BookingByDayLineChart;
+export default DayWiseBookingStatus;

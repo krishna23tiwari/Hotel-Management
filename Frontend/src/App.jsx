@@ -17,6 +17,8 @@ import UserSettings from './AdminDash/UserSettings';
 import AdminDashBoard from './AdminDash/AdminDashBoard';
 import CheckInCheckOutBarchart from './Charts/CheckInCheckOutBarchart';
 import DayWiseBookingStatus from './Charts/DayWiseBookingStatus';
+import Allusers from './Charts/Allusers';
+import SelectedBookingsShow from './AdminDash/SelectedBookingsShow';
 
 
 
@@ -157,9 +159,29 @@ const App = () => {
             </AdminLayout>
           }
           />
+
+<Route
+          path="/all-users-chart"
+          element={
+            <AdminLayout>
+              <Allusers />
+            </AdminLayout>
+          }
+          />
+
+<Route
+          path="/selected-booking-show"
+          element={
+            <AdminLayout>
+              <SelectedBookingsShow />
+            </AdminLayout>
+          }
+          />
         {/* Add other admin routes similarly */}
       </Routes>
     </BrowserRouter>
+
+    
   );
 };
 

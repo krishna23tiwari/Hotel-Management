@@ -3,7 +3,7 @@ import { Link, useNavigate  } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import {FaUser,FaEnvelope,FaLock,FaPhone,FaCalendarAlt,FaIdBadge} from 'react-icons/fa';
-
+import baseurl from '../BaseUrl';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -14,24 +14,41 @@ export default function SignUp() {
 
   const handleChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
+  // const handleSubmit = async(e) => {
+  //   e.preventDefault();
 
-    try{
-      const res = await axios.post('http://localhost:4545/user/signup', formData)
-      if (res.status === 201) {
-        alert(res.data.message, "jjk");
-        localStorage.setItem('signupEmail', formData.email);
-        navi('/otp');
-      } else {
-        alert(res.data.message, "hello" || 'Signup failed');
-      }
-    } catch (error) {
-      alert(error?.response?.data?.message || 'Something went wrong');
-    }
+  //   try{
+  //     const res = await axios.post('http://localhost:4545/user/signup', formData)
+  //     if (res.status === 201) {
+  //       alert(res.data.message, "jjk");
+  //       localStorage.setItem('signupEmail', formData.email);
+  //       navi('/otp');
+  //     } else {
+  //       alert(res.data.message, "hello" || 'Signup failed');
+  //     }
+  //   } catch (error) {
+  //     alert(error?.response?.data?.message || 'Something went wrong');
+  //   }
     
-  };
+  // };
+// Make sure this is at the top with your imports
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(`${baseurl}user/signup`, formData);
+    if (res.status === 201) {
+      alert(res.data.message, "jjk");
+      localStorage.setItem('signupEmail', formData.email);
+      navi('/otp');
+    } else {
+      alert(res.data.message, "hello" || 'Signup failed');
+    }
+  } catch (error) {
+    alert(error?.response?.data?.message || 'Something went wrong');
+  }
+};
   const fields = [
     { name: 'name', type: 'text', placeholder: 'Full Name', Icon: FaUser },
     { name: 'email', type: 'email', placeholder: 'Email Address', Icon: FaEnvelope },

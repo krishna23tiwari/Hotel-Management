@@ -3,6 +3,7 @@ import axios from 'axios';
 import photo1 from "../assets/photo1.avif";
 import photo2 from "../assets/photo2.avif";
 import photo3 from "../assets/photo3.avif";
+import baseurl from '../BaseUrl';
 
 const designs = [
   { id: 1, image: photo1, name: 'Design One' },
@@ -19,22 +20,39 @@ const UserSettings = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const handleDesignSelect = async (value) => {
-    setSelectedBg(value.image);
+  // const handleDesignSelect = async (value) => {
+  //   setSelectedBg(value.image);
   
-    const res = await fetch(value.image);
-    const blob = await res.blob();
-    const file = new File([blob], `${value.name}.jpg`, { type: blob.type });
+  //   const res = await fetch(value.image);
+  //   const blob = await res.blob();
+  //   const file = new File([blob], `${value.name}.jpg`, { type: blob.type });
   
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("files", file);
+  //   const formData = new FormData();
+  //   formData.append("email", email);
+  //   formData.append("files", file);
   
-    await axios.post("http://localhost:4545/user/backgroundimage", formData, getAuthHeaders());
+  //   await axios.post("http://localhost:4545/user/backgroundimage", formData, getAuthHeaders());
   
-    alert(`${value.name} saved as background!`);
-  };
+  //   alert(`${value.name} saved as background!`);
+  // };
   
+  // Make sure this is at the top with your imports
+
+const handleDesignSelect = async (value) => {
+  setSelectedBg(value.image);
+
+  const res = await fetch(value.image);
+  const blob = await res.blob();
+  const file = new File([blob], `${value.name}.jpg`, { type: blob.type });
+
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("files", file);
+
+  await axios.post(`${baseurl}user/backgroundimage`, formData, getAuthHeaders());
+
+  alert(`${value.name} saved as background!`);
+};
 
   return (
     <div

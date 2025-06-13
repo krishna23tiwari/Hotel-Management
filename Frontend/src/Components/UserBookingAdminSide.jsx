@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaCheckCircle, FaTimesCircle, FaBan } from "react-icons/fa";
+import baseurl from "../BaseUrl";
 
 const ForUserBookingAdminSide = () => {
   const [bookings, setBookings] = useState([]);
@@ -18,119 +19,211 @@ const ForUserBookingAdminSide = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const fetchBookings = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:4545/userbooking/getbookingdataforadmin",
-        getAuthHeaders()
-      );
-      setBookings(res.data.data || []);
-    } catch (error) {
-      console.error("Fetch error:", error.message);
-    }
-  };
+  // const fetchBookings = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       "http://localhost:4545/userbooking/getbookingdataforadmin",
+  //       getAuthHeaders()
+  //     );
+  //     setBookings(res.data.data || []);
+  //   } catch (error) {
+  //     console.error("Fetch error:", error.message);
+  //   }
+  // };
 
+  const fetchBookings = async () => {
+  try {
+    const res = await axios.get(
+      `${baseurl}userbooking/getbookingdataforadmin`,
+      getAuthHeaders()
+    );
+    setBookings(res.data.data || []);
+  } catch (error) {
+    console.error("Fetch error:", error.message);
+  }
+};
   console.log(`>>>bookings>>>>>>`, bookings)
 
+  // const approveBooking = async (id) => {
+  //   try {
+  //     await axios.put(
+  //       `http://localhost:4545/userbooking/approveuser/${id}`,
+  //       { status: "approved" },
+  //       getAuthHeaders()
+  //     );
+  //     fetchBookings();
+  //   } catch (error) {
+  //     console.error("Approval error:", error.message);
+  //   }
+  // };
+
+
   const approveBooking = async (id) => {
-    try {
-      await axios.put(
-        `http://localhost:4545/userbooking/approveuser/${id}`,
-        { status: "approved" },
-        getAuthHeaders()
-      );
-      fetchBookings();
-    } catch (error) {
-      console.error("Approval error:", error.message);
-    }
-  };
+  try {
+    await axios.put(
+      `${baseurl}userbooking/approveuser/${id}`,
+      { status: "approved" },
+      getAuthHeaders()
+    );
+    fetchBookings();
+  } catch (error) {
+    console.error("Approval error:", error.message);
+  }
+};
 
-  const deleteBooking = async (id) => {
-    try {
-      const res = await axios.delete(
-        `http://localhost:4545/userbooking/harddelete/${id}`,
+
+  // const deleteBooking = async (id) => {
+  //   try {
+  //     const res = await axios.delete(
+  //       `http://localhost:4545/userbooking/harddelete/${id}`,
         
-        getAuthHeaders()
-      );
+  //       getAuthHeaders()
+  //     );
 
-      console.log(`>>>id delete>>>`, res.data)
-      fetchBookings();
-    } catch (error) {
-      console.error("Cancel error:", error.message);
-    }
-  };
+  //     console.log(`>>>id delete>>>`, res.data)
+  //     fetchBookings();
+  //   } catch (error) {
+  //     console.error("Cancel error:", error.message);
+  //   }
+  // };
+
+const deleteBooking = async (id) => {
+  try {
+    const res = await axios.delete(
+      `${baseurl}userbooking/harddelete/${id}`,
+      getAuthHeaders()
+    );
+
+    console.log(`>>>id delete>>>`, res.data);
+    fetchBookings();
+  } catch (error) {
+    console.error("Cancel error:", error.message);
+  }
+};
 
 
-  const fetchBookingsByStatus = async (status) => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        'http://localhost:4545/userbooking/status',
-        {
-          params: { ischecking: status },
-          ...getAuthHeaders(),
-        }
-      );
-      setischeckindata(res.data.data || []);
-    } catch (error) {
-      console.error("Fetch error:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchBookingsByStatus = async (status) => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.get(
+  //       'http://localhost:4545/userbooking/status',
+  //       {
+  //         params: { ischecking: status },
+  //         ...getAuthHeaders(),
+  //       }
+  //     );
+  //     setischeckindata(res.data.data || []);
+  //   } catch (error) {
+  //     console.error("Fetch error:", error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   
   // const StatusCheckInCheckOut = async() => {
   //   const res = await axios.get('http://localhost:4545/userbooking/checkstatus', getAuthHeaders())
   //   setcheckinout(res)
   // }
 
- 
+ const fetchBookingsByStatus = async (status) => {
+  setLoading(true);
+  try {
+    const res = await axios.get(
+      `${baseurl}userbooking/status`,
+      {
+        params: { ischecking: status },
+        ...getAuthHeaders(),
+      }
+    );
+    setischeckindata(res.data.data || []);
+  } catch (error) {
+    console.error("Fetch error:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  // const StatusCheckInCheckOut = async () => {
+  //   const res = await axios.get(
+  //     'http://localhost:4545/userbooking/checkstatus',
+  //     {
+  //       params: { ischecking: ischecking }, // or 'checkOut' or 'waiting'
+  //       ...getAuthHeaders()
+  //     }
+  //   );
+  //   setcheckinout(res.data.data);
+  // }
 
 
   const StatusCheckInCheckOut = async () => {
-    const res = await axios.get(
-      'http://localhost:4545/userbooking/checkstatus',
-      {
-        params: { ischecking: ischecking }, // or 'checkOut' or 'waiting'
-        ...getAuthHeaders()
-      }
-    );
-    setcheckinout(res.data.data);
-  }
-
+  const res = await axios.get(
+    `${baseurl}userbooking/checkstatus`,
+    {
+      params: { ischecking: ischecking }, // or 'checkOut' or 'waiting'
+      ...getAuthHeaders()
+    }
+  );
+  setcheckinout(res.data.data);
+}
    console.log(`>>>>res----->>>`, checkinout)
   
 
 
 
+  // const checkIn = async (id) => {
+  //   const res = await axios.get(
+  //     `http://localhost:4545/userbooking/checkin/${id}`,
+  //     {
+  //       params: { ischecking: "checkIn" },
+  //       ...getAuthHeaders(),
+  //     }
+  //   );
+  //   console.log(`>>>res>>>>`,res.data.ischecking)
+  //   setLoading(res.data);
+  //   setischeckindata(res.data)
+  // };
+
+
   const checkIn = async (id) => {
-    const res = await axios.get(
-      `http://localhost:4545/userbooking/checkin/${id}`,
-      {
-        params: { ischecking: "checkIn" },
-        ...getAuthHeaders(),
-      }
-    );
-    console.log(`>>>res>>>>`,res.data.ischecking)
-    setLoading(res.data);
-    setischeckindata(res.data)
-  };
+  const res = await axios.get(
+    `${baseurl}userbooking/checkin/${id}`,
+    {
+      params: { ischecking: "checkIn" },
+      ...getAuthHeaders(),
+    }
+  );
+  console.log(`>>>res>>>>`, res.data.ischecking);
+  setLoading(res.data);
+  setischeckindata(res.data);
+};
+
 
   console.log(`>>>>>checkindata>>>>`, ischeckindata)
   
+  // const checkOut = async (id) => {
+  //   const res = await axios.get(
+  //     `http://localhost:4545/userbooking/checkout/${id}`,
+  //     {
+  //       params: { ischecking: "checkOut" },
+  //       ...getAuthHeaders(),
+  //     }
+  //   );  
+  //   setischeckindata(res.data)
+  //   setLoading(res.data);
+  // };
+  
   const checkOut = async (id) => {
-    const res = await axios.get(
-      `http://localhost:4545/userbooking/checkout/${id}`,
-      {
-        params: { ischecking: "checkOut" },
-        ...getAuthHeaders(),
-      }
-    );  
-    setischeckindata(res.data)
-    setLoading(res.data);
-  };
-  
-  
+  const res = await axios.get(
+    `${baseurl}userbooking/checkout/${id}`,
+    {
+      params: { ischecking: "checkOut" },
+      ...getAuthHeaders(),
+    }
+  );  
+  setischeckindata(res.data);
+  setLoading(res.data);
+};
   useEffect(() => {
     console.log("Updated check-in data:", ischeckindata);
   }, [ischeckindata]);

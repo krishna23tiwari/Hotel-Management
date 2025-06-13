@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import baseurl from "../BaseUrl";
 
 const RecentBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -24,29 +25,53 @@ const RecentBookings = () => {
 
 
 
+// const fetchBookings = async () => {
+//     try {
+//       const res = await axios.get("http://localhost:4545/userbooking/getbookingdataforadmin", {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("token")}`,
+//         },
+//       });
+  
+//       const allBookings = res.data.data;
+  
+//       // Sort bookings by createdAt (or another date field) in descending order
+//       const sortedBookings = allBookings.sort(
+//         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+//       );
+  
+//       // Take the top 5 most recent
+//       const topFive = sortedBookings.slice(0, 5);
+  
+//       setBookings(topFive);
+//     } catch (error) {
+//       console.error("Failed to fetch bookings", error);
+//     }
+//   };
+
 const fetchBookings = async () => {
-    try {
-      const res = await axios.get("http://localhost:4545/userbooking/getbookingdataforadmin", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
-      const allBookings = res.data.data;
-  
-      // Sort bookings by createdAt (or another date field) in descending order
-      const sortedBookings = allBookings.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-  
-      // Take the top 5 most recent
-      const topFive = sortedBookings.slice(0, 5);
-  
-      setBookings(topFive);
-    } catch (error) {
-      console.error("Failed to fetch bookings", error);
-    }
-  };
+  try {
+    const res = await axios.get(`${baseurl}userbooking/getbookingdataforadmin`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const allBookings = res.data.data;
+
+    // Sort bookings by createdAt (or another date field) in descending order
+    const sortedBookings = allBookings.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    // Take the top 5 most recent
+    const topFive = sortedBookings.slice(0, 5);
+
+    setBookings(topFive);
+  } catch (error) {
+    console.error("Failed to fetch bookings", error);
+  }
+};
 
     useEffect(() => {
     fetchBookings();

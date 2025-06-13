@@ -17,6 +17,7 @@ import { BsSun, BsMoon } from "react-icons/bs";
 import axios from "axios";
 import {toggleTheme} from '../Slice/Theme'
 import { Link } from "react-router";
+import baseurl from "../BaseUrl";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -58,31 +59,52 @@ const NavBar = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const fetchallinfo = async () => {
-    const res = await axios.get(
-      "http://localhost:4545/userbooking/showuserbooking",
-      getAuthHeaders()
-    );
-    // console.log(res.data);
-    setdata(res.data);
+  // const fetchallinfo = async () => {
+  //   const res = await axios.get(
+  //     "http://localhost:4545/userbooking/showuserbooking",
+  //     getAuthHeaders()
+  //   );
+  //   // console.log(res.data);
+  //   setdata(res.data);
     
-  };
+  // };
 
 
   // console.log(`>>>Data>>>>`, data);
   // console.log(`image>>>>`, profileImage)
 
+// Make sure this is at the top with your imports
+
+const fetchallinfo = async () => {
+  const res = await axios.get(
+    `${baseurl}userbooking/showuserbooking`,
+    getAuthHeaders()
+  );
+  // console.log(res.data);
+  setdata(res.data);
+};
+
+  // const handleCheckIn = async (bookingId) => {
+  //   const res = await axios.put(
+  //     `http://localhost:4545/userbooking/checkin/${bookingId}`,
+  //     {},
+  //     getAuthHeaders()
+  //   );
+
+  //   // console.log(`>>>>checkIn>>>>`, res.data);
+  //   fetchallinfo();
+  // };
+
   const handleCheckIn = async (bookingId) => {
-    const res = await axios.put(
-      `http://localhost:4545/userbooking/checkin/${bookingId}`,
-      {},
-      getAuthHeaders()
-    );
+  const res = await axios.put(
+    `${baseurl}userbooking/checkin/${bookingId}`,
+    {},
+    getAuthHeaders()
+  );
 
-    // console.log(`>>>>checkIn>>>>`, res.data);
-    fetchallinfo();
-  };
-
+  // console.log(`>>>>checkIn>>>>`, res.data);
+  fetchallinfo();
+};
   const openResetPopup = () => {
     const savedEmail = localStorage.getItem("email");
     if (savedEmail) {
@@ -91,79 +113,144 @@ const NavBar = () => {
     setResetPopupOpen(true);
   };
 
-  const handleCacel = async (bookingId) => {
-    const res = await axios.patch(
-      `http://localhost:4545/userbooking/handlecancel/${bookingId}`,
-      {},
-      getAuthHeaders()
-    );
+  // const handleCacel = async (bookingId) => {
+  //   const res = await axios.patch(
+  //     `http://localhost:4545/userbooking/handlecancel/${bookingId}`,
+  //     {},
+  //     getAuthHeaders()
+  //   );
 
-    // console.log(`>>>>res-cancel>>>>`, res.data);
-    fetchallinfo();
-  };
+  //   // console.log(`>>>>res-cancel>>>>`, res.data);
+  //   fetchallinfo();
+  // };
+
+  const handleCacel = async (bookingId) => {
+  const res = await axios.patch(
+    `${baseurl}userbooking/handlecancel/${bookingId}`,
+    {},
+    getAuthHeaders()
+  );
+
+  // console.log(`>>>>res-cancel>>>>`, res.data);
+  fetchallinfo();
+};
+  // const handleCheckOut = async (bookingId) => {
+  //   const res = await axios.put(
+  //     `http://localhost:4545/userbooking/checkOut/${bookingId}`,
+  //     {},
+  //     getAuthHeaders()
+  //   );
+
+  //   // console.log(`>>>>checkIn>>>>`, res.data);
+  //   fetchallinfo();
+  // };
+
 
   const handleCheckOut = async (bookingId) => {
+  const res = await axios.put(
+    `${baseurl}userbooking/checkOut/${bookingId}`,
+    {},
+    getAuthHeaders()
+  );
+
+  // console.log(`>>>>checkIn>>>>`, res.data);
+  fetchallinfo();
+};
+
+  // const handleResetPassword = async () => {
+  //   try {
+  //     const res = await axios.put(
+  //       "http://localhost:4545/user/reset-password",
+  //       {
+  //         oldPassword,
+  //         newPassword,
+  //       },
+  //       getAuthHeaders()
+  //     );
+
+  //     alert(res.data.message || "Password reset successful");
+
+  //     openResetPopup();
+  //     setOldPassword("");
+  //     setNewPassword("");
+  //   } catch (err) {
+  //     alert(err.response?.data?.message || "Password reset failed");
+  //   }
+  // };
+
+const handleResetPassword = async () => {
+  try {
     const res = await axios.put(
-      `http://localhost:4545/userbooking/checkOut/${bookingId}`,
-      {},
+      `${baseurl}user/reset-password`,
+      {
+        oldPassword,
+        newPassword,
+      },
       getAuthHeaders()
     );
 
-    // console.log(`>>>>checkIn>>>>`, res.data);
-    fetchallinfo();
-  };
+    alert(res.data.message || "Password reset successful");
 
-  const handleResetPassword = async () => {
-    try {
-      const res = await axios.put(
-        "http://localhost:4545/user/reset-password",
-        {
-          oldPassword,
-          newPassword,
-        },
-        getAuthHeaders()
-      );
+    openResetPopup();
+    setOldPassword("");
+    setNewPassword("");
+  } catch (err) {
+    alert(err.response?.data?.message || "Password reset failed");
+  }
+};
 
-      alert(res.data.message || "Password reset successful");
 
-      openResetPopup();
-      setOldPassword("");
-      setNewPassword("");
-    } catch (err) {
-      alert(err.response?.data?.message || "Password reset failed");
+  // const updateNameAgePhone = async () => {
+  //   const email = localStorage.getItem("email");
+  
+  //   const formData = new FormData();
+  //   formData.append("email", email);
+  //   formData.append("name", editName);
+  //   formData.append("age", editAge);
+  //   formData.append("phone", editPhone);
+  //   if (editImage) {
+  //     formData.append("image", editImage);
+  //   }
+  
+  //   const res = await axios.patch(
+  //     "http://localhost:4545/user/editnamephonegenderage",
+  //     formData,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`, // or from getAuthHeaders()
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     }
+  //   );
+  
+  //   alert(res.data.message || "Profile updated");
+  // };
+  
+const updateNameAgePhone = async () => {
+  const email = localStorage.getItem("email");
+
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("name", editName);
+  formData.append("age", editAge);
+  formData.append("phone", editPhone);
+  if (editImage) {
+    formData.append("image", editImage);
+  }
+
+  const res = await axios.patch(
+    `${baseurl}user/editnamephonegenderage`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
     }
-  };
+  );
 
-
-
-
-  const updateNameAgePhone = async () => {
-    const email = localStorage.getItem("email");
-  
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("name", editName);
-    formData.append("age", editAge);
-    formData.append("phone", editPhone);
-    if (editImage) {
-      formData.append("image", editImage);
-    }
-  
-    const res = await axios.patch(
-      "http://localhost:4545/user/editnamephonegenderage",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // or from getAuthHeaders()
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-  
-    alert(res.data.message || "Profile updated");
-  };
-  
-
+  alert(res.data.message || "Profile updated");
+};
   useEffect(() => {
     fetchallinfo();
   }, []);
@@ -171,26 +258,26 @@ const NavBar = () => {
 
   
 
-  const fetchUserProfile = async () => {
-    const email = localStorage.getItem("email");
+  // const fetchUserProfile = async () => {
+  //   const email = localStorage.getItem("email");
   
-    try {
-      const res = await axios.post(
-        "http://localhost:4545/user/profile",
-        { email },
-        getAuthHeaders()
-      );
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:4545/user/profile",
+  //       { email },
+  //       getAuthHeaders()
+  //     );
   
-      // console.log("response>>>>>>>", res.data.user);
+  //     // console.log("response>>>>>>>", res.data.user);
   
-      if (res.data.user && res.data.user.image) {
-        setProfileImage(res.data.user.image);
-        setUserName(res.data.user.name)
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-    }
-  };
+  //     if (res.data.user && res.data.user.image) {
+  //       setProfileImage(res.data.user.image);
+  //       setUserName(res.data.user.name)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user profile:", error);
+  //   }
+  // };
 
   
 
@@ -214,20 +301,55 @@ const NavBar = () => {
 //   }
 // };
 
+const fetchUserProfile = async () => {
+  const email = localStorage.getItem("email");
 
+  try {
+    const res = await axios.post(
+      `${baseurl}user/profile`,
+      { email },
+      getAuthHeaders()
+    );
 
-const getBackGroundImage = async(req, res) => {
-  const email = localStorage.getItem('email')
+    // console.log("response>>>>>>>", res.data.user);
 
-  if(!email){
-    console.error("email not found")
-    return
+    if (res.data.user && res.data.user.image) {
+      setProfileImage(res.data.user.image);
+      setUserName(res.data.user.name)
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
   }
-  const response = await axios.get(`http://localhost:4545/user/getalldataimage?email=${email}`, getAuthHeaders())
+};
+
+// const getBackGroundImage = async(req, res) => {
+//   const email = localStorage.getItem('email')
+
+//   if(!email){
+//     console.error("email not found")
+//     return
+//   }
+//   const response = await axios.get(`http://localhost:4545/user/getalldataimage?email=${email}`, getAuthHeaders())
+
+//   console.log(`>>>>response-api>>>>`, response.data);
+//   setuserData(response.data.user)
+// }
+
+const getBackGroundImage = async () => {
+  const email = localStorage.getItem('email');
+
+  if (!email) {
+    console.error("email not found");
+    return;
+  }
+  const response = await axios.get(
+    `${baseurl}user/getalldataimage?email=${email}`,
+    getAuthHeaders()
+  );
 
   console.log(`>>>>response-api>>>>`, response.data);
-  setuserData(response.data.user)
-}
+  setuserData(response.data.user);
+};
 
 useEffect(() => {
   getBackGroundImage();

@@ -10,6 +10,7 @@ import {
   Legend
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import baseurl from '../BaseUrl';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -18,40 +19,75 @@ const CheckInCheckOutBarchart = () => {
   const [cancelCount, setCancelCount] = useState(0);
   const [waitingCount, setWaitingCount] = useState(0);
 
-  const fetchBookingData = async () => {
-    try {
-      const res = await axios.get("http://localhost:4545/userbooking/getbookingdataforadmin", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+  // const fetchBookingData = async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:4545/userbooking/getbookingdataforadmin", {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`
+  //       }
+  //     });
 
-      const bookings = res.data.data;
+  //     const bookings = res.data.data;
 
-      let checkIn = 0;
-      let cancelled = 0;
-      let waiting = 0;
+  //     let checkIn = 0;
+  //     let cancelled = 0;
+  //     let waiting = 0;
 
-      bookings.forEach(booking => {
-        const status = booking.ischecking?.toLowerCase();
+  //     bookings.forEach(booking => {
+  //       const status = booking.ischecking?.toLowerCase();
 
-        if (status === 'checkin') {
-          checkIn++;
-        } else if (status === 'cancel') {
-          cancelled++;
-        } else if (status === 'waiting') {
-          waiting++;
-        }
-      });
+  //       if (status === 'checkin') {
+  //         checkIn++;
+  //       } else if (status === 'cancel') {
+  //         cancelled++;
+  //       } else if (status === 'waiting') {
+  //         waiting++;
+  //       }
+  //     });
 
-      setCheckInCount(checkIn);
-      setCancelCount(cancelled);
-      setWaitingCount(waiting);
-    } catch (err) {
-      console.error("Failed to fetch booking data", err);
-    }
-  };
+  //     setCheckInCount(checkIn);
+  //     setCancelCount(cancelled);
+  //     setWaitingCount(waiting);
+  //   } catch (err) {
+  //     console.error("Failed to fetch booking data", err);
+  //   }
+  // };
 
+// Make sure this is at the top with your imports
+
+const fetchBookingData = async () => {
+  try {
+    const res = await axios.get(`${baseurl}userbooking/getbookingdataforadmin`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const bookings = res.data.data;
+
+    let checkIn = 0;
+    let cancelled = 0;
+    let waiting = 0;
+
+    bookings.forEach(booking => {
+      const status = booking.ischecking?.toLowerCase();
+
+      if (status === 'checkin') {
+        checkIn++;
+      } else if (status === 'cancel') {
+        cancelled++;
+      } else if (status === 'waiting') {
+        waiting++;
+      }
+    });
+
+    setCheckInCount(checkIn);
+    setCancelCount(cancelled);
+    setWaitingCount(waiting);
+  } catch (err) {
+    console.error("Failed to fetch booking data", err);
+  }
+};
   useEffect(() => {
     fetchBookingData();
   }, []);
@@ -86,7 +122,7 @@ const CheckInCheckOutBarchart = () => {
   };
 
   return (
-    <div className="bg-gray-300 backdrop-blur-md p-3">
+    <div className="bg-gray-300 backdrop-blur-md p-3 h-[250px]">
       <Bar data={data} options={options} />
     </div>
   );

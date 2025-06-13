@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import baseurl from "../BaseUrl";
 
 const ForAdmin = () => {
   const [form, setForm] = useState({ city: "", state: "" });
@@ -22,23 +23,41 @@ const ForAdmin = () => {
   }, []);
 
 
-  const fetchStatesindropdown = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:4545/addingstate/showallstate",
-        getAuthHeaders()
-      );
+  // const fetchStatesindropdown = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "http://localhost:4545/addingstate/showallstate",
+  //       getAuthHeaders()
+  //     );
 
-      const activeStates = response.data.data.filter(state => state.status === 'active');
-      // console.log(`>>>>cityDropDown>>>>>`, response.data.data)
-      setStates(activeStates);
-      setctiveinactive(response.data.data)
+  //     const activeStates = response.data.data.filter(state => state.status === 'active');
+  //     // console.log(`>>>>cityDropDown>>>>>`, response.data.data)
+  //     setStates(activeStates);
+  //     setctiveinactive(response.data.data)
 
-    } catch (error) {
-      console.error("Error fetching states:", error);
-      showAlert("error", "Failed to load states");
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching states:", error);
+  //     showAlert("error", "Failed to load states");
+  //   }
+  // };
+
+const fetchStatesindropdown = async () => {
+  try {
+    const response = await axios.get(
+      `${baseurl}addingstate/showallstate`,
+      getAuthHeaders()
+    );
+
+    const activeStates = response.data.data.filter(state => state.status === 'active');
+    // console.log(`>>>>cityDropDown>>>>>`, response.data.data)
+    setStates(activeStates);
+    setctiveinactive(response.data.data)
+
+  } catch (error) {
+    console.error("Error fetching states:", error);
+    showAlert("error", "Failed to load states");
+  }
+};
 
 
   const getAuthHeaders = () => {
@@ -46,19 +65,35 @@ const ForAdmin = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
+  // const fetchData = async () => {
+  //   const res = await axios.get(
+  //     "http://localhost:4545/admin/getalldata",
+  //     getAuthHeaders()
+  //   );
+  //   const actualData = res.data.data; 
+
+  //   const active = actualData.filter((item) => item.status === "active");
+  //   const inactive = actualData.filter((item) => item.status === "inactive");
+
+  //   setData(active);
+  //   setInactiveData(inactive);
+  // };
+
+
   const fetchData = async () => {
-    const res = await axios.get(
-      "http://localhost:4545/admin/getalldata",
-      getAuthHeaders()
-    );
-    const actualData = res.data.data; 
+  const res = await axios.get(
+    `${baseurl}admin/getalldata`,
+    getAuthHeaders()
+  );
+  const actualData = res.data.data; 
 
-    const active = actualData.filter((item) => item.status === "active");
-    const inactive = actualData.filter((item) => item.status === "inactive");
+  const active = actualData.filter((item) => item.status === "active");
+  const inactive = actualData.filter((item) => item.status === "inactive");
 
-    setData(active);
-    setInactiveData(inactive);
-  };
+  setData(active);
+  setInactiveData(inactive);
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,47 +101,82 @@ const ForAdmin = () => {
   };
 
 
-  const handleSubmit = async () => {
-    if (!form.city || !form.state) return alert("Both fields required");
+  // const handleSubmit = async () => {
+  //   if (!form.city || !form.state) return alert("Both fields required");
   
-    try {
-      let response;
-      if (editingId) {
+  //   try {
+  //     let response;
+  //     if (editingId) {
 
-        response = await axios.put(
-          `http://localhost:4545/admin/updatecitystate/${editingId}`,
-          form,
-          getAuthHeaders()
-        );
-      } else {
-        response = await axios.post(
-          "http://localhost:4545/admin/AddCityState",
-          form,
-          getAuthHeaders()
-        );
-      }
+  //       response = await axios.put(
+  //         `http://localhost:4545/admin/updatecitystate/${editingId}`,
+  //         form,
+  //         getAuthHeaders()
+  //       );
+  //     } else {
+  //       response = await axios.post(
+  //         "http://localhost:4545/admin/AddCityState",
+  //         form,
+  //         getAuthHeaders()
+  //       );
+  //     }
 
-      if (response.status === 200) {
-        alert(response.data.message); 
-      }
+  //     if (response.status === 200) {
+  //       alert(response.data.message); 
+  //     }
   
   
-      setForm({ city: "", state: "" });
-      setEditingId(null);
-      fetchData();
-    } catch (err) {
+  //     setForm({ city: "", state: "" });
+  //     setEditingId(null);
+  //     fetchData();
+  //   } catch (err) {
 
-      if (err.response && err.response.data && err.response.data.message) {
-        alert(err.response.data.message); 
-        setForm({ city: "", state: "" });
-      } else {
-        console.error("Error submitting:", err);
-        alert("Failed to add or update city-state. Please try again.");
-      }
+  //     if (err.response && err.response.data && err.response.data.message) {
+  //       alert(err.response.data.message); 
+  //       setForm({ city: "", state: "" });
+  //     } else {
+  //       console.error("Error submitting:", err);
+  //       alert("Failed to add or update city-state. Please try again.");
+  //     }
+  //   }
+  // };
+  
+const handleSubmit = async () => {
+  if (!form.city || !form.state) return alert("Both fields required");
+
+  try {
+    let response;
+    if (editingId) {
+      response = await axios.put(
+        `${baseurl}admin/updatecitystate/${editingId}`,
+        form,
+        getAuthHeaders()
+      );
+    } else {
+      response = await axios.post(
+        `${baseurl}admin/AddCityState`,
+        form,
+        getAuthHeaders()
+      );
     }
-  };
-  
 
+    if (response.status === 200) {
+      alert(response.data.message); 
+    }
+
+    setForm({ city: "", state: "" });
+    setEditingId(null);
+    fetchData();
+  } catch (err) {
+    if (err.response && err.response.data && err.response.data.message) {
+      alert(err.response.data.message); 
+      setForm({ city: "", state: "" });
+    } else {
+      console.error("Error submitting:", err);
+      alert("Failed to add or update city-state. Please try again.");
+    }
+  }
+};
 
   const handleEdit = (item) => {
     setForm({ city: item.city, state: item.state });
@@ -114,50 +184,90 @@ const ForAdmin = () => {
   };
 
 
+  // const activateEntry = async (id) => {
+  //   try {
+  //     const res = await axios.patch(
+  //       `http://localhost:4545/admin/activateentry/${id}`,
+  //       {},
+  //       getAuthHeaders()
+  //     );
+     
+  //     alert(res.data.message);
+  //     fetchData();
+  //   } catch (err) {
+  //     if (err.response) {
+
+  //       const { status, data } = err.response;
+  //       if (status === 400 || status === 404) {
+  //         alert(data.message);
+  //       } else if (status >= 500) {
+  //         alert("Server error — please try again later.");
+  //       } else {
+  //         alert("Unexpected error: " + data.message);
+  //       }
+  //     } else {
+     
+  //       console.error("Error activating entry:", err);
+  //       alert("Network error — please check your connection.");
+  //     }
+  //   }
+  // };
+  
+  
+
+  // const softDelete = async (id) => {
+  //   await axios.patch(`http://localhost:4545/admin/softdelete/${id}`);
+  //   fetchData();
+  // };
+
+  // const hardDelete = async (id) => {
+  //   await axios.delete(
+  //     `http://localhost:4545/admin/harddelete/${id}`,
+  //     getAuthHeaders()
+  //   );
+  //   fetchData();
+  // };
+
+
   const activateEntry = async (id) => {
-    try {
-      const res = await axios.patch(
-        `http://localhost:4545/admin/activateentry/${id}`,
-        {},
-        getAuthHeaders()
-      );
-     
-      alert(res.data.message);
-      fetchData();
-    } catch (err) {
-      if (err.response) {
-
-        const { status, data } = err.response;
-        if (status === 400 || status === 404) {
-          alert(data.message);
-        } else if (status >= 500) {
-          alert("Server error — please try again later.");
-        } else {
-          alert("Unexpected error: " + data.message);
-        }
-      } else {
-     
-        console.error("Error activating entry:", err);
-        alert("Network error — please check your connection.");
-      }
-    }
-  };
-  
-  
-
-  const softDelete = async (id) => {
-    await axios.patch(`http://localhost:4545/admin/softdelete/${id}`);
-    fetchData();
-  };
-
-  const hardDelete = async (id) => {
-    await axios.delete(
-      `http://localhost:4545/admin/harddelete/${id}`,
+  try {
+    const res = await axios.patch(
+      `${baseurl}admin/activateentry/${id}`,
+      {},
       getAuthHeaders()
     );
+   
+    alert(res.data.message);
     fetchData();
-  };
+  } catch (err) {
+    if (err.response) {
+      const { status, data } = err.response;
+      if (status === 400 || status === 404) {
+        alert(data.message);
+      } else if (status >= 500) {
+        alert("Server error — please try again later.");
+      } else {
+        alert("Unexpected error: " + data.message);
+      }
+    } else {
+      console.error("Error activating entry:", err);
+      alert("Network error — please check your connection.");
+    }
+  }
+};
 
+const softDelete = async (id) => {
+  await axios.patch(`${baseurl}admin/softdelete/${id}`, {}, getAuthHeaders());
+  fetchData();
+};
+
+const hardDelete = async (id) => {
+  await axios.delete(
+    `${baseurl}admin/harddelete/${id}`,
+    getAuthHeaders()
+  );
+  fetchData();
+};
   return (
     <div className="p-5">
       <h1 className="text-xl mb-4 font-semibold">City-State Management</h1>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import baseurl from "../BaseUrl";
 
 const ForBookings = () => {
   const { selectedRoom } = useParams();
@@ -31,32 +32,56 @@ const ForBookings = () => {
 
 //  console.log(`>>>totalprice>>>`, totalPrice)
 
-  const fetchCoupons = async() =>{
-        const res = await axios.get('http://localhost:4545/coupon/getallcoupon', getAuthHeaders())
-        if(res.status === 200){
-            // alert(res.data.message)
-            // console.log(`>>>>resforcoupon>>>`,res.data)
-            setcoupons(res.data.showallcoupon)
+  // const fetchCoupons = async() =>{
+  //       const res = await axios.get('http://localhost:4545/coupon/getallcoupon', getAuthHeaders())
+  //       if(res.status === 200){
+  //           // alert(res.data.message)
+  //           // console.log(`>>>>resforcoupon>>>`,res.data)
+  //           setcoupons(res.data.showallcoupon)
             
-        }
+  //       }
+  // }
+
+  // Make sure this is at the top with your imports
+
+const fetchCoupons = async () => {
+  const res = await axios.get(`${baseurl}coupon/getallcoupon`, getAuthHeaders());
+  if (res.status === 200) {
+    // alert(res.data.message)
+    // console.log(`>>>>resforcoupon>>>`,res.data)
+    setcoupons(res.data.showallcoupon);
   }
+};
 
 //   console.log(`>>>coupons>>>`, coupons)
 
 
 
+  // const fetchRoomPrice = async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders());
+  //     const rooms = res.data.data || [];
+  //     const matchedRoom = rooms.find(room => room._id === selectedRoom);
+  //     if (matchedRoom) {
+  //       setRoomPrice(matchedRoom.price || 0);
+  //     }
+  //   } catch (err) {
+  //     console.error("Failed to fetch rooms:", err.message);
+  //   }
+  // };
+
   const fetchRoomPrice = async () => {
-    try {
-      const res = await axios.get("http://localhost:4545/roomroute/getallrooms", getAuthHeaders());
-      const rooms = res.data.data || [];
-      const matchedRoom = rooms.find(room => room._id === selectedRoom);
-      if (matchedRoom) {
-        setRoomPrice(matchedRoom.price || 0);
-      }
-    } catch (err) {
-      console.error("Failed to fetch rooms:", err.message);
+  try {
+    const res = await axios.get(`${baseurl}roomroute/getallrooms`, getAuthHeaders());
+    const rooms = res.data.data || [];
+    const matchedRoom = rooms.find(room => room._id === selectedRoom);
+    if (matchedRoom) {
+      setRoomPrice(matchedRoom.price || 0);
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch rooms:", err.message);
+  }
+};
 
   useEffect(() => {
     if (selectedRoom) {
@@ -147,54 +172,64 @@ const ForBookings = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const userinfo = async() => {
-    const res = await axios.get('http://localhost:4545/user/getuserinfo', getAuthHeaders())
+// const userinfo = async() => {
+//     const res = await axios.get('http://localhost:4545/user/getuserinfo', getAuthHeaders())
 
-    if(res.status === 200 && res.data.user){
-        setUserInfo(res.data.user)
-    }else{
-        console.log("failed to fetch info")
-    }
-}
+//     if(res.status === 200 && res.data.user){
+//         setUserInfo(res.data.user)
+//     }else{
+//         console.log("failed to fetch info")
+//     }
+// }
+
+const userinfo = async () => {
+  const res = await axios.get(`${baseurl}user/getuserinfo`, getAuthHeaders());
+
+  if (res.status === 200 && res.data.user) {
+    setUserInfo(res.data.user);
+  } else {
+    console.log("failed to fetch info");
+  }
+};
 
 useEffect(() => {
     userinfo()
 },[])
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
+// const handleSubmit = async (e) => {
+//     e.preventDefault();
   
-    const checkInDate = new Date(formData.checkInDate);
-    const checkOutDate = new Date(formData.checkOutDate);
+//     const checkInDate = new Date(formData.checkInDate);
+//     const checkOutDate = new Date(formData.checkOutDate);
   
-    if (checkOutDate <= checkInDate) {
-      alert("Check-out date must be later than Check-in date.");
-      return; 
-    }
+//     if (checkOutDate <= checkInDate) {
+//       alert("Check-out date must be later than Check-in date.");
+//       return; 
+//     }
   
-    const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice, status: "pending" };
+//     const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice, status: "pending" };
   
-    try {
-      const res = await axios.post("http://localhost:4545/userbooking/forbooking", payload, getAuthHeaders());
-      alert("Booking Successful!");
-      setFormData({
-        userName: "",
-        userPhone: "",
-        userEmail: "",
-        checkInDate: "",
-        checkOutDate: "",
-        numberOfGuests: 1,
-        numberOfRooms: 1,
-        anyChild: "no",
-        couponName: ""
-      });
+//     try {
+//       const res = await axios.post("http://localhost:4545/userbooking/forbooking", payload, getAuthHeaders());
+//       alert("Booking Successful!");
+//       setFormData({
+//         userName: "",
+//         userPhone: "",
+//         userEmail: "",
+//         checkInDate: "",
+//         checkOutDate: "",
+//         numberOfGuests: 1,
+//         numberOfRooms: 1,
+//         anyChild: "no",
+//         couponName: ""
+//       });
   
-      setStatus(res.data);
-    } catch (err) {
-      console.error("Booking failed:", err?.response?.data || err.message);
-      alert("Booking Failed!");
-    }
-  };
+//       setStatus(res.data);
+//     } catch (err) {
+//       console.error("Booking failed:", err?.response?.data || err.message);
+//       alert("Booking Failed!");
+//     }
+//   };
   
 
 
@@ -225,6 +260,44 @@ const handleSubmit = async (e) => {
 //   };
 
 //   console.log(`>>>status>>>>`, status)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const checkInDate = new Date(formData.checkInDate);
+  const checkOutDate = new Date(formData.checkOutDate);
+
+  if (checkOutDate <= checkInDate) {
+    alert("Check-out date must be later than Check-in date.");
+    return; 
+  }
+
+  const payload = { ...formData, roomId: selectedRoom, totalAmount: totalPrice, status: "pending" };
+
+  try {
+    const res = await axios.post(
+      `${baseurl}userbooking/forbooking`,
+      payload,
+      getAuthHeaders()
+    );
+    alert("Booking Successful!");
+    setFormData({
+      userName: "",
+      userPhone: "",
+      userEmail: "",
+      checkInDate: "",
+      checkOutDate: "",
+      numberOfGuests: 1,
+      numberOfRooms: 1,
+      anyChild: "no",
+      couponName: ""
+    });
+
+    setStatus(res.data);
+  } catch (err) {
+    console.error("Booking failed:", err?.response?.data || err.message);
+    alert("Booking Failed!");
+  }
+};
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">

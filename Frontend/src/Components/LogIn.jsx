@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import baseurl from '../BaseUrl';
 
 const LogIn = () => {
   const [step, setStep] = useState('login');
@@ -13,70 +14,129 @@ const LogIn = () => {
 
   let data = null;
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('http://localhost:4545/user/login', { email, password });
-      alert(res.data.message);
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('email', res.data.email)
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const res = await axios.post('http://localhost:4545/user/login', { email, password });
+  //     alert(res.data.message);
+  //     localStorage.setItem('token', res.data.token);
+  //     localStorage.setItem('email', res.data.email)
 
-      data = res.data.email 
+  //     data = res.data.email 
 
-      if (res.data.role === 'admin') {
-        navi('/add-state');
-      } else {
-        navi('/user-board');
-      }
-    } catch (err) {
-      alert(err.response.data.message || 'Login failed');
+  //     if (res.data.role === 'admin') {
+  //       navi('/add-state');
+  //     } else {
+  //       navi('/user-board');
+  //     }
+  //   } catch (err) {
+  //     alert(err.response.data.message || 'Login failed');
+  //   }
+  // };
+// Add this at the top with your imports
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${baseurl}user/login`, { email, password });
+    alert(res.data.message);
+    localStorage.setItem('token', res.data.token);
+    localStorage.setItem('email', res.data.email);
+
+    data = res.data.email;
+
+    if (res.data.role === 'admin') {
+      navi('/add-state');
+    } else {
+      navi('/user-board');
     }
-  };
+  } catch (err) {
+    alert(err.response?.data?.message || 'Login failed');
+  }
+};
 
- 
+  // const handleSendOtp = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     console.log("Sending OTP to email:", email);
+
+  //     const res = await axios.post('http://localhost:4545/user/sendOtpOnLogin', { email });
+  //     alert(res.data.message);
+  //     setStep('otp');
+  //   } catch (err) {
+  //     alert(err.response.data.message || 'Failed to send OTP');
+  //   }
+  // };
 
   const handleSendOtp = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("Sending OTP to email:", email);
+  e.preventDefault();
+  try {
+    console.log("Sending OTP to email:", email);
 
-      const res = await axios.post('http://localhost:4545/user/sendOtpOnLogin', { email });
-      alert(res.data.message);
-      setStep('otp');
-    } catch (err) {
-      alert(err.response.data.message || 'Failed to send OTP');
-    }
-  };
+    const res = await axios.post(`${baseurl}user/sendOtpOnLogin`, { email });
+    alert(res.data.message);
+    setStep('otp');
+  } catch (err) {
+    alert(err.response?.data?.message || 'Failed to send OTP');
+  }
+};
+  // const handleVerifyOtp = async (e) => {
+  //   e.preventDefault();
+  //   console.log(`>>>>forresetpwdotp>>>>`,email,otp )
+  //   try {
+  //     const res = await axios.post('http://localhost:4545/user/verifyResetOtp', { email, otp });
+  //     alert(res.data.message);
+  //     setStep('reset');
+  //   } catch (err) {
+  //     alert(err.response?.data?.message || 'OTP verification failed');
+  //   }
+  // };
 
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    console.log(`>>>>forresetpwdotp>>>>`,email,otp )
-    try {
-      const res = await axios.post('http://localhost:4545/user/verifyResetOtp', { email, otp });
-      alert(res.data.message);
-      setStep('reset');
-    } catch (err) {
-      alert(err.response?.data?.message || 'OTP verification failed');
-    }
-  };
+const handleVerifyOtp = async (e) => {
+  e.preventDefault();
+  console.log(`>>>>forresetpwdotp>>>>`, email, otp);
+  try {
+    const res = await axios.post(`${baseurl}user/verifyResetOtp`, { email, otp });
+    alert(res.data.message);
+    setStep('reset');
+  } catch (err) {
+    alert(err.response?.data?.message || 'OTP verification failed');
+  }
+};
+
+  // const handleResetPassword = async (e) => {
+  //   e.preventDefault();
+  //   if (newPass !== confirmPass) return alert("Passwords don't match");
+
+  //   try {
+  //     const res = await axios.post('http://localhost:4545/user/resetPassword', { email, newPass });
+  //     alert(res.data.message);
+  //     setStep('login');
+  //     setPassword('');
+  //     setNewPass('');
+  //     setConfirmPass('');
+  //     setOtp('');
+  //   } catch (err) {
+  //     alert(err.response?.data?.message || 'Password reset failed');
+  //   }
+  // };
 
   const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (newPass !== confirmPass) return alert("Passwords don't match");
+  e.preventDefault();
+  if (newPass !== confirmPass) return alert("Passwords don't match");
 
-    try {
-      const res = await axios.post('http://localhost:4545/user/resetPassword', { email, newPass });
-      alert(res.data.message);
-      setStep('login');
-      setPassword('');
-      setNewPass('');
-      setConfirmPass('');
-      setOtp('');
-    } catch (err) {
-      alert(err.response?.data?.message || 'Password reset failed');
-    }
-  };
-
+  try {
+    const res = await axios.post(`${baseurl}user/resetPassword`, { email, newPass });
+    alert(res.data.message);
+    setStep('login');
+    setPassword('');
+    setNewPass('');
+    setConfirmPass('');
+    setOtp('');
+  } catch (err) {
+    alert(err.response?.data?.message || 'Password reset failed');
+  }
+};
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#1a1a2e] text-white">
       <div className="bg-[#2b2b55] p-8 rounded-xl shadow-md w-full max-w-md">
