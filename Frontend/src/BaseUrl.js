@@ -1,3 +1,5 @@
-const baseurl = 'http://localhost:4545/';
+
+
+const baseurl = import.meta.env.VITE_BACKEND_URL
 
 export default baseurl
