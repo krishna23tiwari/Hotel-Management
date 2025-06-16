@@ -365,274 +365,498 @@ const AddHotel = () => {
   };
 // ...existing code continues...
 
-  return (
-    <div className="p-5">
-      <h1 className="text-xl mb-4 font-semibold">Hotel Management</h1>
+//   return (
+//     <div className="p-5">
+//       <h1 className="text-xl mb-4 font-semibold">Hotel Management</h1>
 
-      {/* <div className="flex gap-2 mb-4 flex-wrap">
+//       {/* <div className="flex gap-2 mb-4 flex-wrap">
 
-        <select
-          name="state"
-          value={form.state}
-          onChange={handleChange}
-          className="border px-2 py-1"
-        >
-          <option value="">Select state</option>
-          {showdropdown.map((state) => (
-            <option key={state._id} value={state._id}>
-              {state.state}
-            </option>
+//         <select
+//           name="state"
+//           value={form.state}
+//           onChange={handleChange}
+//           className="border px-2 py-1"
+//         >
+//           <option value="">Select state</option>
+//           {showdropdown.map((state) => (
+//             <option key={state._id} value={state._id}>
+//               {state.state}
+//             </option>
+//           ))}
+//         </select>
+
+//         <select
+//           name="city"
+//           value={form.city}
+//           onChange={handleChange}
+//           className="border px-2 py-1"
+//         >
+//           <option value="">Select city</option>
+//           {activedropdowncity
+//             .filter((c) => c.state === form.state)
+//             .map((city) => (
+//               <option key={city._id} value={city._id}>
+//                 {city.city}
+//               </option>
+//             ))}
+//         </select>
+
+//         <input
+//           type="text"
+//           name="hotel"
+//           value={form.hotel}
+//           onChange={handleChange}
+//           placeholder="Enter hotel name"
+//           className="border px-2 py-1"
+//         />
+
+//         <button
+//           onClick={handleSubmit}
+//           className="bg-blue-500 text-white px-4 py-1 rounded"
+//         >
+//           {editingId ? "Update" : "Add"}
+//         </button>
+//       </div> */}
+
+//       <div className="flex gap-2 mb-4 flex-wrap">
+//   {/* Existing Selects for state and city */}
+//   <select
+//     name="state"
+//     value={form.state}
+//     onChange={handleChange}
+//     className="border px-2 py-1"
+//   >
+//     <option value="">Select state</option>
+//     {showdropdown.map((state) => (
+//       <option key={state._id} value={state._id}>
+//         {state.state}
+//       </option>
+//     ))}
+//   </select>
+
+//   <select
+//     name="city"
+//     value={form.city}
+//     onChange={handleChange}
+//     className="border px-2 py-1"
+//   >
+//     <option value="">Select city</option>
+//     {activedropdowncity
+//       .filter((c) => c.state === form.state)
+//       .map((city) => (
+//         <option key={city._id} value={city._id}>
+//           {city.city}
+//         </option>
+//       ))}
+//   </select>
+
+//   {/* New Inputs */}
+//   <input
+//     type="text"
+//     name="hotel"
+//     value={form.hotel}
+//     onChange={handleChange}
+//     placeholder="Enter hotel name"
+//     className="border px-2 py-1"
+//   />
+
+//   <input
+//     type="text"
+//     name="address"
+//     value={form.address}
+//     onChange={handleChange}
+//     placeholder="Enter hotel address"
+//     className="border px-2 py-1"
+//   />
+
+//   <input
+//     type="email"
+//     name="email"
+//     value={form.email}
+//     onChange={handleChange}
+//     placeholder="Enter hotel email"
+//     className="border px-2 py-1"
+//   />
+
+//   <input
+//     type="text"
+//     name="phone"
+//     value={form.phone}
+//     onChange={handleChange}
+//     placeholder="Enter hotel phone"
+//     className="border px-2 py-1"
+//   />
+
+// <input
+//     type="text"
+//     name="room"
+//     value={form.room}
+//     onChange={handleChange}
+//     placeholder="Enter hotel rooms"
+//     className="border px-2 py-1"
+//   />
+
+
+// <input
+//     type="text"
+//     name="description"
+//     value={form.description}
+//     onChange={handleChange}
+//     placeholder="Enter hotel description"
+//     className="border px-2 py-1"
+//   />
+
+
+
+//   <button
+//     onClick={handleSubmit}
+//     className="bg-blue-500 text-white px-4 py-1 rounded"
+//   >
+//     {editingId ? "Update" : "Add"}
+//   </button>
+// </div>
+
+
+//       {/* Active Section */}
+//       <h2 className="font-bold">Active Hotels</h2>
+//       <div className="flex justify-between items-center mb-2">
+//         <input
+//           type="text"
+//           value={searchActive}
+//           onChange={(e) => setSearchActive(e.target.value)}
+//           placeholder="Search hotels"
+//           className="border px-2 py-1"
+//         />
+//         <button
+//           onClick={() => setSortActiveAsc(!sortActiveAsc)}
+//           className="bg-gray-300 px-3 py-1 rounded"
+//         >
+//           Sort {sortActiveAsc ? "A-Z" : "Z-A"}
+//         </button>
+//       </div>
+
+//       <table className="table-auto border w-full mb-6">
+//   <thead>
+//     <tr>
+//       <th className="border px-2 py-1">Hotel</th>
+//       <th className="border px-2 py-1">City</th>
+//       <th className="border px-2 py-1">State</th>
+//       <th className="border px-2 py-1">Address</th>
+//       <th className="border px-2 py-1">Email</th>
+//       <th className="border px-2 py-1">Phone</th>
+//       <th className="border px-2 py-1">Rooms</th>
+//       <th className="border px-2 py-1">Actions</th> {/* Actions LAST */}
+//     </tr>
+//   </thead>
+//   <tbody>
+//     {[...data]
+//       .filter((item) =>
+//         item.hotel.toLowerCase().includes(searchActive.toLowerCase())
+//       )
+//       .sort((a, b) =>
+//         sortActiveAsc
+//           ? a.hotel.localeCompare(b.hotel)
+//           : b.hotel.localeCompare(a.hotel)
+//       )
+//       .map((item) => (
+//         <tr key={item._id}>
+//           <td className="border px-2 py-1">{item.hotel}</td>
+//           <td className="border px-2 py-1">
+//             {item.city?.city ||
+//               cities.find((c) => c._id === item.city)?.city ||
+//               "Unknown"}
+//           </td>
+//           <td className="border px-2 py-1">
+//             {item.state?.state ||
+//               states.find((s) => s._id === item.city?.state?._id)?.state ||
+//               "Unknown"}
+//           </td>
+//           <td className="border px-2 py-1">{item.address || "N/A"}</td>
+//           <td className="border px-2 py-1">{item.email || "N/A"}</td>
+//           <td className="border px-2 py-1">{item.phone || "N/A"}</td>
+//           <td className="border px-2 py-1">{item.room || "N/A"}</td>
+//           <td className="border px-2 py-1 flex gap-2">
+//             <button
+//               onClick={() => handleEdit(item)}
+//               className="text-yellow-600"
+//             >
+//               Edit
+//             </button>
+//             <button
+//               onClick={() => softDelete(item._id)}
+//               className="text-orange-600"
+//             >
+//               Soft Delete
+//             </button>
+//             <button
+//               onClick={() => hardDelete(item._id)}
+//               className="text-red-600"
+//             >
+//               Hard Delete
+//             </button>
+//           </td>
+//         </tr>
+//       ))}
+//   </tbody>
+// </table>
+
+
+//       {/* Inactive Section */}
+//       <h2 className="font-bold">Inactive Hotels</h2>
+//       <div className="flex justify-between items-center mb-2">
+//         <input
+//           type="text"
+//           value={searchInactive}
+//           onChange={(e) => setSearchInactive(e.target.value)}
+//           placeholder="Search hotels"
+//           className="border px-2 py-1"
+//         />
+//         <button
+//           onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
+//           className="bg-gray-300 px-3 py-1 rounded"
+//         >
+//           Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
+//         </button>
+//       </div>
+
+//       <table className="table-auto border w-full">
+//         <thead>
+//           <tr>
+//             <th className="border px-2 py-1">Hotel</th>
+//             <th className="border px-2 py-1">City</th>
+//             <th className="border px-2 py-1">State</th>
+//             <th className="border px-2 py-1">Actions</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {[...inactiveData]
+//             .filter((item) =>
+//               item.hotel.toLowerCase().includes(searchInactive.toLowerCase())
+//             )
+//             .sort((a, b) =>
+//               sortInactiveAsc
+//                 ? a.hotel.localeCompare(b.hotel)
+//                 : b.hotel.localeCompare(a.hotel)
+//             )
+//             .map((item) => (
+//               <tr key={item._id}>
+//                 <td className="border px-2 py-1">{item.hotel}</td>
+//                 <td className="border px-2 py-1">
+//                   {item.city?.city ||
+//                     cities.find((c) => c._id === item.city)?.city ||
+//                     "Unknown"}
+//                 </td>
+//                 {/* <td className="border px-2 py-1">
+//                   {item.state?.state ||
+//                     states.find((s) => s._id === item.state)?.state ||
+//                     "Unknown"}
+//                 </td> */}
+
+//                 <td className="border px-2 py-1">
+//                   {item.state?.state ||
+//                     states.find((s) => s._id === item.city.state._id)?.state ||
+//                     "abc"}
+//                 </td>
+//                 <td className="border px-2 py-1 flex gap-2">
+//                   <button
+//                     onClick={() => activateEntry(item._id)}
+//                     className="text-green-600"
+//                   >
+//                     Activate
+//                   </button>
+//                 </td>
+//               </tr>
+//             ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+
+return (
+  <div className="p-4 sm:p-6">
+    <h1 className="text-xl mb-4 font-semibold">Hotel Management</h1>
+
+    {/* Responsive Form */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+      <select
+        name="state"
+        value={form.state}
+        onChange={handleChange}
+        className="border px-2 py-2 rounded w-full"
+      >
+        <option value="">Select state</option>
+        {showdropdown.map((state) => (
+          <option key={state._id} value={state._id}>{state.state}</option>
+        ))}
+      </select>
+
+      <select
+        name="city"
+        value={form.city}
+        onChange={handleChange}
+        className="border px-2 py-2 rounded w-full"
+      >
+        <option value="">Select city</option>
+        {activedropdowncity
+          .filter((c) => c.state === form.state)
+          .map((city) => (
+            <option key={city._id} value={city._id}>{city.city}</option>
           ))}
-        </select>
+      </select>
 
-        <select
-          name="city"
-          value={form.city}
-          onChange={handleChange}
-          className="border px-2 py-1"
-        >
-          <option value="">Select city</option>
-          {activedropdowncity
-            .filter((c) => c.state === form.state)
-            .map((city) => (
-              <option key={city._id} value={city._id}>
-                {city.city}
-              </option>
-            ))}
-        </select>
+      <input
+        type="text"
+        name="hotel"
+        value={form.hotel}
+        onChange={handleChange}
+        placeholder="Enter hotel name"
+        className="border px-2 py-2 rounded w-full"
+      />
 
-        <input
-          type="text"
-          name="hotel"
-          value={form.hotel}
-          onChange={handleChange}
-          placeholder="Enter hotel name"
-          className="border px-2 py-1"
-        />
+      <input
+        type="text"
+        name="address"
+        value={form.address}
+        onChange={handleChange}
+        placeholder="Enter hotel address"
+        className="border px-2 py-2 rounded w-full"
+      />
 
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-1 rounded"
-        >
-          {editingId ? "Update" : "Add"}
-        </button>
-      </div> */}
+      <input
+        type="email"
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="Enter hotel email"
+        className="border px-2 py-2 rounded w-full"
+      />
 
-      <div className="flex gap-2 mb-4 flex-wrap">
-  {/* Existing Selects for state and city */}
-  <select
-    name="state"
-    value={form.state}
-    onChange={handleChange}
-    className="border px-2 py-1"
-  >
-    <option value="">Select state</option>
-    {showdropdown.map((state) => (
-      <option key={state._id} value={state._id}>
-        {state.state}
-      </option>
-    ))}
-  </select>
+      <input
+        type="text"
+        name="phone"
+        value={form.phone}
+        onChange={handleChange}
+        placeholder="Enter hotel phone"
+        className="border px-2 py-2 rounded w-full"
+      />
 
-  <select
-    name="city"
-    value={form.city}
-    onChange={handleChange}
-    className="border px-2 py-1"
-  >
-    <option value="">Select city</option>
-    {activedropdowncity
-      .filter((c) => c.state === form.state)
-      .map((city) => (
-        <option key={city._id} value={city._id}>
-          {city.city}
-        </option>
-      ))}
-  </select>
+      <input
+        type="text"
+        name="room"
+        value={form.room}
+        onChange={handleChange}
+        placeholder="Enter hotel rooms"
+        className="border px-2 py-2 rounded w-full"
+      />
 
-  {/* New Inputs */}
-  <input
-    type="text"
-    name="hotel"
-    value={form.hotel}
-    onChange={handleChange}
-    placeholder="Enter hotel name"
-    className="border px-2 py-1"
-  />
+      <input
+        type="text"
+        name="description"
+        value={form.description}
+        onChange={handleChange}
+        placeholder="Enter hotel description"
+        className="border px-2 py-2 rounded w-full col-span-full"
+      />
 
-  <input
-    type="text"
-    name="address"
-    value={form.address}
-    onChange={handleChange}
-    placeholder="Enter hotel address"
-    className="border px-2 py-1"
-  />
+      <button
+        onClick={handleSubmit}
+        className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+      >
+        {editingId ? "Update" : "Add"}
+      </button>
+    </div>
 
-  <input
-    type="email"
-    name="email"
-    value={form.email}
-    onChange={handleChange}
-    placeholder="Enter hotel email"
-    className="border px-2 py-1"
-  />
+    {/* Active Section */}
+    <h2 className="font-bold text-lg mb-2">Active Hotels</h2>
+    <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 mb-3">
+      <input
+        type="text"
+        value={searchActive}
+        onChange={(e) => setSearchActive(e.target.value)}
+        placeholder="Search hotels"
+        className="border px-2 py-2 rounded w-full sm:w-1/2"
+      />
+      <button
+        onClick={() => setSortActiveAsc(!sortActiveAsc)}
+        className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
+      >
+        Sort {sortActiveAsc ? "A-Z" : "Z-A"}
+      </button>
+    </div>
 
-  <input
-    type="text"
-    name="phone"
-    value={form.phone}
-    onChange={handleChange}
-    placeholder="Enter hotel phone"
-    className="border px-2 py-1"
-  />
-
-<input
-    type="text"
-    name="room"
-    value={form.room}
-    onChange={handleChange}
-    placeholder="Enter hotel rooms"
-    className="border px-2 py-1"
-  />
-
-
-<input
-    type="text"
-    name="description"
-    value={form.description}
-    onChange={handleChange}
-    placeholder="Enter hotel description"
-    className="border px-2 py-1"
-  />
-
-
-
-  <button
-    onClick={handleSubmit}
-    className="bg-blue-500 text-white px-4 py-1 rounded"
-  >
-    {editingId ? "Update" : "Add"}
-  </button>
-</div>
-
-
-      {/* Active Section */}
-      <h2 className="font-bold">Active Hotels</h2>
-      <div className="flex justify-between items-center mb-2">
-        <input
-          type="text"
-          value={searchActive}
-          onChange={(e) => setSearchActive(e.target.value)}
-          placeholder="Search hotels"
-          className="border px-2 py-1"
-        />
-        <button
-          onClick={() => setSortActiveAsc(!sortActiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
-        >
-          Sort {sortActiveAsc ? "A-Z" : "Z-A"}
-        </button>
-      </div>
-
-      <table className="table-auto border w-full mb-6">
-  <thead>
-    <tr>
-      <th className="border px-2 py-1">Hotel</th>
-      <th className="border px-2 py-1">City</th>
-      <th className="border px-2 py-1">State</th>
-      <th className="border px-2 py-1">Address</th>
-      <th className="border px-2 py-1">Email</th>
-      <th className="border px-2 py-1">Phone</th>
-      <th className="border px-2 py-1">Rooms</th>
-      <th className="border px-2 py-1">Actions</th> {/* Actions LAST */}
-    </tr>
-  </thead>
-  <tbody>
-    {[...data]
-      .filter((item) =>
-        item.hotel.toLowerCase().includes(searchActive.toLowerCase())
-      )
-      .sort((a, b) =>
-        sortActiveAsc
-          ? a.hotel.localeCompare(b.hotel)
-          : b.hotel.localeCompare(a.hotel)
-      )
-      .map((item) => (
-        <tr key={item._id}>
-          <td className="border px-2 py-1">{item.hotel}</td>
-          <td className="border px-2 py-1">
-            {item.city?.city ||
-              cities.find((c) => c._id === item.city)?.city ||
-              "Unknown"}
-          </td>
-          <td className="border px-2 py-1">
-            {item.state?.state ||
-              states.find((s) => s._id === item.city?.state?._id)?.state ||
-              "Unknown"}
-          </td>
-          <td className="border px-2 py-1">{item.address || "N/A"}</td>
-          <td className="border px-2 py-1">{item.email || "N/A"}</td>
-          <td className="border px-2 py-1">{item.phone || "N/A"}</td>
-          <td className="border px-2 py-1">{item.room || "N/A"}</td>
-          <td className="border px-2 py-1 flex gap-2">
-            <button
-              onClick={() => handleEdit(item)}
-              className="text-yellow-600"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => softDelete(item._id)}
-              className="text-orange-600"
-            >
-              Soft Delete
-            </button>
-            <button
-              onClick={() => hardDelete(item._id)}
-              className="text-red-600"
-            >
-              Hard Delete
-            </button>
-          </td>
-        </tr>
-      ))}
-  </tbody>
-</table>
-
-
-      {/* Inactive Section */}
-      <h2 className="font-bold">Inactive Hotels</h2>
-      <div className="flex justify-between items-center mb-2">
-        <input
-          type="text"
-          value={searchInactive}
-          onChange={(e) => setSearchInactive(e.target.value)}
-          placeholder="Search hotels"
-          className="border px-2 py-1"
-        />
-        <button
-          onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
-        >
-          Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
-        </button>
-      </div>
-
-      <table className="table-auto border w-full">
+    <div className="overflow-x-auto mb-6">
+      <table className="min-w-full table-auto border">
         <thead>
-          <tr>
-            <th className="border px-2 py-1">Hotel</th>
-            <th className="border px-2 py-1">City</th>
-            <th className="border px-2 py-1">State</th>
-            <th className="border px-2 py-1">Actions</th>
+          <tr className="bg-gray-100">
+            <th className="border px-2 py-2">Hotel</th>
+            <th className="border px-2 py-2">City</th>
+            <th className="border px-2 py-2">State</th>
+            <th className="border px-2 py-2">Address</th>
+            <th className="border px-2 py-2">Email</th>
+            <th className="border px-2 py-2">Phone</th>
+            <th className="border px-2 py-2">Rooms</th>
+            <th className="border px-2 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...data]
+            .filter((item) => item.hotel.toLowerCase().includes(searchActive.toLowerCase()))
+            .sort((a, b) =>
+              sortActiveAsc
+                ? a.hotel.localeCompare(b.hotel)
+                : b.hotel.localeCompare(a.hotel)
+            )
+            .map((item) => (
+              <tr key={item._id}>
+                <td className="border px-2 py-2">{item.hotel}</td>
+                <td className="border px-2 py-2">{item.city?.city || "Unknown"}</td>
+                <td className="border px-2 py-2">{item.state?.state || "Unknown"}</td>
+                <td className="border px-2 py-2">{item.address || "N/A"}</td>
+                <td className="border px-2 py-2">{item.email || "N/A"}</td>
+                <td className="border px-2 py-2">{item.phone || "N/A"}</td>
+                <td className="border px-2 py-2">{item.room || "N/A"}</td>
+                <td className="border px-2 py-2 flex flex-col sm:flex-row gap-1">
+                  <button onClick={() => handleEdit(item)} className="text-yellow-600">Edit</button>
+                  <button onClick={() => softDelete(item._id)} className="text-orange-600">Soft Delete</button>
+                  <button onClick={() => hardDelete(item._id)} className="text-red-600">Hard Delete</button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Inactive Section */}
+    <h2 className="font-bold text-lg mb-2">Inactive Hotels</h2>
+    <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 mb-3">
+      <input
+        type="text"
+        value={searchInactive}
+        onChange={(e) => setSearchInactive(e.target.value)}
+        placeholder="Search hotels"
+        className="border px-2 py-2 rounded w-full sm:w-1/2"
+      />
+      <button
+        onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
+        className="bg-gray-300 px-4 py-2 rounded w-full sm:w-auto"
+      >
+        Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
+      </button>
+    </div>
+
+    <div className="overflow-x-auto">
+      <table className="min-w-full table-auto border">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-2 py-2">Hotel</th>
+            <th className="border px-2 py-2">City</th>
+            <th className="border px-2 py-2">State</th>
+            <th className="border px-2 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {[...inactiveData]
-            .filter((item) =>
-              item.hotel.toLowerCase().includes(searchInactive.toLowerCase())
-            )
+            .filter((item) => item.hotel.toLowerCase().includes(searchInactive.toLowerCase()))
             .sort((a, b) =>
               sortInactiveAsc
                 ? a.hotel.localeCompare(b.hotel)
@@ -640,24 +864,10 @@ const AddHotel = () => {
             )
             .map((item) => (
               <tr key={item._id}>
-                <td className="border px-2 py-1">{item.hotel}</td>
-                <td className="border px-2 py-1">
-                  {item.city?.city ||
-                    cities.find((c) => c._id === item.city)?.city ||
-                    "Unknown"}
-                </td>
-                {/* <td className="border px-2 py-1">
-                  {item.state?.state ||
-                    states.find((s) => s._id === item.state)?.state ||
-                    "Unknown"}
-                </td> */}
-
-                <td className="border px-2 py-1">
-                  {item.state?.state ||
-                    states.find((s) => s._id === item.city.state._id)?.state ||
-                    "abc"}
-                </td>
-                <td className="border px-2 py-1 flex gap-2">
+                <td className="border px-2 py-2">{item.hotel}</td>
+                <td className="border px-2 py-2">{item.city?.city || "Unknown"}</td>
+                <td className="border px-2 py-2">{item.state?.state || "abc"}</td>
+                <td className="border px-2 py-2">
                   <button
                     onClick={() => activateEntry(item._id)}
                     className="text-green-600"
@@ -670,7 +880,9 @@ const AddHotel = () => {
         </tbody>
       </table>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default AddHotel;

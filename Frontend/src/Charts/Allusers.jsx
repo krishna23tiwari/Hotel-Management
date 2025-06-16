@@ -36,27 +36,27 @@ useEffect(() => {
   console.log(`>>>user>>>`, users)
 
   return (
-    <div className="p-4 cursor-pointer bg-white/30 backdrop-blur-md hover:scale-105 transition transform shadow-lg rounded-2xl">
-      <h2 className="text-2xl font-bold mb-4">User Information</h2>
+    <div className="p-2 sm:p-4 cursor-pointer bg-white/30 backdrop-blur-md hover:scale-105 transition transform shadow-lg rounded-2xl">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4">User Information</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300 rounded shadow">
+        <table className="min-w-full border border-gray-300 rounded shadow text-xs sm:text-base">
           <thead>
             <tr className="bg-gray-400 text-left">
-              <th className="px-4 py-2 border">Name</th>
-              <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Phone</th>
-              <th className="px-4 py-2 border">Age</th>
-              <th className="px-4 py-2 border">Status</th>
+              <th className="px-2 sm:px-4 py-2 border">Name</th>
+              <th className="px-2 sm:px-4 py-2 border">Email</th>
+              <th className="px-2 sm:px-4 py-2 border">Phone</th>
+              <th className="px-2 sm:px-4 py-2 border">Age</th>
+              <th className="px-2 sm:px-4 py-2 border">Status</th>
             </tr>
           </thead>
           <tbody>
             {users?.map((user, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border">{user.name}</td>
-                <td className="px-4 py-2 border">{user.email}</td>
-                <td className="px-4 py-2 border">{user.phone}</td>
-                <td className="px-4 py-2 border">{user.age}</td>
-                <td className="px-4 py-2 border capitalize">{user.status}</td>
+                <td className="px-2 sm:px-4 py-2 border">{user.name}</td>
+                <td className="px-2 sm:px-4 py-2 border">{user.email}</td>
+                <td className="px-2 sm:px-4 py-2 border">{user.phone}</td>
+                <td className="px-2 sm:px-4 py-2 border">{user.age}</td>
+                <td className="px-2 sm:px-4 py-2 border capitalize">{user.status}</td>
               </tr>
             ))}
           </tbody>

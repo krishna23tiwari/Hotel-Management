@@ -56,7 +56,7 @@ const handleDesignSelect = async (value) => {
 
   return (
     <div
-      className="p-6 min-h-screen transition-all duration-500"
+      className="p-2 sm:p-4 md:p-6 min-h-screen transition-all duration-500"
       style={{
         backgroundImage: selectedBg ? `url(${selectedBg})` : '',
         backgroundSize: 'cover',
@@ -64,10 +64,10 @@ const handleDesignSelect = async (value) => {
         backgroundPosition: 'center',
       }}
     >
-      <div className="bg-white bg-opacity-80 backdrop-blur-md p-4 rounded-xl shadow-xl">
-        <h1 className="text-3xl font-semibold mb-6 text-center">🎨 Choose Your Design</h1>
+      <div className="bg-white bg-opacity-80 backdrop-blur-md p-2 sm:p-4 rounded-xl shadow-xl max-w-7xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6 text-center">🎨 Choose Your Design</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {designs.map((value) => (
             <div
               key={value.id}
@@ -77,10 +77,10 @@ const handleDesignSelect = async (value) => {
               <img
                 src={value.image}
                 alt={value.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-32 sm:h-40 md:h-48 object-cover"
               />
-              <div className="p-4">
-                <h2 className="text-lg font-medium text-center">{value.name}</h2>
+              <div className="p-2 sm:p-4">
+                <h2 className="text-base sm:text-lg font-medium text-center">{value.name}</h2>
               </div>
             </div>
           ))}

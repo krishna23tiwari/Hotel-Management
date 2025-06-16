@@ -361,124 +361,122 @@ const activateEntry = async (id) => {
 <div className="p-6 bg-gray-50 min-h-screen">
   <h1 className="text-2xl font-bold mb-6 text-blue-800">Room Management</h1>
 
-  {/* --- Form Section --- */}
-  <div className="flex gap-3 mb-6 flex-wrap items-center">
-    <select name="state" value={form.state} onChange={handleChange} className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <option value="">Select State</option>
-      {activestates.map((s) => (
-        <option key={s._id} value={s._id}>{s.state}</option>
-      ))}
-    </select>
+  
+<div className="grid gap-4 mb-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <select name="state" value={form.state} onChange={handleChange} className="border px-3 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <option value="">Select State</option>
+    {activestates.map((s) => (
+      <option key={s._id} value={s._id}>{s.state}</option>
+    ))}
+  </select>
 
-    <select name="city" value={form.city} onChange={handleChange} className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <option value="">Select City</option>
-      {acivecity.filter(c => c.state === form.state).map((c) => (
-        <option key={c._id} value={c._id}>{c.city}</option>
-      ))}
-    </select>
+  <select name="city" value={form.city} onChange={handleChange} className="border px-3 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <option value="">Select City</option>
+    {acivecity.filter(c => c.state === form.state).map((c) => (
+      <option key={c._id} value={c._id}>{c.city}</option>
+    ))}
+  </select>
 
-    <select name="hotel" value={form.hotel} onChange={handleChange} className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <option value="">Select Hotel</option>
-      {hotels.filter(h => h.city._id === form.city).map((h) => (
-        <option key={h._id} value={h._id}>{h.hotel}</option>
-      ))}
-    </select>
+  <select name="hotel" value={form.hotel} onChange={handleChange} className="border px-3 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <option value="">Select Hotel</option>
+    {hotels.filter(h => h.city._id === form.city).map((h) => (
+      <option key={h._id} value={h._id}>{h.hotel}</option>
+    ))}
+  </select>
 
+  <input
+    name="room"
+    value={form.room}
+    onChange={handleChange}
+    placeholder="Enter room name"
+    className="border px-3 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+  />
+
+  <input
+    name="roomNumber"
+    type="text"
+    placeholder="Room Number"
+    value={form.roomNumber}
+    onChange={handleChange}
+    className="border px-3 py-2 rounded w-full"
+  />
+
+  <select name="type" value={form.type} onChange={handleChange} className="border px-3 py-2 rounded w-full">
+    <option value="">Select Room Type</option>
+    <option value="Standard">Standard</option>
+    <option value="Deluxe">Deluxe</option>
+    <option value="Suite">Suite</option>
+    <option value="Premium">Premium</option>
+    <option value="Executive">Executive</option>
+  </select>
+
+  <input
+    name="capacity"
+    type="number"
+    min="1"
+    max="10"
+    placeholder="Capacity"
+    value={form.capacity}
+    onChange={handleChange}
+    className="border px-3 py-2 rounded w-full"
+  />
+
+  <input
+    name="price"
+    type="number"
+    min="0"
+    placeholder="Price"
+    value={form.price}
+    onChange={handleChange}
+    className="border px-3 py-2 rounded w-full"
+  />
+
+  <input
+    name="description"
+    type="text"
+    placeholder="Room Description"
+    value={form.description}
+    onChange={handleChange}
+    className="border px-3 py-2 rounded w-full col-span-full"
+  />
+
+  <div className="col-span-full">
+    <label className="block mb-1">Amenities:</label>
+    <div className="flex flex-wrap gap-2">
+      {["AC", "WiFi", "TV", "Mini Fridge", "Balcony", "Heater"].map((item) => (
+        <label key={item} className="flex items-center gap-1">
+          <input
+            type="checkbox"
+            name="amenities"
+            value={item}
+            checked={form.amenities?.includes(item)}
+            onChange={handleAmenitiesChange}
+          />
+          {item}
+        </label>
+      ))}
+    </div>
+  </div>
+
+  <label className="col-span-full cursor-pointer px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition w-max">
+    Upload Images
     <input
-      name="room"
-      value={form.room}
-      onChange={handleChange}
-      placeholder="Enter room name"
-      className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+      type="file"
+      name="image"
+      multiple
+      onChange={handleImageChange}
+      className="hidden"
     />
+  </label>
 
-<input
-  name="roomNumber"
-  type="text"
-  placeholder="Room Number"
-  value={form.roomNumber}
-  onChange={handleChange}
-  className="border px-3 py-2 rounded"
-/>
-
-<select name="type" value={form.type} onChange={handleChange} className="border px-3 py-2 rounded">
-  <option value="">Select Room Type</option>
-  <option value="Standard">Standard</option>
-  <option value="Deluxe">Deluxe</option>
-  <option value="Suite">Suite</option>
-  <option value="Premium">Premium</option>
-  <option value="Executive">Executive</option>
-</select>
-
-<input
-  name="capacity"
-  type="number"
-  min="1"         
-  max="10"  
-  placeholder="Capacity"
-  value={form.capacity}
-  onChange={handleChange}
-  className="border px-3 py-2 rounded"
-/>
-
-<input
-  name="price"
-  type="number"
-  min="0"   
-  placeholder="Price"
-  value={form.price}
-  onChange={handleChange}
-  className="border px-3 py-2 rounded"
-/>
-
-<input
-  name="description"
-  type="text"
-  placeholder="Room Description"
-  value={form.description}
-  onChange={handleChange}
-  className="border px-3 py-2 rounded"
-/>
-
-{/* Amenities as multiple checkboxes or multi-select */}
-<label className="block">Amenities:</label>
-<div className="flex flex-wrap gap-2">
-  {["AC", "WiFi", "TV", "Mini Fridge", "Balcony", "Heater"].map((item) => (
-    <label key={item}>
-      <input
-        type="checkbox"
-        name="amenities"
-        value={item}
-        checked={form.amenities?.includes(item)}
-        onChange={handleAmenitiesChange}
-      />{" "}
-      {item}
-    </label>
-  ))}
+  <button
+    onClick={handleSubmit}
+    className="col-span-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition w-full sm:w-auto"
+  >
+    {editingId ? "Update" : "Add"}
+  </button>
 </div>
 
-
-
-
-    {/* Upload Image */}
-    <label className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition">
-      Upload Images
-      <input
-        type="file"
-        name="image"
-        multiple
-        onChange={handleImageChange}
-        className="hidden"
-      />
-    </label>
-
-    <button
-      onClick={handleSubmit}
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-    >
-      {editingId ? "Update" : "Add"}
-    </button>
-  </div>
 
   {/* Preview Images */}
   {images.length > 0 && (
@@ -507,7 +505,8 @@ const activateEntry = async (id) => {
     </button>
   </div>
 
-  <table className="w-full border table-auto mb-8 text-sm">
+<div className="overflow-x-auto">
+    <table className="min-w-full border table-auto mb-8 text-sm">
     <thead className="bg-gray-100">
       <tr>
         <th className="border px-3 py-2 font-medium">Room</th>
@@ -583,7 +582,7 @@ const activateEntry = async (id) => {
     placeholder="Search room"
     className="border px-3 py-2 rounded w-full max-w-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
   />
-  <table className="w-full border table-auto text-sm">
+  <table className="min-w-full border table-auto text-sm">
     <thead className="bg-gray-100">
       <tr>
         <th className="border px-3 py-2 font-medium">Room</th>
@@ -623,6 +622,7 @@ const activateEntry = async (id) => {
         ))}
     </tbody>
   </table>
+</div>
 </div>
 
   );

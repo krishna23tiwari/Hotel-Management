@@ -138,17 +138,17 @@ const handleVerifyOtp = async (e) => {
   }
 };
   return (
-    <div className="min-h-screen flex justify-center items-center bg-[#1a1a2e] text-white">
-      <div className="bg-[#2b2b55] p-8 rounded-xl shadow-md w-full max-w-md">
+    <div className="min-h-screen flex justify-center items-center bg-[#1a1a2e] text-white px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#2b2b55] p-6 sm:p-8 rounded-xl shadow-md w-full max-w-sm sm:max-w-md lg:max-w-lg">
         {step === 'login' && (
           <>
-            <h2 className="text-2xl mb-4 text-center">Login</h2>
+            <h2 className="text-xl sm:text-2xl mb-4 text-center">Login</h2>
             <form onSubmit={handleLogin}>
-              <input name='email' type="email" placeholder="Email" className="w-full mb-4 p-3 rounded bg-[#1e1e3f]" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <input type="password" placeholder="Password" className="w-full mb-4 p-3 rounded bg-[#1e1e3f]" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <button type="submit" className="w-full bg-indigo-600 py-2 rounded font-semibold">Login</button>
+              <input name='email' type="email" placeholder="Email" className="w-full mb-4 p-3 rounded bg-[#1e1e3f] text-sm sm:text-base" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input type="password" placeholder="Password" className="w-full mb-4 p-3 rounded bg-[#1e1e3f] text-sm sm:text-base" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <button type="submit" className="w-full bg-indigo-600 py-2 rounded font-semibold text-sm sm:text-base">Login</button>
             </form>
-            <div className="mt-4 flex justify-between text-sm">
+            <div className="mt-4 flex justify-between text-xs sm:text-sm">
               <button onClick={() => setStep('forgot')} className="text-indigo-300 hover:underline">Forgot Password?</button>
               <button onClick={() => navi('/')} className="text-purple-300 hover:underline">Signup</button>
             </div>
@@ -157,32 +157,32 @@ const handleVerifyOtp = async (e) => {
 
         {step === 'forgot' && (
           <>
-            <h2 className="text-2xl mb-4 text-center">Forgot Password</h2>
+            <h2 className="text-xl sm:text-2xl mb-4 text-center">Forgot Password</h2>
             <form onSubmit={handleSendOtp}>
-              <input type="email" placeholder="Enter your email" className="w-full p-3 rounded bg-[#1e1e3f] mb-4" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <button type="submit" className="w-full bg-indigo-600 py-2 rounded">Send OTP</button>
-              <button type="button" onClick={() => setStep('login')} className="mt-3 text-sm text-gray-400 hover:underline">Back to Login</button>
+              <input type="email" placeholder="Enter your email" className="w-full p-3 rounded bg-[#1e1e3f] mb-4 text-sm sm:text-base" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <button type="submit" className="w-full bg-indigo-600 py-2 rounded text-sm sm:text-base">Send OTP</button>
+              <button type="button" onClick={() => setStep('login')} className="mt-3 text-xs sm:text-sm text-gray-400 hover:underline">Back to Login</button>
             </form>
           </>
         )}
 
         {step === 'otp' && (
           <>
-            <h2 className="text-2xl mb-4 text-center">Verify OTP</h2>
+            <h2 className="text-xl sm:text-2xl mb-4 text-center">Verify OTP</h2>
             <form onSubmit={handleVerifyOtp}>
-              <input type="text" placeholder="Enter OTP" className="w-full p-3 rounded bg-[#1e1e3f] mb-4" value={otp} onChange={(e) => setOtp(e.target.value)} required />
-              <button type="submit" className="w-full bg-indigo-600 py-2 rounded">Verify</button>
+              <input type="text" placeholder="Enter OTP" className="w-full p-3 rounded bg-[#1e1e3f] mb-4 text-sm sm:text-base" value={otp} onChange={(e) => setOtp(e.target.value)} required />
+              <button type="submit" className="w-full bg-indigo-600 py-2 rounded text-sm sm:text-base">Verify</button>
             </form>
           </>
         )}
 
         {step === 'reset' && (
           <>
-            <h2 className="text-2xl mb-4 text-center">Reset Password</h2>
+            <h2 className="text-xl sm:text-2xl mb-4 text-center">Reset Password</h2>
             <form onSubmit={handleResetPassword}>
-              <input type="password" placeholder="New Password" className="w-full p-3 rounded bg-[#1e1e3f] mb-4" value={newPass} onChange={(e) => setNewPass(e.target.value)} required />
-              <input type="password" placeholder="Confirm Password" className="w-full p-3 rounded bg-[#1e1e3f] mb-4" value={confirmPass} onChange={(e) => setConfirmPass(e.target.value)} required />
-              <button type="submit" className="w-full bg-indigo-600 py-2 rounded">Update Password</button>
+              <input type="password" placeholder="New Password" className="w-full p-3 rounded bg-[#1e1e3f] mb-4 text-sm sm:text-base" value={newPass} onChange={(e) => setNewPass(e.target.value)} required />
+              <input type="password" placeholder="Confirm Password" className="w-full p-3 rounded bg-[#1e1e3f] mb-4 text-sm sm:text-base" value={confirmPass} onChange={(e) => setConfirmPass(e.target.value)} required />
+              <button type="submit" className="w-full bg-indigo-600 py-2 rounded text-sm sm:text-base">Update Password</button>
             </form>
           </>
         )}

@@ -371,63 +371,63 @@ console.log(`>>>back>>`,userData)
   
   
   return (
-
-    <div className={`flex justify-between items-center p-4 shadow-md transition-all duration-300 ease-in
-      ${darkMode 
-        ? "bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white" 
-        : "bg-gradient-to-r from-blue-100 via-white to-blue-200 text-gray-900"
-      }`}
+    <nav
+      className={`flex flex-col sm:flex-row justify-between items-center p-4 shadow-md transition-all duration-300 ease-in
+        ${darkMode
+          ? "bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white"
+          : "bg-gradient-to-r from-blue-100 via-white to-blue-200 text-gray-900"
+        }`}
     >
-    
-    <h1 className={`text-xl font-extralight font-serif transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-900"}`}>
-  FindMyStay
-</h1>
-
+      <div className="flex items-center w-full sm:w-auto justify-between sm:justify-start">
+        <h1 className={`text-lg sm:text-xl font-extralight font-serif transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-900"}`}>
+          FindMyStay
+        </h1>
+        <div className="sm:hidden flex items-center">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="ml-4 text-2xl"
+            aria-label="Open Menu"
+          >
+            <svg width="24" height="24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+        </div>
+      </div>
 
       {userName && (
-        <p className={`font-light text-base ml-4 transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-800"}`}>
-  Hello, <span className="font-semibold">{userName} !!</span> 👋
-</p>
+        <p className={`font-light text-sm sm:text-base mt-2 sm:mt-0 ml-0 sm:ml-4 transition-all ease-in duration-300 ${darkMode ? "text-white" : "text-gray-800"}`}>
+          Hello, <span className="font-semibold">{userName} !!</span> 👋
+        </p>
+      )}
 
-)}
+      <div className="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0">
+        <button
+          onClick={() => dispatch(toggleTheme())}
+          className="text-xl hover:text-yellow-400 transition ease-in"
+          title="Toggle Theme"
+        >
+          {darkMode ? <BsSun /> : <BsMoon />}
+        </button>
+      </div>
 
-<div className="flex items-center gap-4 relative">
-  <button
-    onClick={() => dispatch(toggleTheme())}
-    className="text-xl hover:text-yellow-400 transition ease-in"
-    title="Toggle Theme"
-  >
-    {darkMode ? <BsSun /> : <BsMoon />}
-  </button>
-
-</div>
-
-
-
-      <div className="flex items-center gap-4 relative">
+      <div className="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0 relative">
         <button
           onClick={() => setPopupOpen(true)}
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition ease-in"
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-3 sm:px-4 py-2 rounded-lg transition ease-in text-sm sm:text-base"
         >
           <FaBook /> All Bookings
         </button>
 
         <div className="relative" ref={dropdownRef}>
-         
-
           <img
-  src={profileImage || "https://i.pravatar.cc/150?img=12"} // fallback if no image yet
-  alt="Profile"
-  className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
-  onClick={() => setDropdownOpen(!dropdownOpen)}
-/>
-
+            src={profileImage || "https://i.pravatar.cc/150?img=12"}
+            alt="Profile"
+            className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          />
 
           {dropdownOpen && (
-            {/* <div className="absolute right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded-lg z-50 text-white"> */},
-            <div className={`absolute right-0 mt-2 w-48 shadow-lg rounded-lg z-50 transition duration-300 ease-in
-  ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"}`}>
-
+            <div className={`absolute right-0 mt-2 w-44 sm:w-48 shadow-lg rounded-lg z-50 transition duration-300 ease-in
+              ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900 border border-gray-300"}`}>
               <ul>
                 <li
                   className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
@@ -439,7 +439,6 @@ console.log(`>>>back>>`,userData)
                 >
                   <MdPassword /> Reset Password
                 </li>
-
                 <li
                   className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
                     ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
@@ -452,9 +451,8 @@ console.log(`>>>back>>`,userData)
                 >
                   <CiEdit /> Edit Profile
                 </li>
-
                 <Link to={'/user-setting'} className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition
-    ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}>
+                  ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}>
                   <IoSettingsSharp /> Settings
                 </Link>
               </ul>
@@ -463,359 +461,324 @@ console.log(`>>>back>>`,userData)
         </div>
       </div>
 
+      {/* Bookings Popup */}
       {popupOpen && (
-
-<div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex flex-col z-40 overflow-y-auto"
-  style={{
-    backgroundImage: `url(${userData?.backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }}
-
->
-  
-  <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-800 p-4 shadow-lg">
-    <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide flex items-center gap-3">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-        Booking Details
-      </h2>
-      <button
-        className="text-white hover:text-red-200 text-lg font-semibold transition flex items-center gap-1 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full"
-        onClick={() => setPopupOpen(false)}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-        Close
-      </button>
-    </div>
-  </div>
-
-  
-  <div className="flex-grow p-6">
-    <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {data?.data?.map((b, idx) => (
-          <div
-            key={idx}
-            className="bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl p-5 shadow-xl hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 flex flex-col text-black"
-
-          >
-          
-            <div className={`self-end mb-2 px-3 py-1 rounded-full text-xs font-bold ${
-              b.ischecking === "checkIn" ? "bg-green-100 text-green-800" :
-              b.ischecking === "checkOut" ? "bg-blue-100 text-blue-800" :
-              b.ischecking === "cancel" ? "bg-red-100 text-red-800" :
-              "bg-yellow-100 text-yellow-800"
-            }`}>
-              {b.ischecking === "checkIn" ? "Checked In" :
-               b.ischecking === "checkOut" ? "Checked Out" :
-               b.ischecking === "cancel" ? "Cancelled" : "Pending"}
-            </div>
-
-            
-            <div className="space-y-3 text-sm text-gray-700 leading-relaxed flex-grow">
-              <div className="flex items-start gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <div>
-                  <h3 className="font-bold text-gray-900">{b.userName}</h3>
-                  <div className="text-gray-600">{b.userPhone}</div>
-                  <div className="text-gray-600 truncate">{b.userEmail}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <div>
-                  <span className="font-medium">Dates:</span> {new Date(b.checkInDate).toLocaleDateString()} - {new Date(b.checkOutDate).toLocaleDateString()}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <div>
-                  <span className="font-medium">Guests:</span> {b.numberOfGuests}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="fixed inset-0 bg-gradient-to-br from-[#e0eafc] to-[#cfdef3] flex flex-col z-40 overflow-y-auto"
+          style={{
+            backgroundImage: `url(${userData?.backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="sticky top-0 z-10 bg-gradient-to-r from-blue-600 to-blue-800 p-4 shadow-lg">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-wide flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-                <div className="truncate">
-                  <span className="font-medium">Hotel:</span> {b.roomId?.hotel?.hotel || "N/A"}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                Booking Details
+              </h2>
+              <button
+                className="text-white hover:text-red-200 text-lg font-semibold transition flex items-center gap-1 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full mt-2 sm:mt-0"
+                onClick={() => setPopupOpen(false)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
-                <div>
-                  <span className="font-medium">Location:</span> {b.roomId?.hotel?.city?.city}, {b.roomId?.hotel?.city?.state?.state}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div>
-                  <span className="font-medium">Amount:</span> ₹{b.totalAmount}
-                </div>
-              </div>
-
-              {b.couponName && (
-                <div className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-                  </svg>
-                  <div>
-                    <span className="font-medium">Coupon:</span> {b.couponName}
-                  </div>
-                </div>
-              )}
+                Close
+              </button>
             </div>
-
-            
-            {b.ischecking !== "cancel" ? (
-              <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap justify-between gap-2">
-                <button
-                  onClick={() => handleCheckIn(b._id)}
-                  disabled={b.ischecking === "checkIn"}
-                  className={`flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition ${
-                    b.ischecking === "checkIn"
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-green-500 hover:bg-green-600 text-white"
-                  }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                  {b.ischecking === "checkIn" ? "Checked In" : "Check-In"}
-                </button>
-
-                <button
-                  onClick={() => handleCheckOut(b._id)}
-                  disabled={b.ischecking === "checkOut"}
-                  className={`flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition ${
-                    b.ischecking === "checkOut"
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                  {b.ischecking === "checkOut" ? "Checked Out" : "Check-Out"}
-                </button>
-
-                <button
-                  onClick={() => handleCacel(b._id)}
-                  className="flex-1 min-w-[100px] flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <div className="mt-4 pt-3 border-t border-gray-100 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Booking Cancelled
-                </div>
-              </div>
-            )}
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</div>
-
-        
-
-        
+          <div className="flex-grow p-2 sm:p-4 md:p-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {data?.data?.map((b, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl p-3 sm:p-5 shadow-xl hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 flex flex-col text-black"
+                  >
+                    <div className={`self-end mb-2 px-3 py-1 rounded-full text-xs font-bold ${
+                      b.ischecking === "checkIn" ? "bg-green-100 text-green-800" :
+                      b.ischecking === "checkOut" ? "bg-blue-100 text-blue-800" :
+                      b.ischecking === "cancel" ? "bg-red-100 text-red-800" :
+                      "bg-yellow-100 text-yellow-800"
+                    }`}>
+                      {b.ischecking === "checkIn" ? "Checked In" :
+                        b.ischecking === "checkOut" ? "Checked Out" :
+                        b.ischecking === "cancel" ? "Cancelled" : "Pending"}
+                    </div>
+                    <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-700 leading-relaxed flex-grow">
+                      <div className="flex items-start gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <div>
+                          <h3 className="font-bold text-gray-900">{b.userName}</h3>
+                          <div className="text-gray-600">{b.userPhone}</div>
+                          <div className="text-gray-600 truncate">{b.userEmail}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <div>
+                          <span className="font-medium">Dates:</span> {new Date(b.checkInDate).toLocaleDateString()} - {new Date(b.checkOutDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <div>
+                          <span className="font-medium">Guests:</span> {b.numberOfGuests}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        <div className="truncate">
+                          <span className="font-medium">Hotel:</span> {b.roomId?.hotel?.hotel || "N/A"}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <div>
+                          <span className="font-medium">Location:</span> {b.roomId?.hotel?.city?.city}, {b.roomId?.hotel?.city?.state?.state}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                          <span className="font-medium">Amount:</span> ₹{b.totalAmount}
+                        </div>
+                      </div>
+                      {b.couponName && (
+                        <div className="flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                          </svg>
+                          <div>
+                            <span className="font-medium">Coupon:</span> {b.couponName}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {b.ischecking !== "cancel" ? (
+                      <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap justify-between gap-2">
+                        <button
+                          onClick={() => handleCheckIn(b._id)}
+                          disabled={b.ischecking === "checkIn"}
+                          className={`flex-1 min-w-[90px] sm:min-w-[100px] flex items-center justify-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
+                            b.ischecking === "checkIn"
+                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                              : "bg-green-500 hover:bg-green-600 text-white"
+                          }`}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                          </svg>
+                          {b.ischecking === "checkIn" ? "Checked In" : "Check-In"}
+                        </button>
+                        <button
+                          onClick={() => handleCheckOut(b._id)}
+                          disabled={b.ischecking === "checkOut"}
+                          className={`flex-1 min-w-[90px] sm:min-w-[100px] flex items-center justify-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
+                            b.ischecking === "checkOut"
+                              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                              : "bg-blue-500 hover:bg-blue-600 text-white"
+                          }`}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                          </svg>
+                          {b.ischecking === "checkOut" ? "Checked Out" : "Check-Out"}
+                        </button>
+                        <button
+                          onClick={() => handleCacel(b._id)}
+                          className="flex-1 min-w-[90px] sm:min-w-[100px] flex items-center justify-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="mt-4 pt-3 border-t border-gray-100 text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-800 rounded-full text-xs sm:text-sm font-semibold">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          Booking Cancelled
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
+      {/* Edit Profile Popup */}
       {editProfileOpen && (
-      
         <div
-  className="fixed inset-0 flex justify-center items-center z-50"
-  style={{
-    backgroundImage: `url(${userData?.backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }}
->
-  <div className="backdrop-blur-md bg-white/10 border border-white/20 text-black p-6 rounded-xl w-full max-w-md shadow-2xl">
-    <h2 className="text-xl font-semibold mb-4 text-center">Edit Profile</h2>
-
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Email</label>
-      <input
-        type="email"
-        value={emailinfield}
-        readOnly
-        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none cursor-not-allowed placeholder:text-white/60"
-      />
-    </div>
-
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Profile Image</label>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setEditImage(e.target.files[0])}
-        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-sm file:bg-white/30 file:text-black/40"
-      />
-    </div>
-
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Name</label>
-      <input
-        type="text"
-        value={editName}
-        onChange={(e) => setEditName(e.target.value)}
-        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
-        placeholder="Enter Name"
-      />
-    </div>
-
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Age</label>
-      <input
-        type="number"
-        value={editAge}
-        onChange={(e) => setEditAge(e.target.value)}
-        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
-        placeholder="Enter Age"
-      />
-    </div>
-
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Phone</label>
-      <input
-        type="text"
-        value={editPhone}
-        onChange={(e) => setEditPhone(e.target.value)}
-        className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60"
-        placeholder="Enter Phone Number"
-      />
-    </div>
-
-    <div className="flex justify-between mt-6">
-      <button
-        className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 transition ease-in"
-        onClick={() => {
-          updateNameAgePhone();
-          setEditProfileOpen(false);
-        }}
-      >
-        Save
-      </button>
-      <button
-        className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition ease-in"
-        onClick={() => setEditProfileOpen(false)}
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
-
+          className="fixed inset-0 flex justify-center items-center z-50 px-2"
+          style={{
+            backgroundImage: `url(${userData?.backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 text-black p-4 sm:p-6 rounded-xl w-full max-w-xs sm:max-w-md shadow-2xl">
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 text-center">Edit Profile</h2>
+            <div className="mb-4">
+              <label className="block text-xs sm:text-sm font-medium mb-1">Email</label>
+              <input
+                type="email"
+                value={emailinfield}
+                readOnly
+                className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none cursor-not-allowed placeholder:text-white/60 text-xs sm:text-base"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-xs sm:text-sm font-medium mb-1">Profile Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setEditImage(e.target.files[0])}
+                className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs sm:file:text-sm file:bg-white/30 file:text-black/40"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-xs sm:text-sm font-medium mb-1">Name</label>
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60 text-xs sm:text-base"
+                placeholder="Enter Name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-xs sm:text-sm font-medium mb-1">Age</label>
+              <input
+                type="number"
+                value={editAge}
+                onChange={(e) => setEditAge(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60 text-xs sm:text-base"
+                placeholder="Enter Age"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-xs sm:text-sm font-medium mb-1">Phone</label>
+              <input
+                type="text"
+                value={editPhone}
+                onChange={(e) => setEditPhone(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-white/20 text-black outline-none placeholder:text-black/60 text-xs sm:text-base"
+                placeholder="Enter Phone Number"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between mt-6 gap-2">
+              <button
+                className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 transition ease-in text-white"
+                onClick={() => {
+                  updateNameAgePhone();
+                  setEditProfileOpen(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition ease-in text-white"
+                onClick={() => setEditProfileOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
+      {/* Reset Password Popup */}
       {resetPopupOpen && (
-      
-
         <div
-  className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
-  style={{
-    backgroundImage: `url(${userData?.backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }}
->
-  <div className="backdrop-blur-md bg-white/10 border border-white/20 p-6 rounded-lg shadow-xl w-full max-w-md">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold text-gray-800">Reset Password</h2>
-      <button
-        className="text-red-500 hover:text-red-700 font-bold"
-        onClick={() => setResetPopupOpen(false)}
-      >
-        X
-      </button>
-    </div>
-
-    <div className="space-y-4">
-      <div>
-        <label className="block mb-1 text-sm font-medium text-gray-700">
-          Email
-        </label>
-        <input
-          type="email"
-          value={emailinfield}
-          readOnly
-          className="w-full p-2 border text-black border-gray-300 rounded bg-white/20 cursor-not-allowed"
-        />
-      </div>
-
-      <div>
-        <label className="block mb-1 text-sm font-medium text-gray-700">
-          Old Password
-        </label>
-        <input
-          type="password"
-          placeholder="Enter Old Password"
-          className="w-full p-2 text-black border border-gray-300 rounded bg-white/20"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label className="block mb-1 text-sm font-medium text-gray-700">
-          New Password
-        </label>
-        <input
-          type="password"
-          placeholder="Enter New Password"
-          className="w-full p-2 text-black border border-gray-300 rounded bg-white/20"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-      </div>
-
-      <button
-        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition ease-in w-full"
-        onClick={handleResetPassword}
-      >
-        Reset Password
-      </button>
-    </div>
-  </div>
-</div>
-
+          className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50 px-2"
+          style={{
+            backgroundImage: `url(${userData?.backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 p-4 sm:p-6 rounded-lg shadow-xl w-full max-w-xs sm:max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800">Reset Password</h2>
+              <button
+                className="text-red-500 hover:text-red-700 font-bold"
+                onClick={() => setResetPopupOpen(false)}
+              >
+                X
+              </button>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              <div>
+                <label className="block mb-1 text-xs sm:text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={emailinfield}
+                  readOnly
+                  className="w-full p-2 border text-black border-gray-300 rounded bg-white/20 cursor-not-allowed text-xs sm:text-base"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-xs sm:text-sm font-medium text-gray-700">
+                  Old Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter Old Password"
+                  className="w-full p-2 text-black border border-gray-300 rounded bg-white/20 text-xs sm:text-base"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-xs sm:text-sm font-medium text-gray-700">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  className="w-full p-2 text-black border border-gray-300 rounded bg-white/20 text-xs sm:text-base"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+              <button
+                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition ease-in w-full"
+                onClick={handleResetPassword}
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-    </div>
+    </nav>
   );
 };
 

@@ -269,20 +269,17 @@ const hardDelete = async (id) => {
   fetchData();
 };
   return (
-    <div className="p-5">
-      <h1 className="text-xl mb-4 font-semibold">City-State Management</h1>
+    <div className="p-2 sm:p-5">
+      <h1 className="text-lg sm:text-xl mb-4 font-semibold">City-State Management</h1>
 
-      <div className="flex gap-2 mb-4">
-       
-
+      <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <select
           name="state"
           value={form.state}
           onChange={handleChange}
-          className="border px-2 py-1"
+          className="border px-2 py-1 w-full sm:w-auto"
         >
           <option value="">Select state</option>
-
           {states.map((state) => (
             <option key={state._id} value={state._id}>
               {state.state}
@@ -296,154 +293,154 @@ const hardDelete = async (id) => {
           value={form.city}
           onChange={handleChange}
           placeholder="Enter city"
-          className="border px-2 py-1"
+          className="border px-2 py-1 w-full sm:w-auto"
         />
 
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-1 rounded"
+          className="bg-blue-500 text-white px-4 py-1 rounded w-full sm:w-auto"
         >
           {editingId ? "Update" : "Add"}
         </button>
       </div>
 
-  
       <h2 className="font-bold">Active Entries</h2>
 
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center mb-2 gap-2">
         <input
           type="text"
           value={searchActive}
           onChange={(e) => setSearchActive(e.target.value)}
           placeholder="Search active cities"
-          className="border px-2 py-1"
+          className="border px-2 py-1 w-full sm:w-auto"
         />
         <button
           onClick={() => setSortActiveAsc(!sortActiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
+          className="bg-gray-300 px-3 py-1 rounded w-full sm:w-auto"
         >
           Sort {sortActiveAsc ? "A-Z" : "Z-A"}
         </button>
       </div>
 
-      <table className="table-auto border w-full mb-6">
-        <thead>
-          <tr>
-            <th className="border px-2 py-1">City</th>
-            <th className="border px-2 py-1">State</th>
-            <th className="border px-2 py-1">Date</th>
-            <th className="border px-2 py-1">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...data]
-            .filter((item) =>
-              item.city.toLowerCase().includes(searchActive.toLowerCase())
-            )
-            .sort((a, b) =>
-              sortActiveAsc
-                ? a.city.localeCompare(b.city)
-                : b.city.localeCompare(a.city)
-            )
-            .map((item) => (
-              <tr key={item._id}>
-                <td className="border px-2 py-1">{item.city}</td>
+      <div className="overflow-x-auto mb-6">
+        <table className="table-auto border w-full min-w-[600px]">
+          <thead>
+            <tr>
+              <th className="border px-2 py-1">City</th>
+              <th className="border px-2 py-1">State</th>
+              <th className="border px-2 py-1">Date</th>
+              <th className="border px-2 py-1">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...data]
+              .filter((item) =>
+                item.city.toLowerCase().includes(searchActive.toLowerCase())
+              )
+              .sort((a, b) =>
+                sortActiveAsc
+                  ? a.city.localeCompare(b.city)
+                  : b.city.localeCompare(a.city)
+              )
+              .map((item) => (
+                <tr key={item._id}>
+                  <td className="border px-2 py-1">{item.city}</td>
+                  <td className="border px-2 py-1">
+                    {item.state?.state ||
+                      activeinactive.find((s) => s._id === item.state)?.state ||
+                      "Unknown"}
+                  </td>
+                  <td className="border px-2 py-1">{item.date}</td>
+                  <td className="border px-2 py-1">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button
+                        onClick={() => handleEdit(item)}
+                        className="text-yellow-600"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => softDelete(item._id)}
+                        className="text-orange-600"
+                      >
+                        Soft Delete
+                      </button>
+                      <button
+                        onClick={() => hardDelete(item._id)}
+                        className="text-red-600"
+                      >
+                        Hard Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
-                <td className="border px-2 py-1">
-                  {item.state?.state ||
-                    activeinactive.find((s) => s._id === item.state)?.state ||
-                    "Unknown"}
-                </td>
-
-                <td className="border px-2 py-1">{item.date}</td>
-                <td className="border px-2 py-1 flex gap-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="text-yellow-600"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => softDelete(item._id)}
-                    className="text-orange-600"
-                  >
-                    Soft Delete
-                  </button>
-                  <button
-                    onClick={() => hardDelete(item._id)}
-                    className="text-red-600"
-                  >
-                    Hard Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-
-    
       <h2 className="font-bold">Inactive Entries</h2>
 
-     
-      <div className="flex justify-between items-center mb-2 mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center mb-2 mt-4 gap-2">
         <input
           type="text"
           value={searchInactive}
           onChange={(e) => setSearchInactive(e.target.value)}
           placeholder="Search inactive cities"
-          className="border px-2 py-1"
+          className="border px-2 py-1 w-full sm:w-auto"
         />
         <button
           onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
+          className="bg-gray-300 px-3 py-1 rounded w-full sm:w-auto"
         >
           Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
         </button>
       </div>
 
-      <table className="table-auto border w-full">
-        <thead>
-          <tr>
-            <th className="border px-2 py-1">City</th>
-            <th className="border px-2 py-1">State</th>
-            <th className="border px-2 py-1">Date</th>
-            <th className="border px-2 py-1">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...inactiveData]
-            .filter((item) =>
-              item.city.toLowerCase().includes(searchInactive.toLowerCase())
-            )
-            .sort((a, b) =>
-              sortInactiveAsc
-                ? a.city.localeCompare(b.city)
-                : b.city.localeCompare(a.city)
-            )
-            .map((item) => (
-              <tr key={item._id}>
-                <td className="border px-2 py-1">{item.city}</td>
-
-                <td td className="border px-2 py-1">
-                {item.state?.state ||
-                  activeinactive.find((value) => value._id === item.state)?.state ||
-                  "Unknown"
-                  }
-                </td>
-
-                <td className="border px-2 py-1">{item.date}</td>
-                <td className="border px-2 py-1 flex gap-2">
-                  <button
-                    onClick={() => activateEntry(item._id)}
-                    className="text-green-600"
-                  >
-                    Activate
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="table-auto border w-full min-w-[600px]">
+          <thead>
+            <tr>
+              <th className="border px-2 py-1">City</th>
+              <th className="border px-2 py-1">State</th>
+              <th className="border px-2 py-1">Date</th>
+              <th className="border px-2 py-1">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...inactiveData]
+              .filter((item) =>
+                item.city.toLowerCase().includes(searchInactive.toLowerCase())
+              )
+              .sort((a, b) =>
+                sortInactiveAsc
+                  ? a.city.localeCompare(b.city)
+                  : b.city.localeCompare(a.city)
+              )
+              .map((item) => (
+                <tr key={item._id}>
+                  <td className="border px-2 py-1">{item.city}</td>
+                  <td className="border px-2 py-1">
+                    {item.state?.state ||
+                      activeinactive.find((value) => value._id === item.state)?.state ||
+                      "Unknown"}
+                  </td>
+                  <td className="border px-2 py-1">{item.date}</td>
+                  <td className="border px-2 py-1">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button
+                        onClick={() => activateEntry(item._id)}
+                        className="text-green-600"
+                      >
+                        Activate
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

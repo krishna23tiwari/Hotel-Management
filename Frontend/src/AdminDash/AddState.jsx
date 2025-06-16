@@ -234,55 +234,212 @@ const hardDelete = async (id) => {
 //     }
 //   };
   
+  // return (
+  //   <div className="p-5">
+  //     <h1 className="text-xl mb-4 font-semibold">State Management</h1>
+
+  //     <div className="flex gap-2 mb-4">
+  //       <input
+  //         type="text"
+  //         name="state"
+  //         value={form.state}
+  //         onChange={handleChange}
+  //         placeholder="Enter state name"
+  //         className="border px-2 py-1"
+  //       />
+  //       <input
+  //         type="text"
+  //         name="code"
+  //         value={form.code}
+  //         onChange={handleChange}
+  //         placeholder="Enter state code"
+  //         className="border px-2 py-1"
+  //       />
+  //       <button
+  //         onClick={handleSubmit}
+  //         className="bg-blue-500 text-white px-4 py-1 rounded"
+  //       >
+  //         {editingId ? "Update" : "Add"}
+  //       </button>
+  //     </div>
+
+  //     {/* Active Section */}
+  //     <h2 className="font-bold">Active States</h2>
+
+  //     <div className="flex justify-between items-center mb-2">
+  //       <input
+  //         type="text"
+  //         value={searchActive}
+  //         onChange={(e) => setSearchActive(e.target.value)}
+  //         placeholder="Search active states"
+  //         className="border px-2 py-1"
+  //       />
+  //       <button
+  //         onClick={() => setSortActiveAsc(!sortActiveAsc)}
+  //         className="bg-gray-300 px-3 py-1 rounded"
+  //       >
+  //         Sort {sortActiveAsc ? "A-Z" : "Z-A"}
+  //       </button>
+  //     </div>
+
+  //     <table className="table-auto border w-full mb-6">
+  //       <thead>
+  //         <tr>
+  //           <th className="border px-2 py-1">State</th>
+  //           <th className="border px-2 py-1">State Code</th>
+  //           <th className="border px-2 py-1">Date</th>
+  //           <th className="border px-2 py-1">Actions</th>
+  //         </tr>
+  //       </thead>
+  //       <tbody>
+  //         {[...data]
+  //           .filter((item) =>
+  //             item.state.toLowerCase().includes(searchActive.toLowerCase())
+  //           )
+  //           .sort((a, b) =>
+  //             sortActiveAsc
+  //               ? a.state.localeCompare(b.state)
+  //               : b.state.localeCompare(a.state)
+  //           )
+  //           .map((item) => (
+  //             <tr key={item._id}>
+  //               <td className="border px-2 py-1">{item.state}</td>
+  //               <td className="border px-2 py-1">{item.code}</td>
+  //               <td className="border px-2 py-1">{item.date}</td>
+  //               <td className="border px-2 py-1 flex gap-2">
+  //                 <button
+  //                   onClick={() => handleEdit(item)}
+  //                   className="text-yellow-600"
+  //                 >
+  //                   Edit
+  //                 </button>
+  //                 <button
+  //                   onClick={() => softDelete(item._id)}
+  //                   className="text-orange-600"
+  //                 >
+  //                   Soft Delete
+  //                 </button>
+  //                 <button
+  //                   onClick={() => hardDelete(item._id)}
+  //                   className="text-red-600"
+  //                 >
+  //                   Hard Delete
+  //                 </button>
+  //               </td>
+  //             </tr>
+  //           ))}
+  //       </tbody>
+  //     </table>
+
+  //     {/* Inactive Section */}
+  //     <h2 className="font-bold">Inactive States</h2>
+
+  //     <div className="flex justify-between items-center mb-2 mt-4">
+  //       <input
+  //         type="text"
+  //         value={searchInactive}
+  //         onChange={(e) => setSearchInactive(e.target.value)}
+  //         placeholder="Search inactive states"
+  //         className="border px-2 py-1"
+  //       />
+  //       <button
+  //         onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
+  //         className="bg-gray-300 px-3 py-1 rounded"
+  //       >
+  //         Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
+  //       </button>
+  //     </div>
+
+  //     <table className="table-auto border w-full">
+  //       <thead>
+  //         <tr>
+  //           <th className="border px-2 py-1">State</th>
+  //           <th className="border px-2 py-1">State Code</th>
+  //           <th className="border px-2 py-1">Date</th>
+  //           <th className="border px-2 py-1">Actions</th>
+  //         </tr>
+  //       </thead>
+  //       <tbody>
+  //         {[...inactiveData]
+  //           .filter((item) =>
+  //             item.state.toLowerCase().includes(searchInactive.toLowerCase())
+  //           )
+  //           .sort((a, b) =>
+  //             sortInactiveAsc
+  //               ? a.state.localeCompare(b.state)
+  //               : b.state.localeCompare(a.state)
+  //           )
+  //           .map((item) => (
+  //             <tr key={item._id}>
+  //               <td className="border px-2 py-1">{item.state}</td>
+  //               <td className="border px-2 py-1">{item.code}</td>
+  //               <td className="border px-2 py-1">{item.date}</td>
+  //               <td className="border px-2 py-1 flex gap-2">
+  //                 <button
+  //                   onClick={() => activateEntry(item._id)}
+  //                   className="text-green-600"
+  //                 >
+  //                   Activate
+  //                 </button>
+  //               </td>
+  //             </tr>
+  //           ))}
+  //       </tbody>
+  //     </table>
+  //   </div>
+  // );
+
   return (
-    <div className="p-5">
-      <h1 className="text-xl mb-4 font-semibold">State Management</h1>
+  <div className="p-5 max-w-full">
+    <h1 className="text-xl mb-4 font-semibold">State Management</h1>
 
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          name="state"
-          value={form.state}
-          onChange={handleChange}
-          placeholder="Enter state name"
-          className="border px-2 py-1"
-        />
-        <input
-          type="text"
-          name="code"
-          value={form.code}
-          onChange={handleChange}
-          placeholder="Enter state code"
-          className="border px-2 py-1"
-        />
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-1 rounded"
-        >
-          {editingId ? "Update" : "Add"}
-        </button>
-      </div>
+    {/* Form Section */}
+    <div className="flex flex-wrap gap-2 mb-4">
+      <input
+        type="text"
+        name="state"
+        value={form.state}
+        onChange={handleChange}
+        placeholder="Enter state name"
+        className="border px-2 py-1 w-full sm:w-auto"
+      />
+      <input
+        type="text"
+        name="code"
+        value={form.code}
+        onChange={handleChange}
+        placeholder="Enter state code"
+        className="border px-2 py-1 w-full sm:w-auto"
+      />
+      <button
+        onClick={handleSubmit}
+        className="bg-blue-500 text-white px-4 py-1 rounded w-full sm:w-auto"
+      >
+        {editingId ? "Update" : "Add"}
+      </button>
+    </div>
 
-      {/* Active Section */}
-      <h2 className="font-bold">Active States</h2>
+    {/* Active Section */}
+    <h2 className="font-bold">Active States</h2>
 
-      <div className="flex justify-between items-center mb-2">
-        <input
-          type="text"
-          value={searchActive}
-          onChange={(e) => setSearchActive(e.target.value)}
-          placeholder="Search active states"
-          className="border px-2 py-1"
-        />
-        <button
-          onClick={() => setSortActiveAsc(!sortActiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
-        >
-          Sort {sortActiveAsc ? "A-Z" : "Z-A"}
-        </button>
-      </div>
+    <div className="flex flex-wrap justify-between gap-2 items-center mb-2">
+      <input
+        type="text"
+        value={searchActive}
+        onChange={(e) => setSearchActive(e.target.value)}
+        placeholder="Search active states"
+        className="border px-2 py-1 w-full sm:w-64"
+      />
+      <button
+        onClick={() => setSortActiveAsc(!sortActiveAsc)}
+        className="bg-gray-300 px-3 py-1 rounded w-full sm:w-auto"
+      >
+        Sort {sortActiveAsc ? "A-Z" : "Z-A"}
+      </button>
+    </div>
 
-      <table className="table-auto border w-full mb-6">
+    <div className="overflow-x-auto">
+      <table className="table-auto border w-full mb-6 text-sm">
         <thead>
           <tr>
             <th className="border px-2 py-1">State</th>
@@ -306,51 +463,55 @@ const hardDelete = async (id) => {
                 <td className="border px-2 py-1">{item.state}</td>
                 <td className="border px-2 py-1">{item.code}</td>
                 <td className="border px-2 py-1">{item.date}</td>
-                <td className="border px-2 py-1 flex gap-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="text-yellow-600"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => softDelete(item._id)}
-                    className="text-orange-600"
-                  >
-                    Soft Delete
-                  </button>
-                  <button
-                    onClick={() => hardDelete(item._id)}
-                    className="text-red-600"
-                  >
-                    Hard Delete
-                  </button>
+                <td className="border px-2 py-1">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="text-yellow-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => softDelete(item._id)}
+                      className="text-orange-600"
+                    >
+                      Soft Delete
+                    </button>
+                    <button
+                      onClick={() => hardDelete(item._id)}
+                      className="text-red-600"
+                    >
+                      Hard Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
         </tbody>
       </table>
+    </div>
 
-      {/* Inactive Section */}
-      <h2 className="font-bold">Inactive States</h2>
+    {/* Inactive Section */}
+    <h2 className="font-bold">Inactive States</h2>
 
-      <div className="flex justify-between items-center mb-2 mt-4">
-        <input
-          type="text"
-          value={searchInactive}
-          onChange={(e) => setSearchInactive(e.target.value)}
-          placeholder="Search inactive states"
-          className="border px-2 py-1"
-        />
-        <button
-          onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
-          className="bg-gray-300 px-3 py-1 rounded"
-        >
-          Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
-        </button>
-      </div>
+    <div className="flex flex-wrap justify-between gap-2 items-center mb-2 mt-4">
+      <input
+        type="text"
+        value={searchInactive}
+        onChange={(e) => setSearchInactive(e.target.value)}
+        placeholder="Search inactive states"
+        className="border px-2 py-1 w-full sm:w-64"
+      />
+      <button
+        onClick={() => setSortInactiveAsc(!sortInactiveAsc)}
+        className="bg-gray-300 px-3 py-1 rounded w-full sm:w-auto"
+      >
+        Sort {sortInactiveAsc ? "A-Z" : "Z-A"}
+      </button>
+    </div>
 
-      <table className="table-auto border w-full">
+    <div className="overflow-x-auto">
+      <table className="table-auto border w-full text-sm">
         <thead>
           <tr>
             <th className="border px-2 py-1">State</th>
@@ -374,7 +535,7 @@ const hardDelete = async (id) => {
                 <td className="border px-2 py-1">{item.state}</td>
                 <td className="border px-2 py-1">{item.code}</td>
                 <td className="border px-2 py-1">{item.date}</td>
-                <td className="border px-2 py-1 flex gap-2">
+                <td className="border px-2 py-1">
                   <button
                     onClick={() => activateEntry(item._id)}
                     className="text-green-600"
@@ -387,7 +548,9 @@ const hardDelete = async (id) => {
         </tbody>
       </table>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default AddState;

@@ -24,9 +24,11 @@ import SelectedBookingsShow from './AdminDash/SelectedBookingsShow';
 
 const AdminLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen">
-      <SideBarMenuAdmin />
-      <div className="flex-1 ml-64"> 
+    <div className="min-h-screen relative">
+      <div className="fixed top-0 left-0 h-full z-40">
+        <SideBarMenuAdmin />
+      </div>
+      <div className="ml-0 md:ml-64  transition-all">
         {children}
       </div>
     </div>

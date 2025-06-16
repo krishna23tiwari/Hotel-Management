@@ -257,74 +257,61 @@ const deleteBooking = async (id) => {
     });
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 p-6">
-      <h1 className="text-4xl font-bold text-center mb-10">Admin Bookings Panel</h1>
+    <div className="min-h-screen bg-white text-gray-800 p-4 sm:p-6">
+      <h1 className="text-2xl sm:text-4xl font-bold text-center mb-6 sm:mb-10">Admin Bookings Panel</h1>
 
-      <div className="flex flex-wrap justify-center gap-4 mb-6">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
         <button
           onClick={() => setFilter("all")}
-          className={`px-4 py-2 rounded-full shadow-md ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-blue-100"}`}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "all" ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-blue-100"}`}
         >
           All
         </button>
         <button
           onClick={() => setFilter("approved")}
-          className={`px-4 py-2 rounded-full shadow-md ${filter === "approved" ? "bg-green-500 text-white" : "bg-gray-200 hover:bg-green-100"}`}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "approved" ? "bg-green-500 text-white" : "bg-gray-200 hover:bg-green-100"}`}
         >
           Approved
         </button>
         <button
           onClick={() => setFilter("pending")}
-          className={`px-4 py-2 rounded-full shadow-md ${filter === "pending" ? "bg-yellow-500 text-white" : "bg-gray-200 hover:bg-yellow-100"}`}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "pending" ? "bg-yellow-500 text-white" : "bg-gray-200 hover:bg-yellow-100"}`}
         >
           Pending
         </button>
-<button
-  onClick={() => setFilter("checkIn")}
-  className={`px-4 py-2 rounded-full shadow-md ${
-    filter === "checkIn" ? "bg-purple-500 text-white" : "bg-gray-200 hover:bg-purple-100"
-  }`}
->
-  Checked-In
-</button>
-
-<button
-  onClick={() => setFilter("checkOut")}
-  className={`px-4 py-2 rounded-full shadow-md ${
-    filter === "checkOut" ? "bg-gray-500 text-white" : "bg-gray-200 hover:bg-gray-300"
-  }`}
->
-  Checked-Out
-</button>
-
-<button
-  onClick={() => setFilter("cancel")}
-  className={`px-4 py-2 rounded-full shadow-md ${
-    filter === "cancel" ? "bg-red-500 text-white" : "bg-gray-200 hover:bg-red-100"
-  }`}
->
-  Cancel
-</button>
-
-
-
-
-
+        <button
+          onClick={() => setFilter("checkIn")}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "checkIn" ? "bg-purple-500 text-white" : "bg-gray-200 hover:bg-purple-100"}`}
+        >
+          Checked-In
+        </button>
+        <button
+          onClick={() => setFilter("checkOut")}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "checkOut" ? "bg-gray-500 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+        >
+          Checked-Out
+        </button>
+        <button
+          onClick={() => setFilter("cancel")}
+          className={`px-3 py-2 sm:px-4 sm:py-2 rounded-full shadow-md ${filter === "cancel" ? "bg-red-500 text-white" : "bg-gray-200 hover:bg-red-100"}`}
+        >
+          Cancel
+        </button>
       </div>
 
-      <div className="flex justify-between items-center flex-wrap gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 sm:mb-6">
         <input
           type="text"
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2 border rounded-md w-full sm:w-1/2 shadow"
+          className="px-3 py-2 border rounded-md w-full sm:w-1/2 shadow"
         />
 
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-2 border rounded-md shadow"
+          className="px-3 py-2 border rounded-md shadow w-full sm:w-auto"
         >
           <option value="date">Sort by Date</option>
           <option value="amount">Sort by Amount</option>
@@ -335,14 +322,14 @@ const deleteBooking = async (id) => {
       {filteredBookings.length === 0 ? (
         <p className="text-center text-gray-500">No bookings found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredBookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-gradient-to-br from-gray-50 to-blue-100 border border-blue-200 rounded-xl shadow p-6 transition-transform hover:scale-[1.02]"
+              className="bg-gradient-to-br from-gray-50 to-blue-100 border border-blue-200 rounded-xl shadow p-4 sm:p-6 transition-transform hover:scale-[1.02]"
             >
               <div className="mb-2">
-                <h2 className="text-xl font-semibold text-blue-700">{booking.userName}</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-blue-700">{booking.userName}</h2>
                 <p className="text-sm text-gray-600">📞 {booking.userPhone}</p>
               </div>
 
@@ -354,12 +341,11 @@ const deleteBooking = async (id) => {
                 <p><strong>Rooms:</strong> {booking.numberOfRooms}</p>
                 <p><strong>Child:</strong> {booking.anyChild ? "Yes" : "No"}</p>
                 <p><strong>Total Amount:</strong> ₹{booking.totalAmount}</p>
-                <p><strong>isChecking:</strong><span className={`font-semibold ${booking.ischecking === "checkIn"? "text-green-600": booking.ischecking === "checkOut"? "text-yellow-600": booking.ischecking === "cancel"? "text-red-600": ""}`}>{booking.ischecking}</span></p>
-
+                <p><strong>isChecking:</strong><span className={`font-semibold ${booking.ischecking === "checkIn" ? "text-green-600" : booking.ischecking === "checkOut" ? "text-yellow-600" : booking.ischecking === "cancel" ? "text-red-600" : ""}`}>{booking.ischecking}</span></p>
                 <p><strong>Status:</strong> <span className={`font-semibold ${booking.status === "approved" ? "text-green-600" : booking.status === "pending" ? "text-yellow-600" : "text-red-600"}`}>{booking.status}</span></p>
               </div>
 
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   onClick={() => approveBooking(booking._id)}
                   disabled={booking.status === "approved"}
